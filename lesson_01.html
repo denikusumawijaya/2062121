@@ -375,12 +375,142 @@
             </div>
 
             <div class="visual-box">
-                <svg width="200" height="150" viewBox="0 0 200 150">
-                    <rect x="50" y="10" width="40" height="120" fill="#A78BFA" transform="rotate(10 70 130)" class="pulse-anim"/>
-                    <line x1="10" y1="130" x2="190" y2="130" stroke="#4B5563" stroke-width="2"/>
-                    <line x1="50" y1="130" x2="80" y2="130" stroke="#F87171" stroke-width="2" transform="rotate(10 70 130)"/>
-                    <text x="90" y="125" font-size="12" fill="#F87171" font-family="Poppins" font-weight="bold">1° Error</text>
+                <!-- Ilustrasi Kota yang Detail -->
+                <svg width="100%" height="250" viewBox="0 0 800 250" style="max-width: 800px;">
+                    <!-- Langit -->
+                    <rect x="0" y="0" width="800" height="250" fill="#E0F2FE"/>
+                    
+                    <!-- Jalan & Trotoar -->
+                    <rect x="0" y="200" width="800" height="50" fill="#6B7280"/>
+                    <rect x="0" y="195" width="800" height="10" fill="#9CA3AF"/>
+                    <line x1="0" y1="225" x2="800" y2="225" stroke="#FCD34D" stroke-width="2" stroke-dasharray="20"/>
+                    
+                    <!-- Gedung 1 (Kiri, Pendek, Atap Segitiga) -->
+                    <rect x="50" y="110" width="100" height="85" fill="#A78BFA"/>
+                    <polygon points="50,110 150,110 100,70" fill="#8B5CF6"/> <!-- Atap -->
+                    <rect x="80" y="160" width="30" height="35" fill="#FCD34D" rx="15" ry="15"/> <!-- Pintu -->
+                    <rect x="60" y="125" width="20" height="20" fill="#BFDBFE"/> <!-- Jendela -->
+                    <rect x="120" y="125" width="20" height="20" fill="#BFDBFE"/> <!-- Jendela -->
+                    
+                    <!-- Gedung 2 (Tengah, Tinggi, Atap Datar) -->
+                    <rect x="200" y="50" width="150" height="145" fill="#F9A8D4"/>
+                    <rect x="250" y="160" width="40" height="35" fill="#FCD34D" rx="20" ry="20"/> <!-- Pintu -->
+                    <rect x="220" y="70" width="25" height="25" fill="#BFDBFE"/> <!-- Jendela -->
+                    <rect x="260" y="70" width="25" height="25" fill="#BFDBFE"/>
+                    <rect x="300" y="70" width="25" height="25" fill="#BFDBFE"/>
+                    <rect x="220" y="110" width="25" height="25" fill="#BFDBFE"/>
+                    <rect x="260" y="110" width="25" height="25" fill="#BFDBFE"/>
+                    <rect x="300" y="110" width="25" height="25" fill="#BFDBFE"/>
+                    
+                    <!-- Gedung 3 (Kanan, Sedang, Atap Miring) -->
+                    <rect x="420" y="120" width="120" height="75" fill="#FCD34D"/>
+                    <polygon points="420,120 540,120 560,90 400,90" fill="#F59E0B"/> <!-- Atap Miring -->
+                    <rect x="455" y="155" width="30" height="40" fill="#A78BFA" rx="15" ry="15"/> <!-- Pintu -->
+                    <rect x="435" y="130" width="20" height="20" fill="#BFDBFE"/> <!-- Jendela -->
+                    <rect x="500" y="130" width="20" height="20" fill="#BFDBFE"/>
+                    
+                    <!-- Awan -->
+                    <path d="M 650 60 Q 670 40 700 60 Q 720 40 740 60 Q 760 60 760 80 Q 760 100 730 100 L 660 100 Q 630 100 630 80 Q 630 60 650 60" fill="white" class="float-anim"/>
                 </svg>
+            </div>
+
+            <div class="game-area" id="game2">
+                <div class="bilingual" style="margin-bottom:15px; font-weight:600;">
+                    <div class="en">Identify the geometry in the city above! / Identifikasi geometri di kota di atas!</div>
+                </div>
+                <div class="game-grid">
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-search"></i> 1. The tip of the triangular roof represents a... / Ujung atap segitiga merepresentasikan...</div>
+                        <div class="radio-group">
+                            <label><input type="radio" name="q2_1" value="Point"> Point / Titik</label>
+                            <label><input type="radio" name="q2_1" value="Line"> Line / Garis</label>
+                        </div>
+                        <div class="feedback" id="fb2_1"></div><div class="solution" id="sol2_1">Solusi: Ujung dari bentuk adalah titik.</div>
+                    </div>
+
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-search"></i> 2. The edge of the flat roof is a... / Tepi atap datar adalah...</div>
+                        <div class="radio-group">
+                            <label><input type="radio" name="q2_2" value="Line"> Line segment / Ruas garis</label>
+                            <label><input type="radio" name="q2_2" value="Plane"> Plane / Bidang</label>
+                        </div>
+                        <div class="feedback" id="fb2_2"></div><div class="solution" id="sol2_2">Solusi: Sisi atap datar adalah ruas garis.</div>
+                    </div>
+
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-search"></i> 3. The side of the building wall is a... / Sisi dinding gedung adalah...</div>
+                        <div class="radio-group">
+                            <label><input type="radio" name="q2_3" value="Point"> Point / Titik</label>
+                            <label><input type="radio" name="q2_3" value="Plane"> Plane / Bidang</label>
+                        </div>
+                        <div class="feedback" id="fb2_3"></div><div class="solution" id="sol2_3">Solusi: Dinding yang luas adalah bidang.</div>
+                    </div>
+
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-search"></i> 4. The corner of a window forms a... / Sudut jendela membentuk...</div>
+                        <div class="radio-group">
+                            <label><input type="radio" name="q2_4" value="Right angle"> Right angle / Sudut siku-siku</label>
+                            <label><input type="radio" name="q2_4" value="Acute angle"> Acute angle / Sudut lancip</label>
+                        </div>
+                        <div class="feedback" id="fb2_4"></div><div class="solution" id="sol2_4">Solusi: Sudut jendela umumnya 90° (siku-siku).</div>
+                    </div>
+
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-search"></i> 5. The slanted roof creates an... / Atap miring menciptakan...</div>
+                        <div class="radio-group">
+                            <label><input type="radio" name="q2_5" value="Obtuse"> Obtuse angle / Sudut tumpul</label>
+                            <label><input type="radio" name="q2_5" value="Right"> Right angle / Sudut siku-siku</label>
+                        </div>
+                        <div class="feedback" id="fb2_5"></div><div class="solution" id="sol2_5">Solusi: Atap datar/miring landai sering membentuk sudut tumpul (>90°).</div>
+                    </div>
+
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-search"></i> 6. Why must building angles be precise? / Mengapa sudut gedung harus presisi?</div>
+                        <div class="radio-group">
+                            <label><input type="radio" name="q2_6" value="Safety"> Safety / Keamanan struktur</label>
+                            <label><input type="radio" name="q2_6" value="Color"> For color / Untuk warna</label>
+                        </div>
+                        <div class="feedback" id="fb2_6"></div><div class="solution" id="sol2_6">Solusi: Ketidakpresisian sudut dapat menyebabkan bangunan runtuh.</div>
+                    </div>
+
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-search"></i> 7. The road dashed line is... / Garis putus-putus jalan adalah...</div>
+                        <div class="radio-group">
+                            <label><input type="radio" name="q2_7" value="Parallel"> Parallel lines / Garis sejajar</label>
+                            <label><input type="radio" name="q2_7" value="Intersecting"> Intersecting / Garis berpotongan</label>
+                        </div>
+                        <div class="feedback" id="fb2_7"></div><div class="solution" id="sol2_7">Solusi: Garis putus-putus sejajar dengan tepi jalan.</div>
+                    </div>
+
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-search"></i> 8. The wall meets the road at a... / Dinding bertemu jalan di sudut...</div>
+                        <div class="radio-group">
+                            <label><input type="radio" name="q2_8" value="90"> 90° angle / Sudut 90°</label>
+                            <label><input type="radio" name="q2_8" value="45"> 45° angle / Sudut 45°</label>
+                        </div>
+                        <div class="feedback" id="fb2_8"></div><div class="solution" id="sol2_8">Solusi: Dinding tegak lurus dengan jalan (90°).</div>
+                    </div>
+
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-search"></i> 9. The yellow door shape is a... / Bentuk pintu kuning adalah...</div>
+                        <div class="radio-group">
+                            <label><input type="radio" name="q2_9" value="Rectangle"> Rectangle / Persegi panjang</label>
+                            <label><input type="radio" name="q2_9" value="Triangle"> Triangle / Segitiga</label>
+                        </div>
+                        <div class="feedback" id="fb2_9"></div><div class="solution" id="sol2_9">Solusi: Pintu berbentuk persegi panjang (arc di atas).</div>
+                    </div>
+
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-search"></i> 10. Architecture heavily relies on... / Arsitektur sangat bergantung pada...</div>
+                        <div class="radio-group">
+                            <label><input type="radio" name="q2_10" value="Geometry"> Geometry / Geometri</label>
+                            <label><input type="radio" name="q2_10" value="Biology"> Biology / Biologi</label>
+                        </div>
+                        <div class="feedback" id="fb2_10"></div><div class="solution" id="sol2_10">Solusi: Arsitektur adalah penerapan geometri.</div>
+                    </div>
+                </div>
+                <button class="btn btn-check" onclick="checkGame2()"><i class="fas fa-check-circle"></i> Check All</button>
+                <button class="btn btn-reset" onclick="resetGame2()"><i class="fas fa-redo"></i> Reset All</button>
             </div>
         </div>
     </div>
@@ -397,28 +527,100 @@
 
             <div class="theory-box">
                 <div class="bilingual">
-                    <div class="en"><strong>Acute angle:</strong> Less than 90°. <strong>Right angle:</strong> Exactly 90°. <strong>Obtuse angle:</strong> Greater than 90° but less than 180°. A straight line forms a 180° angle.</div>
-                    <div class="id"><strong>Sudut lancip:</strong> Kurang dari 90°. <strong>Sudut siku-siku:</strong> Tepat 90°. <strong>Sudut tumpul:</strong> Lebih dari 90° tapi kurang dari 180°. Garis lurus membentuk sudut 180°.</div>
+                    <div class="en"><strong>Acute:</strong> < 90° | <strong>Right:</strong> = 90° | <strong>Obtuse:</strong> > 90° & < 180° | <strong>Straight:</strong> = 180°</div>
+                    <div class="id"><strong>Lancip:</strong> < 90° | <strong>Siku-siku:</strong> = 90° | <strong>Tumpul:</strong> > 90° & < 180° | <strong>Lurus:</strong> = 180°</div>
                 </div>
+            </div>
+
+            <div class="visual-box">
+                <svg width="100%" height="120" viewBox="0 0 600 120">
+                    <!-- Acute -->
+                    <g class="float-anim">
+                        <line x1="50" y1="100" x2="150" y2="100" stroke="#A78BFA" stroke-width="4"/>
+                        <line x1="50" y1="100" x2="100" y2="40" stroke="#A78BFA" stroke-width="4"/>
+                        <path d="M 80 100 A 30 30 0 0 1 70 80" fill="none" stroke="#F9A8D4" stroke-width="3"/>
+                        <text x="60" y="115" font-size="14" fill="#4B5563" font-weight="bold" font-family="Poppins">Acute < 90°</text>
+                    </g>
+
+                    <!-- Right -->
+                    <g class="float-anim" style="animation-delay: 0.3s;">
+                        <line x1="250" y1="100" x2="350" y2="100" stroke="#34D399" stroke-width="4"/>
+                        <line x1="250" y1="100" x2="250" y2="20" stroke="#34D399" stroke-width="4"/>
+                        <rect x="250" y="80" width="20" height="20" fill="none" stroke="#F9A8D4" stroke-width="3"/>
+                        <text x="270" y="115" font-size="14" fill="#4B5563" font-weight="bold" font-family="Poppins">Right = 90°</text>
+                    </g>
+
+                    <!-- Obtuse -->
+                    <g class="float-anim" style="animation-delay: 0.6s;">
+                        <line x1="450" y1="100" x2="550" y2="100" stroke="#FCD34D" stroke-width="4"/>
+                        <line x1="450" y1="100" x2="480" y2="30" stroke="#FCD34D" stroke-width="4"/>
+                        <path d="M 480 100 A 30 30 0 0 1 460 70" fill="none" stroke="#F9A8D4" stroke-width="3"/>
+                        <text x="455" y="115" font-size="14" fill="#4B5563" font-weight="bold" font-family="Poppins">Obtuse > 90°</text>
+                    </g>
+                </svg>
             </div>
 
             <div class="game-area" id="game3">
                 <div class="game-grid">
+                    <!-- Q1 -->
                     <div class="question-block">
-                        <div class="q-title">Match the angle type / Cocokkan jenis sudut</div>
-                        <div style="margin-top: 10px;">
-                            < 90° : <select id="drop-a"><option value="">--Pilih--</option><option value="lancip">Acute / Lancip</option><option value="siku">Right / Siku-siku</option><option value="tumpul">Obtuse / Tumpul</option></select> <br><br>
-                            = 90° : <select id="drop-b"><option value="">--Pilih--</option><option value="lancip">Acute / Lancip</option><option value="siku">Right / Siku-siku</option><option value="tumpul">Obtuse / Tumpul</option></select> <br><br>
-                            > 90° & < 180° : <select id="drop-c"><option value="">--Pilih--</option><option value="lancip">Acute / Lancip</option><option value="siku">Right / Siku-siku</option><option value="tumpul">Obtuse / Tumpul</option></select>
-                        </div>
-                        <div class="feedback" id="fb5"></div><div class="solution" id="sol5">Solusi: < 90° = Lancip, = 90° = Siku, > 90° = Tumpul</div>
+                        <div class="q-title" style="font-size:0.85rem;">1. Angle 45° is... / Sudut 45° adalah...</div>
+                        <select id="q3_1" style="width:100%; padding:4px;"><option value="">--Pilih--</option><option value="Acute">Acute / Lancip</option><option value="Right">Right / Siku</option><option value="Obtuse">Obtuse / Tumpul</option></select>
+                        <div class="feedback" id="fb3_1"></div><div class="solution" id="sol3_1">Solusi: < 90° = Lancip</div>
                     </div>
-                    
+                    <!-- Q2 -->
                     <div class="question-block">
-                        <div class="q-title">Straight Line Angle / Sudut Garis Lurus</div>
-                        <div style="margin-top: 10px;">Total angle in a straight line is... <br><br>
-                        <select id="drop-d"><option value="">--Pilih--</option><option value="90">90°</option><option value="180">180°</option><option value="360">360°</option></select></div>
-                        <div class="feedback" id="fb5b"></div><div class="solution" id="sol5b">Solusi: Garis lurus = 180°</div>
+                        <div class="q-title" style="font-size:0.85rem;">2. Angle 90° is... / Sudut 90° adalah...</div>
+                        <select id="q3_2" style="width:100%; padding:4px;"><option value="">--Pilih--</option><option value="Acute">Acute / Lancip</option><option value="Right">Right / Siku</option><option value="Obtuse">Obtuse / Tumpul</option></select>
+                        <div class="feedback" id="fb3_2"></div><div class="solution" id="sol3_2">Solusi: = 90° = Siku-siku</div>
+                    </div>
+                    <!-- Q3 -->
+                    <div class="question-block">
+                        <div class="q-title" style="font-size:0.85rem;">3. Angle 120° is... / Sudut 120° adalah...</div>
+                        <select id="q3_3" style="width:100%; padding:4px;"><option value="">--Pilih--</option><option value="Acute">Acute / Lancip</option><option value="Right">Right / Siku</option><option value="Obtuse">Obtuse / Tumpul</option></select>
+                        <div class="feedback" id="fb3_3"></div><div class="solution" id="sol3_3">Solusi: > 90° = Tumpul</div>
+                    </div>
+                    <!-- Q4 -->
+                    <div class="question-block">
+                        <div class="q-title" style="font-size:0.85rem;">4. Angle 180° is... / Sudut 180° adalah...</div>
+                        <select id="q3_4" style="width:100%; padding:4px;"><option value="">--Pilih--</option><option value="Straight">Straight / Lurus</option><option value="Obtuse">Obtuse / Tumpul</option></select>
+                        <div class="feedback" id="fb3_4"></div><div class="solution" id="sol3_4">Solusi: 180° = Lurus</div>
+                    </div>
+                    <!-- Q5 -->
+                    <div class="question-block">
+                        <div class="q-title" style="font-size:0.85rem;">5. Angle 89° is... / Sudut 89° adalah...</div>
+                        <select id="q3_5" style="width:100%; padding:4px;"><option value="">--Pilih--</option><option value="Acute">Acute / Lancip</option><option value="Right">Right / Siku</option></select>
+                        <div class="feedback" id="fb3_5"></div><div class="solution" id="sol3_5">Solusi: < 90° = Lancip</div>
+                    </div>
+                    <!-- Q6 -->
+                    <div class="question-block">
+                        <div class="q-title" style="font-size:0.85rem;">6. Angle 91° is... / Sudut 91° adalah...</div>
+                        <select id="q3_6" style="width:100%; padding:4px;"><option value="">--Pilih--</option><option value="Obtuse">Obtuse / Tumpul</option><option value="Right">Right / Siku</option></select>
+                        <div class="feedback" id="fb3_6"></div><div class="solution" id="sol3_6">Solusi: > 90° = Tumpul</div>
+                    </div>
+                    <!-- Q7 -->
+                    <div class="question-block">
+                        <div class="q-title" style="font-size:0.85rem;">7. A corner of a book is... / Sudut buku adalah...</div>
+                        <select id="q3_7" style="width:100%; padding:4px;"><option value="">--Pilih--</option><option value="Right">Right / Siku</option><option value="Obtuse">Obtuse / Tumpul</option></select>
+                        <div class="feedback" id="fb3_7"></div><div class="solution" id="sol3_7">Solusi: Sudut buku = 90°</div>
+                    </div>
+                    <!-- Q8 -->
+                    <div class="question-block">
+                        <div class="q-title" style="font-size:0.85rem;">8. Total angle in straight line / Total sudut garis lurus</div>
+                        <input type="text" id="q3_8" style="width:100%; padding:4px;" placeholder="Derajat...">
+                        <div class="feedback" id="fb3_8"></div><div class="solution" id="sol3_8">Solusi: 180°</div>
+                    </div>
+                    <!-- Q9 -->
+                    <div class="question-block">
+                        <div class="q-title" style="font-size:0.85rem;">9. Total angle in full circle / Total sudut 1 putaran</div>
+                        <input type="text" id="q3_9" style="width:100%; padding:4px;" placeholder="Derajat...">
+                        <div class="feedback" id="fb3_9"></div><div class="solution" id="sol3_9">Solusi: 360°</div>
+                    </div>
+                    <!-- Q10 -->
+                    <div class="question-block">
+                        <div class="q-title" style="font-size:0.85rem;">10. An angle < 180° but > 90° is... / Sudut < 180° tapi > 90° adalah...</div>
+                        <select id="q3_10" style="width:100%; padding:4px;"><option value="">--Pilih--</option><option value="Obtuse">Obtuse / Tumpul</option><option value="Straight">Straight / Lurus</option></select>
+                        <div class="feedback" id="fb3_10"></div><div class="solution" id="sol3_10">Solusi: Tumpul</div>
                     </div>
                 </div>
                 <button class="btn btn-check" onclick="checkGame3()"><i class="fas fa-check-circle"></i> Check</button>
@@ -431,40 +633,117 @@
     <div class="section-container">
         <div class="card">
             <div class="timer"><i class="fas fa-clock"></i> 00:20 - 00:30</div>
-            <div class="section-title"><i class="fas fa-superscript"></i> Problem Introduction</div>
+            <div class="section-title"><i class="fas fa-drafting-compass"></i> Problem Introduction: The Blueprint</div>
             <div class="bilingual">
                 <div class="en">Two important concepts: <strong>Complementary</strong> angles sum to 90°, <strong>Supplementary</strong> angles sum to 180°.</div>
                 <div class="id">Dua konsep penting: Sudut <strong>Berpenyiku</strong> (Komplementer) jumlahnya 90°, sudut <strong>Berpelurus</strong> (Suplemen) jumlahnya 180°.</div>
             </div>
 
             <div class="theory-box">
+                <div style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); opacity: 0.2; font-size: 4rem;">
+                    <i class="fas fa-ruler-combined pulse-anim"></i>
+                </div>
                 <div class="bilingual">
-                    <div class="en">If Angle A is \( (2x + 10)^\circ \) and Angle B is \( 3x^\circ \), and they form a right angle (Complementary), we can write: \( (2x + 10) + 3x = 90 \)</div>
-                    <div class="id">Jika Sudut A adalah \( (2x + 10)^\circ \) dan Sudut B adalah \( 3x^\circ \), dan mereka membentuk sudut siku-siku (Berpenyiku), kita bisa menulis: \( (2x + 10) + 3x = 90 \)</div>
+                    <div class="en">We use algebra to find missing angles: \( Angle A + Angle B = 90^\circ \) or \( 180^\circ \)</div>
+                    <div class="id">Kita menggunakan aljabar untuk mencari sudut yang hilang: \( Sudut A + Sudut B = 90^\circ \) atau \( 180^\circ \)</div>
                 </div>
             </div>
 
             <div class="visual-box">
-                <svg width="200" height="120" viewBox="0 0 200 120">
-                    <rect x="10" y="10" width="10" height="100" fill="#333"/>
-                    <rect x="10" y="10" width="100" height="10" fill="#333"/>
-                    <path d="M 40 10 L 50 10 A 30 30 0 0 0 40 40" fill="#A78BFA"/>
-                    <text x="45" y="35" font-size="12" fill="white">A</text>
-                    <path d="M 40 40 A 30 30 0 0 0 10 40 L 10 30" fill="#FCD34D"/>
-                    <text x="15" y="45" font-size="12" fill="#333">B</text>
+                <!-- Animated Complementary & Supplementary SVG -->
+                <svg width="100%" height="150" viewBox="0 0 500 150" style="max-width: 500px;">
+                    <!-- Complementary (90°) -->
+                    <g transform="translate(50, 20)">
+                        <rect x="0" y="0" width="100" height="100" fill="none" stroke="#ccc" stroke-width="2" stroke-dasharray="5"/>
+                        <path d="M 0 100 L 100 100" stroke="#333" stroke-width="3"/>
+                        <path d="M 0 100 L 0 0" stroke="#333" stroke-width="3"/>
+                        <path d="M 0 100 L 60 40" stroke="#A78BFA" stroke-width="4" class="draw-line"/>
+                        <path d="M 15 100 A 20 20 0 0 0 20 85" fill="#A78BFA" opacity="0.5"/>
+                        <path d="M 20 85 A 20 20 0 0 0 10 95" fill="#FCD34D" opacity="0.5"/>
+                        <text x="20" y="75" font-size="14" fill="#A78BFA" font-weight="bold">A</text>
+                        <text x="5" y="95" font-size="14" fill="#FCD34D" font-weight="bold">B</text>
+                        <text x="30" y="120" font-size="16" fill="#333" font-weight="bold" font-family="Poppins">A + B = 90°</text>
+                    </g>
+
+                    <!-- Supplementary (180°) -->
+                    <g transform="translate(250, 20)">
+                        <path d="M 0 100 L 200 100" stroke="#333" stroke-width="3"/>
+                        <path d="M 100 100 L 150 20" stroke="#34D399" stroke-width="4" class="draw-line"/>
+                        <path d="M 115 100 A 20 20 0 0 0 110 80" fill="#34D399" opacity="0.5"/>
+                        <path d="M 110 80 A 20 20 0 0 0 95 95" fill="#F87171" opacity="0.5"/>
+                        <text x="120" y="75" font-size="14" fill="#34D399" font-weight="bold">X</text>
+                        <text x="90" y="95" font-size="14" fill="#F87171" font-weight="bold">Y</text>
+                        <text x="50" y="120" font-size="16" fill="#333" font-weight="bold" font-family="Poppins">X + Y = 180°</text>
+                    </g>
                 </svg>
             </div>
 
             <div class="game-area" id="game4">
-                <div class="question-block">
-                    <div class="q-title">Solve for x / Selesaikan untuk mencari x</div>
-                    <div>\( (2x + 10) + 3x = 90 \)</div>
-                    <div style="margin-top:10px;">x = <input type="text" id="q6" style="width: 60px;">°</div>
-                    <div class="feedback" id="fb6"></div>
-                    <div class="solution" id="sol6">Solution / Solusi: 5x + 10 = 90 → 5x = 80 → x = 16</div>
+                <div class="bilingual" style="margin-bottom:15px; font-weight:600;">
+                    <div class="en"><i class="fas fa-hard-hat" style="color:var(--accent)"></i> Case Study: The Pavilion Blueprint / Studi Kasus: Cetakan Biru Paviliun</div>
                 </div>
-                <button class="btn btn-check" onclick="checkGame4()"><i class="fas fa-check-circle"></i> Check</button>
-                <button class="btn btn-reset" onclick="resetGame4()"><i class="fas fa-redo"></i> Reset</button>
+                <div class="game-grid">
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-pencil-ruler"></i> 1. Complementary angles sum up to... / Sudut berpenyiku berjumlah...</div>
+                        <input type="text" id="q4_1" style="width: 60px;">°
+                        <div class="feedback" id="fb4_1"></div><div class="solution" id="sol4_1">Solusi: Berpenyiku = 90°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-pencil-ruler"></i> 2. Supplementary angles sum up to... / Sudut berpelurus berjumlah...</div>
+                        <input type="text" id="q4_2" style="width: 60px;">°
+                        <div class="feedback" id="fb4_2"></div><div class="solution" id="sol4_2">Solusi: Berpelurus = 180°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-pencil-ruler"></i> 3. If A and B are complementary, A=2x, B=3x, the equation is... / Persamaannya...</div>
+                        <select id="q4_3" style="width:100%;">
+                            <option value="">--Pilih--</option>
+                            <option value="2x+3x=90">2x + 3x = 90</option>
+                            <option value="2x+3x=180">2x + 3x = 180</option>
+                        </select>
+                        <div class="feedback" id="fb4_3"></div><div class="solution" id="sol4_3">Solusi: Berpenyiku = 90°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-pencil-ruler"></i> 4. From Q3, what is x? / Dari soal 3, berapa nilai x?</div>
+                        <input type="text" id="q4_4" style="width: 60px;">
+                        <div class="feedback" id="fb4_4"></div><div class="solution" id="sol4_4">Solusi: 5x = 90 → x = 18</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-pencil-ruler"></i> 5. From Q3, what is Angle A? / Dari soal 3, berapa sudut A?</div>
+                        <input type="text" id="q4_5" style="width: 60px;">°
+                        <div class="feedback" id="fb4_5"></div><div class="solution" id="sol4_5">Solusi: A = 2(18) = 36°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-pencil-ruler"></i> 6. If X and Y are supplementary, X=(x+10), Y=(3x), the equation is... / Persamaannya...</div>
+                        <select id="q4_6" style="width:100%;">
+                            <option value="">--Pilih--</option>
+                            <option value="x+10+3x=90">x+10+3x = 90</option>
+                            <option value="x+10+3x=180">x+10+3x = 180</option>
+                        </select>
+                        <div class="feedback" id="fb4_6"></div><div class="solution" id="sol4_6">Solusi: Berpelurus = 180°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-pencil-ruler"></i> 7. From Q6, what is x? / Dari soal 6, berapa nilai x?</div>
+                        <input type="text" id="q4_7" style="width: 60px;">
+                        <div class="feedback" id="fb4_7"></div><div class="solution" id="sol4_7">Solusi: 4x + 10 = 180 → 4x = 170 → x = 42.5</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-pencil-ruler"></i> 8. From Q6, what is Angle Y? / Dari soal 6, berapa sudut Y?</div>
+                        <input type="text" id="q4_8" style="width: 60px;">°
+                        <div class="feedback" id="fb4_8"></div><div class="solution" id="sol4_8">Solusi: Y = 3(42.5) = 127.5°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-pencil-ruler"></i> 9. If two supplementary angles are equal, each is... / Jika pelurus sama besar, masing-masing...</div>
+                        <input type="text" id="q4_9" style="width: 60px;">°
+                        <div class="feedback" id="fb4_9"></div><div class="solution" id="sol4_9">Solusi: 180° / 2 = 90°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-pencil-ruler"></i> 10. If two complementary angles are equal, each is... / Jika penyiku sama besar, masing-masing...</div>
+                        <input type="text" id="q4_10" style="width: 60px;">°
+                        <div class="feedback" id="fb4_10"></div><div class="solution" id="sol4_10">Solusi: 90° / 2 = 45°</div>
+                    </div>
+                </div>
+                <button class="btn btn-check" onclick="checkGame4()"><i class="fas fa-check-circle"></i> Check All</button>
+                <button class="btn btn-reset" onclick="resetGame4()"><i class="fas fa-redo"></i> Reset All</button>
             </div>
         </div>
     </div>
@@ -473,42 +752,114 @@
     <div class="section-container">
         <div class="card">
             <div class="timer"><i class="fas fa-clock"></i> 00:30 - 00:45</div>
-            <div class="section-title"><i class="fas fa-drafting-compass"></i> Guided Practice</div>
+            <div class="section-title"><i class="fas fa-users-cog"></i> Guided Practice</div>
             <div class="bilingual">
-                <div class="en">A bridge has two supports forming supplementary angles. If one angle is 125°, what is the angle next to it?</div>
-                <div class="id">Jembatan memiliki dua penyangga yang membentuk sudut berpelurus. Jika salah satu sudutnya 125°, berapa sudut di sebelahnya?</div>
+                <div class="en">Let's solve structural problems together step-by-step!</div>
+                <div class="id">Mari kita selesaikan masalah struktural bersama langkah demi langkah!</div>
             </div>
 
             <div class="game-area" id="game5">
                 <div class="game-grid">
+                    
+                    <!-- Q1 with SVG Bridge -->
+                    <div class="question-block" style="grid-column: span 2;">
+                        <div class="q-title"><i class="fas fa-bridge"></i> 1. Bridge Support: Find the supplementary angle / Hitung sudut pelurus</div>
+                        <div style="display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
+                            <svg width="150" height="100" viewBox="0 0 150 100">
+                                <line x1="10" y1="90" x2="140" y2="90" stroke="#333" stroke-width="3"/>
+                                <line x1="40" y1="90" x2="100" y2="90" stroke="#A78BFA" stroke-width="6"/>
+                                <line x1="40" y1="90" x2="100" y2="20" stroke="#333" stroke-width="3"/>
+                                <path d="M 60 90 A 20 20 0 0 0 55 75" fill="#FCD34D"/>
+                                <text x="55" y="70" font-size="12" fill="#FCD34D" font-weight="bold">125°</text>
+                                <text x="80" y="85" font-size="12" fill="#A78BFA" font-weight="bold">?°</text>
+                            </svg>
+                            <div style="display:flex; align-items:center; gap:5px;">125° + <input type="text" id="q5_1" style="width: 60px;">° = 180°</div>
+                        </div>
+                        <div class="feedback" id="fb5_1"></div><div class="solution" id="sol5_1">Solusi: 180° - 125° = 55°</div>
+                    </div>
+
+                    <!-- Q2 with SVG Corner -->
                     <div class="question-block">
-                        <div class="q-title">1. Find the supplementary angle / Hitung sudut pelurus</div>
-                        <div style="display:flex; align-items:center; gap:5px;"><input type="text" id="q7_1" style="width: 40px;" value="125" readonly>° + <input type="text" id="q7_2" style="width: 60px;">° = 180°</div>
-                        <div class="feedback" id="fb7_1"></div><div class="solution" id="sol7_1">Solusi: 180° - 125° = 55°</div>
+                        <div class="q-title"><i class="fas fa-drafting-compass"></i> 2. Corner Joint: Complementary / Sudut Berpenyiku</div>
+                        <div style="display:flex; align-items:center; gap:15px;">
+                            <svg width="80" height="80" viewBox="0 0 80 80">
+                                <line x1="10" y1="70" x2="70" y2="70" stroke="#333" stroke-width="3"/>
+                                <line x1="10" y1="70" x2="10" y2="10" stroke="#333" stroke-width="3"/>
+                                <line x1="10" y1="70" x2="50" y2="30" stroke="#34D399" stroke-width="3"/>
+                                <path d="M 25 70 A 15 15 0 0 0 20 60" fill="#34D399"/>
+                                <text x="25" y="60" font-size="11" fill="#34D399" font-weight="bold">35°</text>
+                            </svg>
+                            <input type="text" id="q5_2" style="width: 60px;">°
+                        </div>
+                        <div class="feedback" id="fb5_2"></div><div class="solution" id="sol5_2">Solusi: 90° - 35° = 55°</div>
+                    </div>
+
+                    <!-- Q3 with SVG Straight Line Algebra -->
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-ruler"></i> 3. Flat Roof: Supplementary Algebra / Pelurus Aljabar</div>
+                        <div style="display:flex; align-items:center; gap:15px;">
+                            <svg width="120" height="60" viewBox="0 0 120 60">
+                                <line x1="10" y1="50" x2="110" y2="50" stroke="#333" stroke-width="3"/>
+                                <line x1="60" y1="50" x2="90" y2="20" stroke="#F87171" stroke-width="3"/>
+                                <text x="20" y="45" font-size="11" fill="#A78BFA" font-weight="bold">3x°</text>
+                                <text x="75" y="40" font-size="11" fill="#F87171" font-weight="bold">x°</text>
+                            </svg>
+                            <div>x = <input type="text" id="q5_3" style="width: 50px;">°</div>
+                        </div>
+                        <div class="feedback" id="fb5_3"></div><div class="solution" id="sol5_3">Solusi: 3x + x = 180 → 4x = 180 → x = 45°</div>
+                    </div>
+
+                    <!-- Q4-Q10 Compact Text -->
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-calculator"></i> 4. From Q3, what is 3x? / Dari Q3, berapa 3x?</div>
+                        <input type="text" id="q5_4" style="width: 60px;">°
+                        <div class="feedback" id="fb5_4"></div><div class="solution" id="sol5_4">Solusi: 3(45) = 135°</div>
                     </div>
 
                     <div class="question-block">
-                        <div class="q-title">2. Complementary angles / Sudut berpenyiku</div>
-                        <div>If Angle A = \(4x\) and Angle B = \(5x\). Find Angle A.</div>
-                        <div style="margin-top:10px; display:flex; gap:10px;">x = <input type="text" id="q8_x" style="width: 60px;">° <br> Angle A = <input type="text" id="q8_a" style="width: 60px;">°</div>
-                        <div class="feedback" id="fb8"></div><div class="solution" id="sol8">Solusi: 4x + 5x = 90 → 9x = 90 → x = 10. Angle A = 4(10) = 40°</div>
+                        <div class="q-title"><i class="fas fa-calculator"></i> 5. Comp angles: A=4x, B=5x. Find x / Penyiku: A=4x, B=5x. x=...</div>
+                        <input type="text" id="q5_5" style="width: 60px;">°
+                        <div class="feedback" id="fb5_5"></div><div class="solution" id="sol5_5">Solusi: 9x = 90 → x = 10</div>
                     </div>
-                </div>
 
-                <div class="question-block" style="margin-top: 15px;">
-                    <div class="q-title">3. Construct a 75° angle virtually / Konstruksi sudut 75°</div>
-                    <div class="bilingual"><div class="en">Select the correct angle range for 75°</div><div class="id">Pilih rentang sudut yang benar untuk 75°</div></div>
-                    <select id="q9" style="margin-top:10px;">
-                        <option value="">--Select--</option>
-                        <option value="lancip">Acute / Lancip (< 90°)</option>
-                        <option value="siku">Right / Siku-siku (= 90°)</option>
-                        <option value="tumpul">Obtuse / Tumpul (> 90°)</option>
-                    </select>
-                    <div class="feedback" id="fb9"></div><div class="solution" id="sol9">Solusi: 75° kurang dari 90°, maka termasuk lancip.</div>
-                </div>
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-calculator"></i> 6. From Q5, Angle A is... / Dari Q5, Sudut A=...</div>
+                        <input type="text" id="q5_6" style="width: 60px;">°
+                        <div class="feedback" id="fb5_6"></div><div class="solution" id="sol5_6">Solusi: 4(10) = 40°</div>
+                    </div>
 
-                <button class="btn btn-check" onclick="checkGame5()"><i class="fas fa-check-circle"></i> Check</button>
-                <button class="btn btn-reset" onclick="resetGame5()"><i class="fas fa-redo"></i> Reset</button>
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-calculator"></i> 7. Supp angles: A=x, B=x+40. Find x / Pelurus A=x, B=x+40. x=...</div>
+                        <input type="text" id="q5_7" style="width: 60px;">°
+                        <div class="feedback" id="fb5_7"></div><div class="solution" id="sol5_7">Solusi: 2x+40=180 → 2x=140 → x=70</div>
+                    </div>
+
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-calculator"></i> 8. From Q7, Angle B is... / Dari Q7, Sudut B=...</div>
+                        <input type="text" id="q5_8" style="width: 60px;">°
+                        <div class="feedback" id="fb5_8"></div><div class="solution" id="sol5_8">Solusi: 70+40 = 110°</div>
+                    </div>
+
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-calculator"></i> 9. Angle 75° is... / Sudut 75° termasuk...</div>
+                        <select id="q5_9" style="width:100%;">
+                            <option value="">--Pilih--</option>
+                            <option value="Acute">Acute / Lancip</option>
+                            <option value="Right">Right / Siku-siku</option>
+                            <option value="Obtuse">Obtuse / Tumpul</option>
+                        </select>
+                        <div class="feedback" id="fb5_9"></div><div class="solution" id="sol5_9">Solusi: < 90° = Lancip</div>
+                    </div>
+
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-calculator"></i> 10. Supp angle of 90° is... / Pelurus dari 90° adalah...</div>
+                        <input type="text" id="q5_10" style="width: 60px;">°
+                        <div class="feedback" id="fb5_10"></div><div class="solution" id="sol5_10">Solusi: 180 - 90 = 90° (Sama-sama siku-siku)</div>
+                    </div>
+
+                </div>
+                <button class="btn btn-check" onclick="checkGame5()"><i class="fas fa-check-circle"></i> Check All</button>
+                <button class="btn btn-reset" onclick="resetGame5()"><i class="fas fa-redo"></i> Reset All</button>
             </div>
         </div>
     </div>
@@ -519,31 +870,108 @@
             <div class="timer"><i class="fas fa-clock"></i> 00:45 - 01:00</div>
             <div class="section-title"><i class="fas fa-hard-hat"></i> Independent Practice</div>
             <div class="bilingual">
-                <div class="en">Architect License Test! Solve these on your own. Remember the 90° and 180° rules.</div>
-                <div class="id">Ujian Lisensi Arsitek! Kerjakan sendiri. Ingat konsep 90° dan 180°.</div>
+                <div class="en">Architect License Test! Solve these structural calculations on your own.</div>
+                <div class="id">Ujian Lisensi Arsitek! Kerjakan perhitungan struktural ini sendiri.</div>
             </div>
 
             <div class="game-area" id="game6">
                 <div class="game-grid">
+                    <!-- Q1 SVG -->
                     <div class="question-block">
-                        <div class="q-title">1. Find the supplementary angle of 45.5° / Tentukan sudut pelurus dari 45,5°</div>
-                        <input type="text" id="q10" style="width: 80px;">°
-                        <div class="feedback" id="fb10"></div><div class="solution" id="sol10">Solusi: 180 - 45.5 = 134.5°</div>
+                        <div class="q-title"><i class="fas fa-ruler-combined"></i> 1. Find supplementary angle of 45.5° / Tentukan sudut pelurus dari 45,5°</div>
+                        <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
+                            <svg width="120" height="50" viewBox="0 0 120 50"><line x1="10" y1="40" x2="110" y2="40" stroke="#333" stroke-width="3"/><line x1="60" y1="40" x2="60" y2="10" stroke="#A78BFA" stroke-width="2"/><path d="M 60 40 A 15 15 0 0 0 55 30" fill="#A78BFA" opacity="0.5"/><text x="45" y="25" font-size="11" fill="#A78BFA" font-weight="bold">45.5°</text><text x="65" y="25" font-size="11" fill="#F87171" font-weight="bold">?</text></svg>
+                            <input type="text" id="q6_1" style="width: 70px;">°
+                        </div>
+                        <div class="feedback" id="fb6_1"></div><div class="solution" id="sol6_1">Solusi: 180 - 45.5 = 134.5°</div>
                     </div>
+
+                    <!-- Q2 SVG -->
                     <div class="question-block">
-                        <div class="q-title">2. Angles A and B are complementary. A=4x, B=5x. Find Angle A / Cari sudut A</div>
-                        <input type="text" id="q11" style="width: 80px;">°
-                        <div class="feedback" id="fb11"></div><div class="solution" id="sol11">Solusi: 9x=90 → x=10. A = 4(10) = 40°</div>
+                        <div class="q-title"><i class="fas fa-ruler-combined"></i> 2. Complementary: A=4x, B=5x. Find Angle A / Penyiku: A=4x, B=5x. Cari A</div>
+                        <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
+                            <svg width="80" height="80" viewBox="0 0 80 80"><line x1="10" y1="70" x2="70" y2="70" stroke="#333" stroke-width="3"/><line x1="10" y1="70" x2="10" y2="10" stroke="#333" stroke-width="3"/><line x1="10" y1="70" x2="50" y2="30" stroke="#34D399" stroke-width="2"/><rect x="10" y="60" width="10" height="10" fill="none" stroke="#333"/><text x="20" y="50" font-size="11" fill="#34D399" font-weight="bold">4x</text><text x="15" y="65" font-size="11" fill="#FCD34D" font-weight="bold">5x</text></svg>
+                            <input type="text" id="q6_2" style="width: 70px;">°
+                        </div>
+                        <div class="feedback" id="fb6_2"></div><div class="solution" id="sol6_2">Solusi: 9x=90 → x=10. A = 4(10) = 40°</div>
                     </div>
-                    <div class="question-block" style="grid-column: span 2;">
-                        <div class="q-title">3. Parallel lines cut by a transversal / Garis sejajar dipotong transversal</div>
-                        <div class="bilingual"><div class="en">If one corresponding angle is \(80^\circ\), what is the other corresponding angle?</div><div class="id">Jika satu sudut sehadap adalah 80°, berapa sudut sehadap lainnya?</div></div>
-                        <input type="text" id="q12" style="width: 80px; margin-top:10px;">°
-                        <div class="feedback" id="fb12"></div><div class="solution" id="sol12">Solusi: Sudut sehadap sama besar = 80°</div>
+
+                    <!-- Q3 SVG -->
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-ruler-combined"></i> 3. Parallel lines: Corresponding angle / Garis sejajar: Sudut sehadap</div>
+                        <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
+                            <svg width="120" height="80" viewBox="0 0 120 80"><line x1="10" y1="20" x2="110" y2="20" stroke="#333" stroke-width="2"/><line x1="10" y1="60" x2="110" y2="60" stroke="#333" stroke-width="2"/><line x1="30" y1="10" x2="90" y2="70" stroke="#A78BFA" stroke-width="2"/><path d="M 50 40 A 10 10 0 0 0 45 35" fill="#FCD34D"/><text x="50" y="30" font-size="11" fill="#FCD34D" font-weight="bold">80°</text><text x="30" y="55" font-size="11" fill="#F87171" font-weight="bold">?</text></svg>
+                            <input type="text" id="q6_3" style="width: 70px;">°
+                        </div>
+                        <div class="feedback" id="fb6_3"></div><div class="solution" id="sol6_3">Solusi: Sudut sehadap sama besar = 80°</div>
+                    </div>
+
+                    <!-- Q4 SVG -->
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-ruler-combined"></i> 4. Alternate interior angle / Sudut dalam berseberangan</div>
+                        <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
+                            <svg width="120" height="80" viewBox="0 0 120 80"><line x1="10" y1="20" x2="110" y2="20" stroke="#333" stroke-width="2"/><line x1="10" y1="60" x2="110" y2="60" stroke="#333" stroke-width="2"/><line x1="30" y1="10" x2="90" y2="70" stroke="#34D399" stroke-width="2"/><path d="M 60 50 A 10 10 0 0 1 70 45" fill="#FCD34D"/><text x="70" y="45" font-size="11" fill="#FCD34D" font-weight="bold">110°</text><text x="40" y="35" font-size="11" fill="#F87171" font-weight="bold">?</text></svg>
+                            <input type="text" id="q6_4" style="width: 70px;">°
+                        </div>
+                        <div class="feedback" id="fb6_4"></div><div class="solution" id="sol6_4">Solusi: Dalam berseberangan sama besar = 110°</div>
+                    </div>
+
+                    <!-- Q5 SVG -->
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-ruler-combined"></i> 5. Comp algebra: (2x+10) and x / Penyiku aljabar</div>
+                        <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
+                            <svg width="80" height="80" viewBox="0 0 80 80"><line x1="10" y1="70" x2="70" y2="70" stroke="#333" stroke-width="3"/><line x1="10" y1="70" x2="10" y2="10" stroke="#333" stroke-width="3"/><line x1="10" y1="70" x2="50" y2="30" stroke="#F87171" stroke-width="2"/><rect x="10" y="60" width="10" height="10" fill="none" stroke="#333"/><text x="20" y="50" font-size="10" fill="#F87171" font-weight="bold">2x+10</text><text x="15" y="65" font-size="11" fill="#FCD34D" font-weight="bold">x</text></svg>
+                            <div>x = <input type="text" id="q6_5" style="width: 50px;">°</div>
+                        </div>
+                        <div class="feedback" id="fb6_5"></div><div class="solution" id="sol6_5">Solusi: 3x+10=90 → 3x=80 → x=26.6°</div>
+                    </div>
+
+                    <!-- Q6 SVG -->
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-ruler-combined"></i> 6. Supp algebra: 3x and (x+20) / Pelurus aljabar</div>
+                        <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
+                            <svg width="120" height="50" viewBox="0 0 120 50"><line x1="10" y1="40" x2="110" y2="40" stroke="#333" stroke-width="3"/><line x1="60" y1="40" x2="90" y2="10" stroke="#A78BFA" stroke-width="2"/><text x="25" y="35" font-size="11" fill="#34D399" font-weight="bold">3x</text><text x="80" y="25" font-size="10" fill="#A78BFA" font-weight="bold">x+20</text></svg>
+                            <div>x = <input type="text" id="q6_6" style="width: 50px;">°</div>
+                        </div>
+                        <div class="feedback" id="fb6_6"></div><div class="solution" id="sol6_6">Solusi: 4x+20=180 → 4x=160 → x=40°</div>
+                    </div>
+
+                    <!-- Q7 SVG -->
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-ruler-combined"></i> 7. Vertically opposite angles / Sudut berhadapan</div>
+                        <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
+                            <svg width="80" height="80" viewBox="0 0 80 80"><line x1="10" y1="10" x2="70" y2="70" stroke="#333" stroke-width="2"/><line x1="70" y1="10" x2="10" y2="70" stroke="#333" stroke-width="2"/><text x="35" y="35" font-size="11" fill="#FCD34D" font-weight="bold">110°</text><text x="35" y="55" font-size="11" fill="#F87171" font-weight="bold">?</text></svg>
+                            <input type="text" id="q6_7" style="width: 70px;">°
+                        </div>
+                        <div class="feedback" id="fb6_7"></div><div class="solution" id="sol6_7">Solusi: Berhadapan sama besar = 110°</div>
+                    </div>
+
+                    <!-- Q8 SVG -->
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-ruler-combined"></i> 8. Triangle angles sum / Sudut segitiga</div>
+                        <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
+                            <svg width="80" height="70" viewBox="0 0 80 70"><polygon points="10,60 70,60 40,10" fill="none" stroke="#A78BFA" stroke-width="2"/><text x="10" y="55" font-size="11" fill="#34D399" font-weight="bold">50°</text><text x="55" y="55" font-size="11" fill="#FCD34D" font-weight="bold">60°</text><text x="35" y="25" font-size="11" fill="#F87171" font-weight="bold">?</text></svg>
+                            <input type="text" id="q6_8" style="width: 70px;">°
+                        </div>
+                        <div class="feedback" id="fb6_8"></div><div class="solution" id="sol6_8">Solusi: 180 - (50+60) = 70°</div>
+                    </div>
+
+                    <!-- Q9 Text -->
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-calculator"></i> 9. Angle is 20° more than its complement / Sudut 20° lebih dari penyikunya</div>
+                        <input type="text" id="q6_9" style="width: 70px;">°
+                        <div class="feedback" id="fb6_9"></div><div class="solution" id="sol6_9">Solusi: x = (90-x)+20 → 2x=110 → x=55°</div>
+                    </div>
+
+                    <!-- Q10 Text -->
+                    <div class="question-block">
+                        <div class="q-title"><i class="fas fa-calculator"></i> 10. Angle is 1/4 of its supplement / Sudut = 1/4 pelurusnya</div>
+                        <input type="text" id="q6_10" style="width: 70px;">°
+                        <div class="feedback" id="fb6_10"></div><div class="solution" id="sol6_10">Solusi: x = 1/4(180-x) → 4x=180-x → 5x=180 → x=36°</div>
                     </div>
                 </div>
-                <button class="btn btn-check" onclick="checkGame6()"><i class="fas fa-check-circle"></i> Check</button>
-                <button class="btn btn-reset" onclick="resetGame6()"><i class="fas fa-redo"></i> Reset</button>
+                <button class="btn btn-check" onclick="checkGame6()"><i class="fas fa-check-circle"></i> Check All</button>
+                <button class="btn btn-reset" onclick="resetGame6()"><i class="fas fa-redo"></i> Reset All</button>
             </div>
         </div>
     </div>
@@ -553,14 +981,8 @@
         <div class="card">
             <div class="section-title"><i class="fas fa-file-alt"></i> Assessment</div>
             <div class="student-info">
-                <div>
-                    <label>Name / Nama:</label><br>
-                    <input type="text" id="studentName" style="width: 250px;">
-                </div>
-                <div>
-                    <label>Date / Tanggal:</label><br>
-                    <input type="date" id="studentDate">
-                </div>
+                <div><label>Name / Nama:</label><br><input type="text" id="studentName" style="width: 250px;"></div>
+                <div><label>Date / Tanggal:</label><br><input type="date" id="studentDate"></div>
             </div>
 
             <div class="tabs">
@@ -573,194 +995,295 @@
 
             <!-- Tab 1 -->
             <div id="tab1" class="tab-content active">
-                <div class="question-block" style="margin-bottom:10px;">
-                    <div class="q-title">1. A point represents... / Titik merepresentasikan...</div>
-                    <div class="radio-group">
-                        <label><input type="radio" name="a1q1" value="A"> Location / Lokasi</label>
-                        <label><input type="radio" name="a1q1" value="B"> Distance / Jarak</label>
+                <div class="game-grid">
+                    <div class="question-block">
+                        <div class="q-title">1. Point represents... / Titik merepresentasikan...</div>
+                        <div class="radio-group"><label><input type="radio" name="a1q1" value="A"> Location / Lokasi</label><label><input type="radio" name="a1q1" value="B"> Size / Ukuran</label></div>
+                        <div class="feedback" id="a1fb1"></div><div class="solution" id="a1sol1">Solusi: Titik = Lokasi</div>
                     </div>
-                    <div class="feedback" id="a1fb1"></div><div class="solution" id="a1sol1">Solusi: Titik hanya menunjukkan lokasi.</div>
-                </div>
-                <div class="question-block" style="margin-bottom:10px;">
-                    <div class="q-title">2. Complementary angles sum up to... / Sudut berpenyiku berjumlah...</div>
-                    <select id="a1q2"><option value="">--Select--</option><option value="90">90°</option><option value="180">180°</option></select>
-                    <div class="feedback" id="a1fb2"></div><div class="solution" id="a1sol2">Solusi: Berpenyiku = 90°</div>
-                </div>
-                <div class="question-block" style="margin-bottom:10px;">
-                    <div class="q-title">3. Half of a straight angle is / Setengah dari sudut lurus adalah</div>
-                    <input type="text" id="a1q3" style="width:60px;">°
-                    <div class="feedback" id="a1fb3"></div><div class="solution" id="a1sol3">Solusi: 180° / 2 = 90°</div>
-                </div>
-                <div class="question-block" style="margin-bottom:10px;">
-                    <div class="q-title">4. Which are 2D geometric objects? (Check all) / Mana yang bidang 2D?</div>
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" id="a1q4a" value="Line"> Line / Garis</label>
-                        <label><input type="checkbox" id="a1q4b" value="Cube"> Cube / Kubus</label>
-                        <label><input type="checkbox" id="a1q4c" value="Plane"> Plane / Bidang</label>
+                    <div class="question-block">
+                        <div class="q-title">2. Comp angles sum to / Penyiku berjumlah</div>
+                        <select id="a1q2"><option value="">--Pilih--</option><option value="90">90°</option><option value="180">180°</option></select>
+                        <div class="feedback" id="a1fb2"></div><div class="solution" id="a1sol2">Solusi: 90°</div>
                     </div>
-                    <div class="feedback" id="a1fb4"></div><div class="solution" id="a1sol4">Solusi: Garis dan Bidang adalah 2D dasar.</div>
-                </div>
-                <div class="question-block">
-                    <div class="q-title">5. An angle of 120° is... / Sudut 120° adalah...</div>
-                    <div class="radio-group">
-                        <label><input type="radio" name="a1q5" value="Acute"> Acute / Lancip</label>
-                        <label><input type="radio" name="a1q5" value="Obtuse"> Obtuse / Tumpul</label>
+                    <div class="question-block">
+                        <div class="q-title">3. Find x / Cari x</div>
+                        <div style="display:flex; gap:10px; align-items:center;"><svg width="80" height="80" viewBox="0 0 80 80"><line x1="10" y1="70" x2="70" y2="70" stroke="#333"/><line x1="10" y1="70" x2="10" y2="10" stroke="#333"/><line x1="10" y1="70" x2="50" y2="30" stroke="#A78BFA"/><text x="20" y="50" font-size="11" fill="#A78BFA">40°</text><text x="15" y="65" font-size="11" fill="#F87171">x</text></svg> <input type="text" id="a1q3" style="width:60px;">°</div>
+                        <div class="feedback" id="a1fb3"></div><div class="solution" id="a1sol3">Solusi: 90-40=50°</div>
                     </div>
-                    <div class="feedback" id="a1fb5"></div><div class="solution" id="a1sol5">Solusi: >90° adalah tumpul.</div>
+                    <div class="question-block">
+                        <div class="q-title">4. Properties of parallel lines / Sifat garis sejajar (Check all that apply)</div>
+                        <div class="checkbox-group"><label><input type="checkbox" id="a1q4a" value="Never meet"> Never meet / Tidak bertemu</label><label><input type="checkbox" id="a1q4b" value="Intersect"> Intersect / Berpotongan</label></div>
+                        <div class="feedback" id="a1fb4"></div><div class="solution" id="a1sol4">Solusi: Tidak bertemu</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">5. Angle type / Tipe sudut</div>
+                        <div style="display:flex; gap:10px; align-items:center;"><svg width="80" height="60" viewBox="0 0 80 60"><line x1="10" y1="50" x2="70" y2="50" stroke="#333"/><line x1="10" y1="50" x2="60" y2="10" stroke="#34D399"/></svg> <select id="a1q5"><option value="">--Pilih--</option><option value="Acute">Acute</option><option value="Obtuse">Obtuse</option></select></div>
+                        <div class="feedback" id="a1fb5"></div><div class="solution" id="a1sol5">Solusi: Lancip</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">6. Half rotation is / Setengah putaran =</div>
+                        <input type="text" id="a1q6" style="width:60px;">°
+                        <div class="feedback" id="a1fb6"></div><div class="solution" id="a1sol6">Solusi: 180°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">7. Find supp / Cari pelurus</div>
+                        <div style="display:flex; gap:10px; align-items:center;"><svg width="100" height="40" viewBox="0 0 100 40"><line x1="10" y1="30" x2="90" y2="30" stroke="#333"/><line x1="50" y1="30" x2="50" y2="10" stroke="#FCD34D"/><text x="30" y="25" fill="#FCD34D" font-size="10">70°</text></svg> <input type="text" id="a1q7" style="width:60px;">°</div>
+                        <div class="feedback" id="a1fb7"></div><div class="solution" id="a1sol7">Solusi: 180-70=110°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">8. Line segment has... endpoints / Ruas garis punya... titik ujung</div>
+                        <div class="radio-group"><label><input type="radio" name="a1q8" value="0"> 0</label><label><input type="radio" name="a1q8" value="1"> 1</label><label><input type="radio" name="a1q8" value="2"> 2</label></div>
+                        <div class="feedback" id="a1fb8"></div><div class="solution" id="a1sol8">Solusi: 2</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">9. Find x / Cari x</div>
+                        <div style="display:flex; gap:10px; align-items:center;"><svg width="80" height="70" viewBox="0 0 80 70"><polygon points="10,60 70,60 40,10" fill="none" stroke="#A78BFA"/><text x="15" y="55" font-size="10" fill="#A78BFA">50°</text><text x="55" y="55" font-size="10" fill="#A78BFA">60°</text></svg> <input type="text" id="a1q9" style="width:60px;">°</div>
+                        <div class="feedback" id="a1fb9"></div><div class="solution" id="a1sol9">Solusi: 180-110=70°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">10. Vertically opposite angles are... / Berhadapan = ...</div>
+                        <select id="a1q10"><option value="">--Pilih--</option><option value="Equal">Equal / Sama</option><option value="Supp">Supplementary / Pelurus</option></select>
+                        <div class="feedback" id="a1fb10"></div><div class="solution" id="a1sol10">Solusi: Sama besar</div>
+                    </div>
                 </div>
-                
-                <button class="btn btn-check" onclick="checkAssessment(1)"><i class="fas fa-check"></i> Submit Group 1</button>
+                <button class="btn btn-check" onclick="checkAssessment(1)"><i class="fas fa-check"></i> Submit</button>
                 <button class="btn btn-print" onclick="printAssessment(1)"><i class="fas fa-print"></i> Print</button>
                 <div class="score-display" id="score1"></div>
             </div>
 
             <!-- Tab 2 -->
             <div id="tab2" class="tab-content">
-                <div class="question-block" style="margin-bottom:10px;">
-                    <div class="q-title">1. Supplementary angle of 72° is... / Pelurus dari 72° adalah...</div>
-                    <input type="text" id="a2q1" style="width:60px;">°
-                    <div class="feedback" id="a2fb1"></div><div class="solution" id="a2sol1">Solusi: 180 - 72 = 108°</div>
-                </div>
-                <div class="question-block" style="margin-bottom:10px;">
-                    <div class="q-title">2. Two angles are complementary. If the first is 35°, the second is... / Dua sudut berpenyiku. Pertama 35°, kedua...</div>
-                    <input type="text" id="a2q2" style="width:60px;">°
-                    <div class="feedback" id="a2fb2"></div><div class="solution" id="a2sol2">Solusi: 90 - 35 = 55°</div>
-                </div>
-                <div class="question-block" style="margin-bottom:10px;">
-                    <div class="q-title">3. An angle equal to 1/4 of its supplementary angle is... / Sudut sama dengan 1/4 pelurusnya adalah...</div>
-                    <input type="text" id="a2q3" style="width:60px;">°
-                    <div class="feedback" id="a2fb3"></div><div class="solution" id="a2sol3">Solusi: x = 1/4(180-x) → 4x = 180-x → 5x=180 → x=36°</div>
-                </div>
-                <div class="question-block" style="margin-bottom:10px;">
-                    <div class="q-title">4. A line segment has... / Ruas garis memiliki...</div>
-                    <div class="radio-group">
-                        <label><input type="radio" name="a2q4" value="0"> 0 endpoints</label>
-                        <label><input type="radio" name="a2q4" value="1"> 1 endpoint</label>
-                        <label><input type="radio" name="a2q4" value="2"> 2 endpoints</label>
+                <div class="game-grid">
+                    <div class="question-block">
+                        <div class="q-title">1. Comp: x and 2x. Find x / Penyiku: x dan 2x</div>
+                        <div style="display:flex; gap:10px; align-items:center;"><svg width="80" height="80" viewBox="0 0 80 80"><line x1="10" y1="70" x2="70" y2="70" stroke="#333"/><line x1="10" y1="70" x2="10" y2="10" stroke="#333"/><line x1="10" y1="70" x2="40" y2="40" stroke="#F87171"/><rect x="10" y="60" width="10" height="10" fill="none" stroke="#333"/><text x="20" y="50" font-size="10" fill="#F87171">2x</text><text x="15" y="65" font-size="10" fill="#34D399">x</text></svg> <input type="text" id="a2q1" style="width:60px;">°</div>
+                        <div class="feedback" id="a2fb1"></div><div class="solution" id="a2sol1">Solusi: 3x=90 → x=30°</div>
                     </div>
-                    <div class="feedback" id="a2fb4"></div><div class="solution" id="a2sol4">Solusi: Ruas garis punya 2 titik ujung.</div>
-                </div>
-                <div class="question-block">
-                    <div class="q-title">5. Vertically opposite angles are... / Sudut berhadapan adalah...</div>
-                    <div class="radio-group">
-                        <label><input type="radio" name="a2q5" value="Equal"> Equal / Sama besar</label>
-                        <label><input type="radio" name="a2q5" value="Supplementary"> Supplementary / Pelurus</label>
+                    <div class="question-block">
+                        <div class="q-title">2. Supp: x and 3x. Find x / Pelurus: x dan 3x</div>
+                        <input type="text" id="a2q2" style="width:60px;">°
+                        <div class="feedback" id="a2fb2"></div><div class="solution" id="a2sol2">Solusi: 4x=180 → x=45°</div>
                     </div>
-                    <div class="feedback" id="a2fb5"></div><div class="solution" id="a2sol5">Solusi: Berhadapan = Sama besar.</div>
+                    <div class="question-block">
+                        <div class="q-title">3. Comp: (3x+5) and (2x+10) / Berpenyiku</div>
+                        <input type="text" id="a2q3" style="width:60px;"> (Nilai x)
+                        <div class="feedback" id="a2fb3"></div><div class="solution" id="a2sol3">Solusi: 5x+15=90 → x=15</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">4. If A comp to B, A=30, B is... / Jika penyiku A=30, B=...</div>
+                        <select id="a2q4"><option value="">--Pilih--</option><option value="60">60°</option><option value="150">150°</option></select>
+                        <div class="feedback" id="a2fb4"></div><div class="solution" id="a2sol4">Solusi: 90-30=60°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">5. Supp algebra / Pelurus aljabar</div>
+                        <div style="display:flex; gap:10px; align-items:center;"><svg width="120" height="50" viewBox="0 0 120 50"><line x1="10" y1="40" x2="110" y2="40" stroke="#333"/><line x1="60" y1="40" x2="90" y2="10" stroke="#A78BFA"/><text x="25" y="35" font-size="10" fill="#34D399">x+20</text><text x="80" y="25" font-size="10" fill="#A78BFA">2x-10</text></svg> <input type="text" id="a2q5" style="width:60px;"> (x)</div>
+                        <div class="feedback" id="a2fb5"></div><div class="solution" id="a2sol5">Solusi: 3x+10=180 → x=170/3 = 56.6°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">6. Which sums equal 90°? / Mana yang jumlahnya 90°? (Check all)</div>
+                        <div class="checkbox-group"><label><input type="checkbox" id="a2q6a" value="30,60"> 30° & 60°</label><label><input type="checkbox" id="a2q6b" value="45,45"> 45° & 45°</label><label><input type="checkbox" id="a2q6c" value="90,90"> 90° & 90°</label></div>
+                        <div class="feedback" id="a2fb6"></div><div class="solution" id="a2sol6">Solusi: 30+60 dan 45+45</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">7. Right angle split 1:3 / Siku-siku 1:3</div>
+                        <input type="text" id="a2q7" style="width:60px;">° (Sudut terkecil)
+                        <div class="feedback" id="a2fb7"></div><div class="solution" id="a2sol7">Solusi: x+3x=90 → x=22.5°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">8. Can two obtuse angles be complementary? / Dua tumpul bisa berpenyiku?</div>
+                        <div class="radio-group"><label><input type="radio" name="a2q8" value="Yes"> Yes</label><label><input type="radio" name="a2q8" value="No"> No</label></div>
+                        <div class="feedback" id="a2fb8"></div><div class="solution" id="a2sol8">Solusi: Tidak, tumpul >90, jumlahnya pasti >90</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">9. Straight line split 1:2 / Lurus 1:2</div>
+                        <div style="display:flex; gap:10px; align-items:center;"><svg width="120" height="40" viewBox="0 0 120 40"><line x1="10" y1="30" x2="110" y2="30" stroke="#333"/><line x1="50" y1="30" x2="50" y2="10" stroke="#F87171"/><text x="20" y="25" font-size="10" fill="#A78BFA">x</text><text x="60" y="25" font-size="10" fill="#A78BFA">2x</text></svg> <input type="text" id="a2q9" style="width:60px;">° (Sudut terbesar)</div>
+                        <div class="feedback" id="a2fb9"></div><div class="solution" id="a2sol9">Solusi: 3x=180 → x=60. Terbesar=2(60)=120°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">10. Angle 20° more than complement / Sudut 20° lebih dari penyikunya</div>
+                        <input type="text" id="a2q10" style="width:60px;">°
+                        <div class="feedback" id="a2fb10"></div><div class="solution" id="a2sol10">Solusi: x=(90-x)+20 → 2x=110 → x=55°</div>
+                    </div>
                 </div>
-
-                <button class="btn btn-check" onclick="checkAssessment(2)"><i class="fas fa-check"></i> Submit Group 2</button>
+                <button class="btn btn-check" onclick="checkAssessment(2)"><i class="fas fa-check"></i> Submit</button>
                 <button class="btn btn-print" onclick="printAssessment(2)"><i class="fas fa-print"></i> Print</button>
                 <div class="score-display" id="score2"></div>
             </div>
 
             <!-- Tab 3 -->
             <div id="tab3" class="tab-content">
-                <div class="question-block" style="margin-bottom:10px;">
-                    <div class="q-title">1. Angle A=(3x+5)° and B=(2x+10)° are complementary. Find x / Berpenyiku. Cari x</div>
-                    <input type="text" id="a3q1" style="width:60px;">
-                    <div class="feedback" id="a3fb1"></div><div class="solution" id="a3sol1">Solusi: 5x+15=90 → 5x=75 → x=15</div>
-                </div>
-                <div class="question-block" style="margin-bottom:10px;">
-                    <div class="q-title">2. From question 1, what is Angle A? / Dari soal 1, berapa sudut A?</div>
-                    <input type="text" id="a3q2" style="width:60px;">°
-                    <div class="feedback" id="a3fb2"></div><div class="solution" id="a3sol2">Solusi: 3(15)+5 = 50°</div>
-                </div>
-                <div class="question-block" style="margin-bottom:10px;">
-                    <div class="q-title">3. An angle is 20° more than twice its complement. Find the angle / Sudut 20° lebih dari 2x penyikunya.</div>
-                    <input type="text" id="a3q3" style="width:60px;">°
-                    <div class="feedback" id="a3fb3"></div><div class="solution" id="a3sol3">Solusi: x = 2(90-x)+20 → 3x=200 → x=66.6°</div>
-                </div>
-                <div class="question-block" style="margin-bottom:10px;">
-                    <div class="q-title">4. If parallel lines are cut by a transversal, alternate interior angles are... / Sudut dalam berseberangan...</div>
-                    <div class="radio-group">
-                        <label><input type="radio" name="a3q4" value="Equal"> Equal / Sama</label>
-                        <label><input type="radio" name="a3q4" value="90"> 90°</label>
+                <div class="game-grid">
+                    <div class="question-block">
+                        <div class="q-title">1. Corresponding angle / Sehadap</div>
+                        <div style="display:flex; gap:10px; align-items:center;"><svg width="100" height="70" viewBox="0 0 100 70"><line x1="10" y1="20" x2="90" y2="20" stroke="#333"/><line x1="10" y1="50" x2="90" y2="50" stroke="#333"/><line x1="30" y1="10" x2="70" y2="60" stroke="#A78BFA"/><text x="35" y="20" font-size="10" fill="#FCD34D">60°</text><text x="30" y="45" font-size="10" fill="#F87171">?</text></svg> <input type="text" id="a3q1" style="width:60px;">°</div>
+                        <div class="feedback" id="a3fb1"></div><div class="solution" id="a3sol1">Solusi: Sehadap = 60°</div>
                     </div>
-                    <div class="feedback" id="a3fb4"></div><div class="solution" id="a3sol4">Solusi: Dalam berseberangan sama besar.</div>
+                    <div class="question-block">
+                        <div class="q-title">2. Alternate interior / Dalam berseberangan</div>
+                        <div style="display:flex; gap:10px; align-items:center;"><svg width="100" height="70" viewBox="0 0 100 70"><line x1="10" y1="20" x2="90" y2="20" stroke="#333"/><line x1="10" y1="50" x2="90" y2="50" stroke="#333"/><line x1="30" y1="10" x2="70" y2="60" stroke="#34D399"/><text x="60" y="35" font-size="10" fill="#FCD34D">110°</text><text x="30" y="45" font-size="10" fill="#F87171">?</text></svg> <input type="text" id="a3q2" style="width:60px;">°</div>
+                        <div class="feedback" id="a3fb2"></div><div class="solution" id="a3sol2">Solusi: Berseberangan = 110°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">3. Co-interior sum / Sehingga jumlahnya</div>
+                        <select id="a3q3"><option value="">--Pilih--</option><option value="90">90°</option><option value="180">180°</option><option value="360">360°</option></select>
+                        <div class="feedback" id="a3fb3"></div><div class="solution" id="a3sol3">Solusi: Sehingga = 180°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">4. Not parallel, corresponding equal? / Tidak sejajar, sehadap sama?</div>
+                        <div class="radio-group"><label><input type="radio" name="a3q4" value="Yes"> Yes</label><label><input type="radio" name="a3q4" value="No"> No</label></div>
+                        <div class="feedback" id="a3fb4"></div><div class="solution" id="a3sol4">Solusi: Tidak, hanya sejajar yang sehadap sama.</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">5. Algebra corresponding / Aljabar sehadap</div>
+                        <div style="display:flex; gap:10px; align-items:center;"><svg width="100" height="70" viewBox="0 0 100 70"><line x1="10" y1="20" x2="90" y2="20" stroke="#333"/><line x1="10" y1="50" x2="90" y2="50" stroke="#333"/><line x1="30" y1="10" x2="70" y2="60" stroke="#F87171"/><text x="35" y="20" font-size="10" fill="#A78BFA">2x</text><text x="60" y="20" font-size="10" fill="#A78BFA">x+50</text></svg> <input type="text" id="a3q5" style="width:60px;"> (x)</div>
+                        <div class="feedback" id="a3fb5"></div><div class="solution" id="a3sol5">Solusi: 2x=x+50 → x=50</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">6. Algebra alternate / Aljabar berseberangan</div>
+                        <input type="text" id="a3q6" style="width:60px;"> (If 3x-10 = 2x+20, find x)
+                        <div class="feedback" id="a3fb6"></div><div class="solution" id="a3sol6">Solusi: 3x-2x=20+10 → x=30</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">7. Identify acute angles in parallel lines / Tandai lancip (Check all)</div>
+                        <div class="checkbox-group"><label><input type="checkbox" id="a3q7a" value="Corresponding 60"> Corresponding 60°</label><label><input type="checkbox" id="a3q7b" value="Co-interior 120"> Co-interior 120°</label></div>
+                        <div class="feedback" id="a3fb7"></div><div class="solution" id="a3sol7">Solusi: 60° lancip</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">8. Co-interior 80°, other is... / Sehingga 80°, lainnya...</div>
+                        <input type="text" id="a3q8" style="width:60px;">°
+                        <div class="feedback" id="a3fb8"></div><div class="solution" id="a3sol8">Solusi: 180-80=100°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">9. Perpendicular transversal creates how many 90°? / Transversal tegak lurus buat berapa 90°?</div>
+                        <select id="a3q9"><option value="">--Pilih--</option><option value="4">4</option><option value="8">8</option></select>
+                        <div class="feedback" id="a3fb9"></div><div class="solution" id="a3sol9">Solusi: 8 sudut 90°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">10. Vertically opposite at intersection / Berhadapan di perpotongan</div>
+                        <div style="display:flex; gap:10px; align-items:center;"><svg width="80" height="80" viewBox="0 0 80 80"><line x1="10" y1="10" x2="70" y2="70" stroke="#333"/><line x1="70" y1="10" x2="10" y2="70" stroke="#333"/><text x="35" y="35" font-size="10" fill="#A78BFA">45°</text></svg> <input type="text" id="a3q10" style="width:60px;">° (Opposite angle)</div>
+                        <div class="feedback" id="a3fb10"></div><div class="solution" id="a3sol10">Solusi: Berhadapan = 45°</div>
+                    </div>
                 </div>
-                <div class="question-block">
-                    <div class="q-title">5. Angle A is complementary to B, B is supplementary to C. If A=40°, what is C? / A berpenyiku dgn B, B berpelurus dgn C. A=40°, C=?</div>
-                    <input type="text" id="a3q5" style="width:60px;">°
-                    <div class="feedback" id="a3fb5"></div><div class="solution" id="a3sol5">Solusi: B=90-40=50°. C=180-50=130°</div>
-                </div>
-
-                <button class="btn btn-check" onclick="checkAssessment(3)"><i class="fas fa-check"></i> Submit Group 3</button>
+                <button class="btn btn-check" onclick="checkAssessment(3)"><i class="fas fa-check"></i> Submit</button>
                 <button class="btn btn-print" onclick="printAssessment(3)"><i class="fas fa-print"></i> Print</button>
                 <div class="score-display" id="score3"></div>
             </div>
 
             <!-- Tab 4 -->
             <div id="tab4" class="tab-content">
-                <div class="question-block" style="margin-bottom:10px;">
-                    <div class="q-title">1. Opposite interior angles are (5x-10)° and (3x+20)°. Find x / Dalam berseberangan. Cari x</div>
-                    <input type="text" id="a4q1" style="width:60px;">
-                    <div class="feedback" id="a4fb1"></div><div class="solution" id="a4sol1">Solusi: 5x-10=3x+20 → 2x=30 → x=15</div>
-                </div>
-                <div class="question-block" style="margin-bottom:10px;">
-                    <div class="q-title">2. A roof forms 155° with a wall. The supplementary angle needed for horizontal is... / Pelurusnya...</div>
-                    <input type="text" id="a4q2" style="width:60px;">°
-                    <div class="feedback" id="a4fb2"></div><div class="solution" id="a4sol2">Solusi: 180 - 155 = 25°</div>
-                </div>
-                <div class="question-block" style="margin-bottom:10px;">
-                    <div class="q-title">3. Two supplementary angles are in ratio 7:3. The difference between them is... / Pelurus berbandingan 7:3. Selisihnya...</div>
-                    <input type="text" id="a4q3" style="width:60px;">°
-                    <div class="feedback" id="a4fb3"></div><div class="solution" id="a4sol3">Solusi: 10x=180→x=18. Selisih=4x=4(18)=72°</div>
-                </div>
-                <div class="question-block" style="margin-bottom:10px;">
-                    <div class="q-title">4. What defines parallel lines? / Apa yang mendefinisikan garis sejajar?</div>
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" id="a4q4a" value="Never meet"> Never meet / Tidak bertemu</label>
-                        <label><input type="checkbox" id="a4q4c" value="Same distance"> Same distance apart / Jarak sama</label>
+                <div class="game-grid">
+                    <div class="question-block">
+                        <div class="q-title">1. Roof pitch 155°, horizontal needs / Atap 155°, pelurus horizontal</div>
+                        <input type="text" id="a4q1" style="width:60px;">°
+                        <div class="feedback" id="a4fb1"></div><div class="solution" id="a4sol1">Solusi: 180-155=25°</div>
                     </div>
-                    <div class="feedback" id="a4fb4"></div><div class="solution" id="a4sol4">Solusi: Tidak bertemu dan jaraknya sama.</div>
+                    <div class="question-block">
+                        <div class="q-title">2. Supp ratio 7:3, difference / Pelurus 7:3, selisih</div>
+                        <input type="text" id="a4q2" style="width:60px;">°
+                        <div class="feedback" id="a4fb2"></div><div class="solution" id="a4sol2">Solusi: 10x=180→x=18. Selisih 4x=72°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">3. Bridge structure angle relationship / Hubungan sudut jembatan</div>
+                        <select id="a4q3"><option value="">--Pilih--</option><option value="Comp">Complementary</option><option value="Supp">Supplementary</option></select>
+                        <div class="feedback" id="a4fb3"></div><div class="solution" id="a4sol3">Solusi: Pelurus (membentuk garis lurus)</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">4. A comp B, B supp C. A=40, C=? / A penyiku B, B pelurus C. C=?</div>
+                        <input type="text" id="a4q4" style="width:60px;">°
+                        <div class="feedback" id="a4fb4"></div><div class="solution" id="a4sol4">Solusi: B=90-40=50. C=180-50=130°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">5. Real world parallel / Paralel dunia nyata (Check all)</div>
+                        <div class="checkbox-group"><label><input type="checkbox" id="a4q5a" value="Railways"> Railway tracks / Rel kereta</label><label><input type="checkbox" id="a4q5b" value="Scissors"> Scissors / Gunting</label></div>
+                        <div class="feedback" id="a4fb5"></div><div class="solution" id="a4sol5">Solusi: Rel kereta</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">6. Clock at 3:00 / Jam 3 siang</div>
+                        <div style="display:flex; gap:10px; align-items:center;"><svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="35" fill="none" stroke="#333" stroke-width="2"/><line x1="40" y1="40" x2="40" y2="15" stroke="#333" stroke-width="3"/><line x1="40" y1="40" x2="65" y2="40" stroke="#A78BFA" stroke-width="3"/></svg> <input type="text" id="a4q6" style="width:60px;">°</div>
+                        <div class="feedback" id="a4fb6"></div><div class="solution" id="a4sol6">Solusi: 90°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">7. Ladder against wall / Tangga di dinding</div>
+                        <div style="display:flex; gap:10px; align-items:center;"><svg width="80" height="80" viewBox="0 0 80 80"><line x1="10" y1="70" x2="10" y2="10" stroke="#333"/><line x1="10" y1="70" x2="70" y2="70" stroke="#333"/><line x1="10" y1="70" x2="60" y2="20" stroke="#F87171"/><rect x="10" y="60" width="10" height="10" fill="none" stroke="#333"/></svg> <select id="a4q7"><option value="">--Pilih--</option><option value="Acute">Acute</option><option value="Right">Right</option></select></div>
+                        <div class="feedback" id="a4fb7"></div><div class="solution" id="a4sol7">Solusi: Sudut siku-siku (Right)</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">8. Scissors opening / Gunting terbuka</div>
+                        <div style="display:flex; gap:10px; align-items:center;"><svg width="80" height="80" viewBox="0 0 80 80"><line x1="10" y1="10" x2="70" y2="70" stroke="#333"/><line x1="70" y1="10" x2="10" y2="70" stroke="#333"/><text x="35" y="35" font-size="10" fill="#34D399">30°</text></svg> <input type="text" id="a4q8" style="width:60px;">° (Opposite angle)</div>
+                        <div class="feedback" id="a4fb8"></div><div class="solution" id="a4sol8">Solusi: Berhadapan = 30°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">9. Linear pair (2n+40) and (3n-20) / Pelurus</div>
+                        <input type="text" id="a4q9" style="width:60px;"> (Nilai n)
+                        <div class="feedback" id="a4fb9"></div><div class="solution" id="a4sol9">Solusi: 5n+20=180 → 5n=160 → n=32</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">10. Angle 1/4 of supplement / Sudut 1/4 pelurusnya</div>
+                        <input type="text" id="a4q10" style="width:60px;">°
+                        <div class="feedback" id="a4fb10"></div><div class="solution" id="a4sol10">Solusi: x=1/4(180-x) → 4x=180-x → x=36°</div>
+                    </div>
                 </div>
-                <div class="question-block">
-                    <div class="q-title">5. A right angle is... / Sudut siku-siku adalah...</div>
-                    <select id="a4q5"><option value="">--Pilih--</option><option value="90">90°</option><option value="180">180°</option></select>
-                    <div class="feedback" id="a4fb5"></div><div class="solution" id="a4sol5">Solusi: Siku-siku = 90°</div>
-                </div>
-
-                <button class="btn btn-check" onclick="checkAssessment(4)"><i class="fas fa-check"></i> Submit Group 4</button>
+                <button class="btn btn-check" onclick="checkAssessment(4)"><i class="fas fa-check"></i> Submit</button>
                 <button class="btn btn-print" onclick="printAssessment(4)"><i class="fas fa-print"></i> Print</button>
                 <div class="score-display" id="score4"></div>
             </div>
 
             <!-- Tab 5 -->
             <div id="tab5" class="tab-content">
-                <div class="question-block" style="margin-bottom:10px;">
-                    <div class="q-title">1. If Angle X and Angle Y are complementary and X > Y, which is true? / Jika X dan Y berpenyiku dan X > Y, mana yang benar?</div>
-                    <div class="radio-group">
-                        <label><input type="radio" name="a5q1" value="X<45"> X < 45°</label>
-                        <label><input type="radio" name="a5q1" value="X>45"> X > 45°</label>
+                <div class="game-grid">
+                    <div class="question-block">
+                        <div class="q-title">1. Triangle missing algebra / Segitiga aljabar</div>
+                        <div style="display:flex; gap:10px; align-items:center;"><svg width="80" height="70" viewBox="0 0 80 70"><polygon points="10,60 70,60 40,10" fill="none" stroke="#A78BFA"/><text x="15" y="55" font-size="10" fill="#A78BFA">x</text><text x="55" y="55" font-size="10" fill="#A78BFA">2x</text><text x="35" y="25" font-size="10" fill="#A78BFA">3x</text></svg> <input type="text" id="a5q1" style="width:60px;"> (x)</div>
+                        <div class="feedback" id="a5fb1"></div><div class="solution" id="a5sol1">Solusi: 6x=180 → x=30</div>
                     </div>
-                    <div class="feedback" id="a5fb1"></div><div class="solution" id="a5sol1">Solusi: Jika X>Y dan X+Y=90, maka X pasti >45°</div>
-                </div>
-                <div class="question-block" style="margin-bottom:10px;">
-                    <div class="q-title">2. Complementary angle of 45.5° is / Penyiku dari 45,5° adalah</div>
-                    <input type="text" id="a5q2" style="width:60px;">°
-                    <div class="feedback" id="a5fb2"></div><div class="solution" id="a5sol2">Solusi: 90 - 45.5 = 44.5°</div>
-                </div>
-                <div class="question-block" style="margin-bottom:10px;">
-                    <div class="q-title">3. Three angles add up to 180°. If two are 50° and 60°, the third is... / Tiga sudut berjumlah 180°. Dua 50° dan 60°, ketiga...</div>
-                    <input type="text" id="a5q3" style="width:60px;">°
-                    <div class="feedback" id="a5fb3"></div><div class="solution" id="a5sol3">Solusi: 180 - 110 = 70°</div>
-                </div>
-                <div class="question-block" style="margin-bottom:10px;">
-                    <div class="q-title">4. Angles on a straight line sum up to... / Sudut pada garis lurus berjumlah...</div>
-                    <select id="a5q4"><option value="">--Pilih--</option><option value="90">90°</option><option value="180">180°</option><option value="360">360°</option></select>
-                    <div class="feedback" id="a5fb4"></div><div class="solution" id="a5sol4">Solusi: Garis lurus = 180°</div>
-                </div>
-                <div class="question-block">
-                    <div class="q-title">5. A line has... endpoints / Garis memiliki... titik ujung</div>
-                    <div class="radio-group">
-                        <label><input type="radio" name="a5q5" value="0"> 0</label>
-                        <label><input type="radio" name="a5q5" value="1"> 1</label>
+                    <div class="question-block">
+                        <div class="q-title">2. Angle 180° is called / Sudut 180° disebut</div>
+                        <select id="a5q2"><option value="">--Pilih--</option><option value="Straight">Straight / Lurus</option><option value="Reflex">Reflex / Refleks</option></select>
+                        <div class="feedback" id="a5fb2"></div><div class="solution" id="a5sol2">Solusi: Lurus</div>
                     </div>
-                    <div class="feedback" id="a5fb5"></div><div class="solution" id="a5sol5">Solusi: Garis (line) tidak memiliki titik ujung (infinity).</div>
+                    <div class="question-block">
+                        <div class="q-title">3. Intersecting lines: 4 angles / Garis berpotongan</div>
+                        <div style="display:flex; gap:10px; align-items:center;"><svg width="80" height="80" viewBox="0 0 80 80"><line x1="10" y1="10" x2="70" y2="70" stroke="#333"/><line x1="70" y1="10" x2="10" y2="70" stroke="#333"/><text x="35" y="35" font-size="10" fill="#FCD34D">50°</text><text x="35" y="55" font-size="10" fill="#F87171">?</text></svg> <input type="text" id="a5q3" style="width:60px;">° (Sudut berpelurus dgn 50°)</div>
+                        <div class="feedback" id="a5fb3"></div><div class="solution" id="a5sol3">Solusi: Pelurus = 180-50=130°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">4. X comp Y, Y comp Z. Are X and Z equal? / X penyiku Y, Y penyiku Z. X=Z?</div>
+                        <div class="radio-group"><label><input type="radio" name="a5q4" value="Yes"> Yes</label><label><input type="radio" name="a5q4" value="No"> No</label></div>
+                        <div class="feedback" id="a5fb4"></div><div class="solution" id="a5sol4">Solusi: Ya, jika sama-sama penyiku Y, maka X=Z.</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">5. Right angle split 1:2:1 / Siku-siku dibagi 1:2:1</div>
+                        <div style="display:flex; gap:10px; align-items:center;"><svg width="80" height="80" viewBox="0 0 80 80"><line x1="10" y1="70" x2="70" y2="70" stroke="#333"/><line x1="10" y1="70" x2="10" y2="10" stroke="#333"/><line x1="10" y1="70" x2="30" y2="30" stroke="#A78BFA"/><line x1="10" y1="70" x2="50" y2="50" stroke="#34D399"/></svg> <input type="text" id="a5q5" style="width:60px;">° (Middle angle / Sudut tengah)</div>
+                        <div class="feedback" id="a5fb5"></div><div class="solution" id="a5sol5">Solusi: x+2x+x=90 → 4x=90 → x=22.5. Tengah=2(22.5)=45°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">6. True about supplementary / Benar tentang pelurus (Check all)</div>
+                        <div class="checkbox-group"><label><input type="checkbox" id="a5q6a" value="Sum 180"> Sum is 180°</label><label><input type="checkbox" id="a5q6b" value="Form line"> Form a straight line</label></div>
+                        <div class="feedback" id="a5fb6"></div><div class="solution" id="a5sol6">Solusi: Keduanya benar</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">7. Parallel complex / Sejajar kompleks</div>
+                        <div style="display:flex; gap:10px; align-items:center;"><svg width="100" height="70" viewBox="0 0 100 70"><line x1="10" y1="20" x2="90" y2="20" stroke="#333"/><line x1="10" y1="50" x2="90" y2="50" stroke="#333"/><line x1="30" y1="10" x2="70" y2="60" stroke="#F87171"/><text x="60" y="35" font-size="10" fill="#F87171">120°</text></svg> <input type="text" id="a5q7" style="width:60px;">° (Co-interior / Sehingga)</div>
+                        <div class="feedback" id="a5fb7"></div><div class="solution" id="a5sol7">Solusi: 180-120=60°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">8. Comp + Supp of 30° is... / Penyiku + Pelurus dari 30° =</div>
+                        <input type="text" id="a5q8" style="width:60px;">°
+                        <div class="feedback" id="a5fb8"></div><div class="solution" id="a5sol8">Solusi: (90-30) + (180-30) = 60 + 150 = 210°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">9. 3 times its complement / 3 kali penyikunya</div>
+                        <select id="a5q9"><option value="">--Pilih--</option><option value="22.5">22.5°</option><option value="45">45°</option><option value="67.5">67.5°</option></select>
+                        <div class="feedback" id="a5fb9"></div><div class="solution" id="a5sol9">Solusi: x=3(90-x) → 4x=270 → x=67.5°</div>
+                    </div>
+                    <div class="question-block">
+                        <div class="q-title">10. Perpendicular transversal / Transversal tegak lurus</div>
+                        <div style="display:flex; gap:10px; align-items:center;"><svg width="100" height="70" viewBox="0 0 100 70"><line x1="10" y1="20" x2="90" y2="20" stroke="#333"/><line x1="10" y1="50" x2="90" y2="50" stroke="#333"/><line x1="50" y1="10" x2="50" y2="60" stroke="#34D399"/><rect x="45" y="20" width="5" height="5" fill="none" stroke="#34D399"/></svg> <input type="text" id="a5q10" style="width:60px;">° (All formed angles)</div>
+                        <div class="feedback" id="a5fb10"></div><div class="solution" id="a5sol10">Solusi: Semua sudut 90°</div>
+                    </div>
                 </div>
-
-                <button class="btn btn-check" onclick="checkAssessment(5)"><i class="fas fa-check"></i> Submit Group 5</button>
+                <button class="btn btn-check" onclick="checkAssessment(5)"><i class="fas fa-check"></i> Submit</button>
                 <button class="btn btn-print" onclick="printAssessment(5)"><i class="fas fa-print"></i> Print</button>
                 <div class="score-display" id="score5"></div>
             </div>
@@ -867,67 +1390,194 @@
             resetFeedback(['fb1', 'fb2', 'fb3', 'fb4', 'fb5', 'fb6', 'fb7', 'fb8', 'fb9', 'fb10']);
         }
 
-        // Section 3
+        // --- GAME 2 (Introduction) CHECKERS ---
+        function checkGame2() {
+            const q2_1 = document.querySelector('input[name="q2_1"]:checked');
+            setFeedback('fb2_1', q2_1 && q2_1.value === "Point");
+
+            const q2_2 = document.querySelector('input[name="q2_2"]:checked');
+            setFeedback('fb2_2', q2_2 && q2_2.value === "Line");
+
+            const q2_3 = document.querySelector('input[name="q2_3"]:checked');
+            setFeedback('fb2_3', q2_3 && q2_3.value === "Plane");
+
+            const q2_4 = document.querySelector('input[name="q2_4"]:checked');
+            setFeedback('fb2_4', q2_4 && q2_4.value === "Right angle");
+
+            const q2_5 = document.querySelector('input[name="q2_5"]:checked');
+            setFeedback('fb2_5', q2_5 && q2_5.value === "Obtuse");
+
+            const q2_6 = document.querySelector('input[name="q2_6"]:checked');
+            setFeedback('fb2_6', q2_6 && q2_6.value === "Safety");
+
+            const q2_7 = document.querySelector('input[name="q2_7"]:checked');
+            setFeedback('fb2_7', q2_7 && q2_7.value === "Parallel");
+
+            const q2_8 = document.querySelector('input[name="q2_8"]:checked');
+            setFeedback('fb2_8', q2_8 && q2_8.value === "90");
+
+            const q2_9 = document.querySelector('input[name="q2_9"]:checked');
+            setFeedback('fb2_9', q2_9 && q2_9.value === "Rectangle");
+
+            const q2_10 = document.querySelector('input[name="q2_10"]:checked');
+            setFeedback('fb2_10', q2_10 && q2_10.value === "Geometry");
+        }
+        function resetGame2() {
+            for(let i=1; i<=10; i++) {
+                const radios = document.querySelectorAll(`input[name="q2_${i}"]`);
+                if(radios.length > 0) radios.forEach(el => el.checked = false);
+            }
+            resetFeedback(['fb2_1', 'fb2_2', 'fb2_3', 'fb2_4', 'fb2_5', 'fb2_6', 'fb2_7', 'fb2_8', 'fb2_9', 'fb2_10']);
+        }
+
+        // --- GAME 3 (Review Knowledge) CHECKERS ---
         function checkGame3() {
-            const da = document.getElementById('drop-a').value;
-            const db = document.getElementById('drop-b').value;
-            const dc = document.getElementById('drop-c').value;
-            setFeedback('fb5', da === 'lancip' && db === 'siku' && dc === 'tumpul');
+            const map = {
+                'q3_1': 'Acute', 'q3_2': 'Right', 'q3_3': 'Obtuse', 'q3_4': 'Straight',
+                'q3_5': 'Acute', 'q3_6': 'Obtuse', 'q3_7': 'Right', 'q3_10': 'Obtuse'
+            };
             
-            const dd = document.getElementById('drop-d').value;
-            setFeedback('fb5b', dd === '180');
+            // Dropdown checks
+            for (const [id, val] of Object.entries(map)) {
+                const v = document.getElementById(id).value;
+                setFeedback('fb'+id.substring(1), v === val);
+            }
+
+            // Text checks
+            const q8 = document.getElementById('q3_8').value.trim();
+            setFeedback('fb3_8', q8 === "180");
+
+            const q9 = document.getElementById('q3_9').value.trim();
+            setFeedback('fb3_9', q9 === "360");
         }
         function resetGame3() {
             document.querySelectorAll('#game3 select').forEach(el => el.value = '');
-            resetFeedback(['fb5', 'fb5b']);
+            document.querySelectorAll('#game3 input[type="text"]').forEach(el => el.value = '');
+            const ids = [];
+            for(let i=1; i<=10; i++) ids.push('fb3_'+i);
+            resetFeedback(ids);
         }
 
-        // Section 4
+        // --- GAME 4 (Problem Intro) CHECKERS ---
         function checkGame4() {
-            const q6 = document.getElementById('q6').value.trim();
-            setFeedback('fb6', q6 === "16");
+            const q1 = document.getElementById('q4_1').value.trim();
+            setFeedback('fb4_1', q1 === "90");
+
+            const q2 = document.getElementById('q4_2').value.trim();
+            setFeedback('fb4_2', q2 === "180");
+
+            const q3 = document.getElementById('q4_3').value;
+            setFeedback('fb4_3', q3 === "2x+3x=90");
+
+            const q4 = document.getElementById('q4_4').value.trim();
+            setFeedback('fb4_4', q4 === "18");
+
+            const q5 = document.getElementById('q4_5').value.trim();
+            setFeedback('fb4_5', q5 === "36");
+
+            const q6 = document.getElementById('q4_6').value;
+            setFeedback('fb4_6', q6 === "x+10+3x=180");
+
+            const q7 = document.getElementById('q4_7').value.trim();
+            setFeedback('fb4_7', q7 === "42.5");
+
+            const q8 = document.getElementById('q4_8').value.trim();
+            setFeedback('fb4_8', q8 === "127.5");
+
+            const q9 = document.getElementById('q4_9').value.trim();
+            setFeedback('fb4_9', q9 === "90");
+
+            const q10 = document.getElementById('q4_10').value.trim();
+            setFeedback('fb4_10', q10 === "45");
         }
         function resetGame4() {
-            document.getElementById('q6').value = '';
-            resetFeedback(['fb6']);
+            for(let i=1; i<=10; i++) {
+                document.getElementById('q4_'+i).value = '';
+            }
+            const ids = [];
+            for(let i=1; i<=10; i++) ids.push('fb4_'+i);
+            resetFeedback(ids);
         }
 
-        // Section 5
+        // --- GAME 5 (Guided Practice) CHECKERS ---
         function checkGame5() {
-            const q7 = document.getElementById('q7_2').value.trim();
-            setFeedback('fb7_1', q7 === "55");
+            const q1 = document.getElementById('q5_1').value.trim();
+            setFeedback('fb5_1', q1 === "55");
 
-            const qx = document.getElementById('q8_x').value.trim();
-            const qa = document.getElementById('q8_a').value.trim();
-            setFeedback('fb8', qx === "10" && qa === "40");
+            const q2 = document.getElementById('q5_2').value.trim();
+            setFeedback('fb5_2', q2 === "55");
 
-            const q9 = document.getElementById('q9').value;
-            setFeedback('fb9', q9 === "lancip");
+            const q3 = document.getElementById('q5_3').value.trim();
+            setFeedback('fb5_3', q3 === "45");
+
+            const q4 = document.getElementById('q5_4').value.trim();
+            setFeedback('fb5_4', q4 === "135");
+
+            const q5 = document.getElementById('q5_5').value.trim();
+            setFeedback('fb5_5', q5 === "10");
+
+            const q6 = document.getElementById('q5_6').value.trim();
+            setFeedback('fb5_6', q6 === "40");
+
+            const q7 = document.getElementById('q5_7').value.trim();
+            setFeedback('fb5_7', q7 === "70");
+
+            const q8 = document.getElementById('q5_8').value.trim();
+            setFeedback('fb5_8', q8 === "110");
+
+            const q9 = document.getElementById('q5_9').value;
+            setFeedback('fb5_9', q9 === "Acute");
+
+            const q10 = document.getElementById('q5_10').value.trim();
+            setFeedback('fb5_10', q10 === "90");
         }
         function resetGame5() {
-            document.getElementById('q7_2').value = '';
-            document.getElementById('q8_x').value = '';
-            document.getElementById('q8_a').value = '';
-            document.getElementById('q9').value = '';
-            resetFeedback(['fb7_1', 'fb8', 'fb9']);
+            for(let i=1; i<=10; i++) {
+                const el = document.getElementById('q5_'+i);
+                if(el.tagName === 'SELECT') el.value = '';
+                else el.value = '';
+            }
+            const ids = [];
+            for(let i=1; i<=10; i++) ids.push('fb5_'+i);
+            resetFeedback(ids);
         }
 
-        // Section 6
+        // Section 6 (Independent Practice)
         function checkGame6() {
-            const q10 = document.getElementById('q10').value.trim();
-            setFeedback('fb10', q10 === "134.5");
+            const q1 = document.getElementById('q6_1').value.trim();
+            setFeedback('fb6_1', q1 === "134.5");
 
-            const q11 = document.getElementById('q11').value.trim();
-            setFeedback('fb11', q11 === "40");
+            const q2 = document.getElementById('q6_2').value.trim();
+            setFeedback('fb6_2', q2 === "40");
 
-            const q12 = document.getElementById('q12').value.trim();
-            setFeedback('fb12', q12 === "80");
+            const q3 = document.getElementById('q6_3').value.trim();
+            setFeedback('fb6_3', q3 === "80");
+
+            const q4 = document.getElementById('q6_4').value.trim();
+            setFeedback('fb6_4', q4 === "110");
+
+            const q5 = document.getElementById('q6_5').value.trim();
+            setFeedback('fb6_5', q5 === "26.6" || q5 === "26.67");
+
+            const q6 = document.getElementById('q6_6').value.trim();
+            setFeedback('fb6_6', q6 === "40");
+
+            const q7 = document.getElementById('q6_7').value.trim();
+            setFeedback('fb6_7', q7 === "110");
+
+            const q8 = document.getElementById('q6_8').value.trim();
+            setFeedback('fb6_8', q8 === "70");
+
+            const q9 = document.getElementById('q6_9').value.trim();
+            setFeedback('fb6_9', q9 === "55");
+
+            const q10 = document.getElementById('q6_10').value.trim();
+            setFeedback('fb6_10', q10 === "36");
         }
         function resetGame6() {
-            document.getElementById('q10').value = '';
-            document.getElementById('q11').value = '';
-            document.getElementById('q12').value = '';
-            resetFeedback(['fb10', 'fb11', 'fb12']);
+            for(let i=1; i<=10; i++) document.getElementById('q6_'+i).value = '';
+            const ids = []; for(let i=1; i<=10; i++) ids.push('fb6_'+i);
+            resetFeedback(ids);
         }
 
         // --- ASSESSMENT TAB & LOGIC ---
@@ -940,99 +1590,76 @@
 
         function checkAssessment(groupNum) {
             let score = 0;
-            const totalQ = 5;
+            const totalQ = 10;
 
             if(groupNum === 1) {
-                const a1q1 = document.querySelector('input[name="a1q1"]:checked');
-                if(a1q1 && a1q1.value === "A") { score++; setFeedback('a1fb1', true); } else { setFeedback('a1fb1', false); }
-
-                const a1q2 = document.getElementById('a1q2').value;
-                if(a1q2 === "90") { score++; setFeedback('a1fb2', true); } else { setFeedback('a1fb2', false); }
-
-                const a1q3 = document.getElementById('a1q3').value.trim();
-                if(a1q3 === "90") { score++; setFeedback('a1fb3', true); } else { setFeedback('a1fb3', false); }
-
-                const a1q4a = document.getElementById('a1q4a').checked;
-                const a1q4b = document.getElementById('a1q4b').checked;
-                const a1q4c = document.getElementById('a1q4c').checked;
-                if(a1q4a && !a1q4b && a1q4c) { score++; setFeedback('a1fb4', true); } else { setFeedback('a1fb4', false); }
-
-                const a1q5 = document.querySelector('input[name="a1q5"]:checked');
-                if(a1q5 && a1q5.value === "Obtuse") { score++; setFeedback('a1fb5', true); } else { setFeedback('a1fb5', false); }
+                if(document.querySelector('input[name="a1q1"]:checked')?.value === "A") { score++; setFeedback('a1fb1', true); } else { setFeedback('a1fb1', false); }
+                if(document.getElementById('a1q2').value === "90") { score++; setFeedback('a1fb2', true); } else { setFeedback('a1fb2', false); }
+                if(document.getElementById('a1q3').value.trim() === "50") { score++; setFeedback('a1fb3', true); } else { setFeedback('a1fb3', false); }
+                if(document.getElementById('a1q4a').checked && !document.getElementById('a1q4b').checked) { score++; setFeedback('a1fb4', true); } else { setFeedback('a1fb4', false); }
+                if(document.getElementById('a1q5').value === "Acute") { score++; setFeedback('a1fb5', true); } else { setFeedback('a1fb5', false); }
+                if(document.getElementById('a1q6').value.trim() === "180") { score++; setFeedback('a1fb6', true); } else { setFeedback('a1fb6', false); }
+                if(document.getElementById('a1q7').value.trim() === "110") { score++; setFeedback('a1fb7', true); } else { setFeedback('a1fb7', false); }
+                if(document.querySelector('input[name="a1q8"]:checked')?.value === "2") { score++; setFeedback('a1fb8', true); } else { setFeedback('a1fb8', false); }
+                if(document.getElementById('a1q9').value.trim() === "70") { score++; setFeedback('a1fb9', true); } else { setFeedback('a1fb9', false); }
+                if(document.getElementById('a1q10').value === "Equal") { score++; setFeedback('a1fb10', true); } else { setFeedback('a1fb10', false); }
             }
             else if(groupNum === 2) {
-                const a2q1 = document.getElementById('a2q1').value.trim();
-                if(a2q1 === "108") { score++; setFeedback('a2fb1', true); } else { setFeedback('a2fb1', false); }
-
-                const a2q2 = document.getElementById('a2q2').value.trim();
-                if(a2q2 === "55") { score++; setFeedback('a2fb2', true); } else { setFeedback('a2fb2', false); }
-
-                const a2q3 = document.getElementById('a2q3').value.trim();
-                if(a2q3 === "36") { score++; setFeedback('a2fb3', true); } else { setFeedback('a2fb3', false); }
-
-                const a2q4 = document.querySelector('input[name="a2q4"]:checked');
-                if(a2q4 && a2q4.value === "2") { score++; setFeedback('a2fb4', true); } else { setFeedback('a2fb4', false); }
-
-                const a2q5 = document.querySelector('input[name="a2q5"]:checked');
-                if(a2q5 && a2q5.value === "Equal") { score++; setFeedback('a2fb5', true); } else { setFeedback('a2fb5', false); }
+                if(document.getElementById('a2q1').value.trim() === "30") { score++; setFeedback('a2fb1', true); } else { setFeedback('a2fb1', false); }
+                if(document.getElementById('a2q2').value.trim() === "45") { score++; setFeedback('a2fb2', true); } else { setFeedback('a2fb2', false); }
+                if(document.getElementById('a2q3').value.trim() === "15") { score++; setFeedback('a2fb3', true); } else { setFeedback('a2fb3', false); }
+                if(document.getElementById('a2q4').value === "60") { score++; setFeedback('a2fb4', true); } else { setFeedback('a2fb4', false); }
+                if(document.getElementById('a2q5').value.trim() === "56.6" || document.getElementById('a2q5').value.trim() === "56.67") { score++; setFeedback('a2fb5', true); } else { setFeedback('a2fb5', false); }
+                if(document.getElementById('a2q6a').checked && document.getElementById('a2q6b').checked && !document.getElementById('a2q6c').checked) { score++; setFeedback('a2fb6', true); } else { setFeedback('a2fb6', false); }
+                if(document.getElementById('a2q7').value.trim() === "22.5") { score++; setFeedback('a2fb7', true); } else { setFeedback('a2fb7', false); }
+                if(document.querySelector('input[name="a2q8"]:checked')?.value === "No") { score++; setFeedback('a2fb8', true); } else { setFeedback('a2fb8', false); }
+                if(document.getElementById('a2q9').value.trim() === "120") { score++; setFeedback('a2fb9', true); } else { setFeedback('a2fb9', false); }
+                if(document.getElementById('a2q10').value.trim() === "55") { score++; setFeedback('a2fb10', true); } else { setFeedback('a2fb10', false); }
             }
             else if(groupNum === 3) {
-                const a3q1 = document.getElementById('a3q1').value.trim();
-                if(a3q1 === "15") { score++; setFeedback('a3fb1', true); } else { setFeedback('a3fb1', false); }
-
-                const a3q2 = document.getElementById('a3q2').value.trim();
-                if(a3q2 === "50") { score++; setFeedback('a3fb2', true); } else { setFeedback('a3fb2', false); }
-
-                const a3q3 = document.getElementById('a3q3').value.trim();
-                if(a3q3 === "66.6" || a3q3 === "66.67") { score++; setFeedback('a3fb3', true); } else { setFeedback('a3fb3', false); }
-
-                const a3q4 = document.querySelector('input[name="a3q4"]:checked');
-                if(a3q4 && a3q4.value === "Equal") { score++; setFeedback('a3fb4', true); } else { setFeedback('a3fb4', false); }
-
-                const a3q5 = document.getElementById('a3q5').value.trim();
-                if(a3q5 === "130") { score++; setFeedback('a3fb5', true); } else { setFeedback('a3fb5', false); }
+                if(document.getElementById('a3q1').value.trim() === "60") { score++; setFeedback('a3fb1', true); } else { setFeedback('a3fb1', false); }
+                if(document.getElementById('a3q2').value.trim() === "110") { score++; setFeedback('a3fb2', true); } else { setFeedback('a3fb2', false); }
+                if(document.getElementById('a3q3').value === "180") { score++; setFeedback('a3fb3', true); } else { setFeedback('a3fb3', false); }
+                if(document.querySelector('input[name="a3q4"]:checked')?.value === "No") { score++; setFeedback('a3fb4', true); } else { setFeedback('a3fb4', false); }
+                if(document.getElementById('a3q5').value.trim() === "50") { score++; setFeedback('a3fb5', true); } else { setFeedback('a3fb5', false); }
+                if(document.getElementById('a3q6').value.trim() === "30") { score++; setFeedback('a3fb6', true); } else { setFeedback('a3fb6', false); }
+                if(document.getElementById('a3q7a').checked && !document.getElementById('a3q7b').checked) { score++; setFeedback('a3fb7', true); } else { setFeedback('a3fb7', false); }
+                if(document.getElementById('a3q8').value.trim() === "100") { score++; setFeedback('a3fb8', true); } else { setFeedback('a3fb8', false); }
+                if(document.getElementById('a3q9').value === "8") { score++; setFeedback('a3fb9', true); } else { setFeedback('a3fb9', false); }
+                if(document.getElementById('a3q10').value.trim() === "45") { score++; setFeedback('a3fb10', true); } else { setFeedback('a3fb10', false); }
             }
             else if(groupNum === 4) {
-                const a4q1 = document.getElementById('a4q1').value.trim();
-                if(a4q1 === "15") { score++; setFeedback('a4fb1', true); } else { setFeedback('a4fb1', false); }
-
-                const a4q2 = document.getElementById('a4q2').value.trim();
-                if(a4q2 === "25") { score++; setFeedback('a4fb2', true); } else { setFeedback('a4fb2', false); }
-
-                const a4q3 = document.getElementById('a4q3').value.trim();
-                if(a4q3 === "72") { score++; setFeedback('a4fb3', true); } else { setFeedback('a4fb3', false); }
-
-                const a4q4a = document.getElementById('a4q4a').checked;
-                const a4q4c = document.getElementById('a4q4c').checked;
-                if(a4q4a && a4q4c) { score++; setFeedback('a4fb4', true); } else { setFeedback('a4fb4', false); }
-
-                const a4q5 = document.getElementById('a4q5').value;
-                if(a4q5 === "90") { score++; setFeedback('a4fb5', true); } else { setFeedback('a4fb5', false); }
+                if(document.getElementById('a4q1').value.trim() === "25") { score++; setFeedback('a4fb1', true); } else { setFeedback('a4fb1', false); }
+                if(document.getElementById('a4q2').value.trim() === "72") { score++; setFeedback('a4fb2', true); } else { setFeedback('a4fb2', false); }
+                if(document.getElementById('a4q3').value === "Supp") { score++; setFeedback('a4fb3', true); } else { setFeedback('a4fb3', false); }
+                if(document.getElementById('a4q4').value.trim() === "130") { score++; setFeedback('a4fb4', true); } else { setFeedback('a4fb4', false); }
+                if(document.getElementById('a4q5a').checked && !document.getElementById('a4q5b').checked) { score++; setFeedback('a4fb5', true); } else { setFeedback('a4fb5', false); }
+                if(document.getElementById('a4q6').value.trim() === "90") { score++; setFeedback('a4fb6', true); } else { setFeedback('a4fb6', false); }
+                if(document.getElementById('a4q7').value === "Right") { score++; setFeedback('a4fb7', true); } else { setFeedback('a4fb7', false); }
+                if(document.getElementById('a4q8').value.trim() === "30") { score++; setFeedback('a4fb8', true); } else { setFeedback('a4fb8', false); }
+                if(document.getElementById('a4q9').value.trim() === "32") { score++; setFeedback('a4fb9', true); } else { setFeedback('a4fb9', false); }
+                if(document.getElementById('a4q10').value.trim() === "36") { score++; setFeedback('a4fb10', true); } else { setFeedback('a4fb10', false); }
             }
             else if(groupNum === 5) {
-                const a5q1 = document.querySelector('input[name="a5q1"]:checked');
-                if(a5q1 && a5q1.value === "X>45") { score++; setFeedback('a5fb1', true); } else { setFeedback('a5fb1', false); }
-
-                const a5q2 = document.getElementById('a5q2').value.trim();
-                if(a5q2 === "44.5") { score++; setFeedback('a5fb2', true); } else { setFeedback('a5fb2', false); }
-
-                const a5q3 = document.getElementById('a5q3').value.trim();
-                if(a5q3 === "70") { score++; setFeedback('a5fb3', true); } else { setFeedback('a5fb3', false); }
-
-                const a5q4 = document.getElementById('a5q4').value;
-                if(a5q4 === "180") { score++; setFeedback('a5fb4', true); } else { setFeedback('a5fb4', false); }
-
-                const a5q5 = document.querySelector('input[name="a5q5"]:checked');
-                if(a5q5 && a5q5.value === "0") { score++; setFeedback('a5fb5', true); } else { setFeedback('a5fb5', false); }
+                if(document.getElementById('a5q1').value.trim() === "30") { score++; setFeedback('a5fb1', true); } else { setFeedback('a5fb1', false); }
+                if(document.getElementById('a5q2').value === "Straight") { score++; setFeedback('a5fb2', true); } else { setFeedback('a5fb2', false); }
+                if(document.getElementById('a5q3').value.trim() === "130") { score++; setFeedback('a5fb3', true); } else { setFeedback('a5fb3', false); }
+                if(document.querySelector('input[name="a5q4"]:checked')?.value === "Yes") { score++; setFeedback('a5fb4', true); } else { setFeedback('a5fb4', false); }
+                if(document.getElementById('a5q5').value.trim() === "45") { score++; setFeedback('a5fb5', true); } else { setFeedback('a5fb5', false); }
+                if(document.getElementById('a5q6a').checked && document.getElementById('a5q6b').checked) { score++; setFeedback('a5fb6', true); } else { setFeedback('a5fb6', false); }
+                if(document.getElementById('a5q7').value.trim() === "60") { score++; setFeedback('a5fb7', true); } else { setFeedback('a5fb7', false); }
+                if(document.getElementById('a5q8').value.trim() === "210") { score++; setFeedback('a5fb8', true); } else { setFeedback('a5fb8', false); }
+                if(document.getElementById('a5q9').value === "67.5") { score++; setFeedback('a5fb9', true); } else { setFeedback('a5fb9', false); }
+                if(document.getElementById('a5q10').value.trim() === "90") { score++; setFeedback('a5fb10', true); } else { setFeedback('a5fb10', false); }
             }
 
             const scoreEl = document.getElementById(`score${groupNum}`);
             scoreEl.style.display = 'block';
             scoreEl.innerHTML = `Score / Skor: ${score} / ${totalQ}`;
-            scoreEl.style.color = (score >= 4) ? 'var(--success)' : 'var(--error)';
+            scoreEl.style.color = (score >= 8) ? 'var(--success)' : 'var(--error)';
         }
 
-        // --- PRINT ASSESSMENT ---
+        // Print Assessment (Updated to handle SVG text better and 10 questions)
         function printAssessment(groupNum) {
             const name = document.getElementById('studentName').value || 'No Name';
             const date = document.getElementById('studentDate').value || 'No Date';
@@ -1050,7 +1677,7 @@
                         h1 { color: #4B5563; border-bottom: 2px solid #A78BFA; padding-bottom: 10px; }
                         .info { margin-bottom: 20px; font-size: 1.2rem; }
                         .q-block { margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
-                        .q-title { font-weight: bold; }
+                        .q-title { font-weight: bold; margin-bottom: 5px; }
                         .student-ans { color: #2563EB; margin-top: 5px; }
                         .correct-ans { color: #16A34A; margin-top: 5px; font-weight: bold; display: block; }
                     </style>
@@ -1061,6 +1688,10 @@
             `;
 
             questions.forEach((q, index) => {
+                // Extract text from SVG elements for print context
+                const svgTexts = q.querySelectorAll('svg text');
+                let svgContext = svgTexts.length > 0 ? "(Ilustrasi menunjukkan: " + Array.from(svgTexts).map(t => t.textContent).join(", ") + ") " : "";
+                
                 const title = q.querySelector('.q-title').innerText;
                 let studentAnswer = "Not answered";
                 let correctAnswer = "See solution on platform";
@@ -1080,7 +1711,7 @@
 
                 printHtml += `
                     <div class="q-block">
-                        <div class="q-title">${index + 1}. ${title}</div>
+                        <div class="q-title">${index + 1}. ${svgContext}${title}</div>
                         <div class="student-ans">Student Answer / Jawaban Siswa: ${studentAnswer}</div>
                         <div class="correct-ans">Correct Answer / Kunci: ${correctAnswer}</div>
                     </div>
