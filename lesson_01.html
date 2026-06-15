@@ -651,29 +651,45 @@
 
             <div class="visual-box">
                 <!-- Animated Complementary & Supplementary SVG -->
-                <svg width="100%" height="150" viewBox="0 0 500 150" style="max-width: 500px;">
+                <svg width="100%" height="150" viewBox="0 0 600 150" style="max-width: 600px;">
                     <!-- Complementary (90°) -->
                     <g transform="translate(50, 20)">
-                        <rect x="0" y="0" width="100" height="100" fill="none" stroke="#ccc" stroke-width="2" stroke-dasharray="5"/>
-                        <path d="M 0 100 L 100 100" stroke="#333" stroke-width="3"/>
-                        <path d="M 0 100 L 0 0" stroke="#333" stroke-width="3"/>
-                        <path d="M 0 100 L 60 40" stroke="#A78BFA" stroke-width="4" class="draw-line"/>
-                        <path d="M 15 100 A 20 20 0 0 0 20 85" fill="#A78BFA" opacity="0.5"/>
-                        <path d="M 20 85 A 20 20 0 0 0 10 95" fill="#FCD34D" opacity="0.5"/>
-                        <text x="20" y="75" font-size="14" fill="#A78BFA" font-weight="bold">A</text>
-                        <text x="5" y="95" font-size="14" fill="#FCD34D" font-weight="bold">B</text>
+                        <!-- Latar belakang sudut siku-siku -->
+                        <rect x="0" y="0" width="100" height="100" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1" rx="2"/>
+                        
+                        <!-- Garis Horizontal & Vertikal -->
+                        <line x1="0" y1="100" x2="110" y2="100" stroke="#333" stroke-width="3"/>
+                        <line x1="0" y1="100" x2="0" y2="-10" stroke="#333" stroke-width="3"/>
+                        <!-- Garis Diagonal -->
+                        <line x1="0" y1="100" x2="70" y2="30" stroke="#A78BFA" stroke-width="4" class="draw-line"/>
+                        
+                        <!-- Lengkungan Sudut A (Tertutup rapat antara vertikal dan diagonal) -->
+                        <path d="M 0 80 A 20 20 0 0 0 14 86 L 0 100 Z" fill="#A78BFA" opacity="0.5" stroke="#A78BFA" stroke-width="1"/>
+                        <text x="8" y="76" font-size="14" fill="#A78BFA" font-weight="bold">A</text>
+                        
+                        <!-- Lengkungan Sudut B (Tertutup rapat antara diagonal dan horizontal) -->
+                        <path d="M 14 86 A 20 20 0 0 0 20 100 L 0 100 Z" fill="#FCD34D" opacity="0.5" stroke="#FCD34D" stroke-width="1"/>
+                        <text x="18" y="96" font-size="14" fill="#FCD34D" font-weight="bold">B</text>
+                        
                         <text x="30" y="120" font-size="16" fill="#333" font-weight="bold" font-family="Poppins">A + B = 90°</text>
                     </g>
 
                     <!-- Supplementary (180°) -->
                     <g transform="translate(250, 20)">
-                        <path d="M 0 100 L 200 100" stroke="#333" stroke-width="3"/>
-                        <path d="M 100 100 L 150 20" stroke="#34D399" stroke-width="4" class="draw-line"/>
-                        <path d="M 115 100 A 20 20 0 0 0 110 80" fill="#34D399" opacity="0.5"/>
-                        <path d="M 110 80 A 20 20 0 0 0 95 95" fill="#F87171" opacity="0.5"/>
-                        <text x="120" y="75" font-size="14" fill="#34D399" font-weight="bold">X</text>
-                        <text x="90" y="95" font-size="14" fill="#F87171" font-weight="bold">Y</text>
-                        <text x="50" y="120" font-size="16" fill="#333" font-weight="bold" font-family="Poppins">X + Y = 180°</text>
+                        <!-- Garis Horizontal Lurus -->
+                        <line x1="-10" y1="100" x2="210" y2="100" stroke="#333" stroke-width="3"/>
+                        <!-- Garis Diagonal -->
+                        <line x1="100" y1="100" x2="160" y2="30" stroke="#34D399" stroke-width="4" class="draw-line"/>
+                        
+                        <!-- Lengkungan Sudut X (Tertutup rapat, tumpul) -->
+                        <path d="M 80 100 A 20 20 0 0 1 108 86 L 100 100 Z" fill="#34D399" opacity="0.5" stroke="#34D399" stroke-width="1"/>
+                        <text x="85" y="86" font-size="14" fill="#34D399" font-weight="bold">X</text>
+                        
+                        <!-- Lengkungan Sudut Y (Tertutup rapat, lancip) -->
+                        <path d="M 108 86 A 20 20 0 0 1 120 100 L 100 100 Z" fill="#F87171" opacity="0.5" stroke="#F87171" stroke-width="1"/>
+                        <text x="112" y="96" font-size="14" fill="#F87171" font-weight="bold">Y</text>
+                        
+                        <text x="60" y="120" font-size="16" fill="#333" font-weight="bold" font-family="Poppins">X + Y = 180°</text>
                     </g>
                 </svg>
             </div>
@@ -765,13 +781,22 @@
                     <div class="question-block" style="grid-column: span 2;">
                         <div class="q-title"><i class="fas fa-bridge"></i> 1. Bridge Support: Find the supplementary angle / Hitung sudut pelurus</div>
                         <div style="display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
-                            <svg width="150" height="100" viewBox="0 0 150 100">
-                                <line x1="10" y1="90" x2="140" y2="90" stroke="#333" stroke-width="3"/>
-                                <line x1="40" y1="90" x2="100" y2="90" stroke="#A78BFA" stroke-width="6"/>
-                                <line x1="40" y1="90" x2="100" y2="20" stroke="#333" stroke-width="3"/>
-                                <path d="M 60 90 A 20 20 0 0 0 55 75" fill="#FCD34D"/>
-                                <text x="55" y="70" font-size="12" fill="#FCD34D" font-weight="bold">125°</text>
-                                <text x="80" y="85" font-size="12" fill="#A78BFA" font-weight="bold">?°</text>
+                             <svg width="150" height="100" viewBox="0 0 150 100">
+                                <!-- Garis Jalan Horizontal Dasar -->
+                                <line x1="10" y1="90" x2="140" y2="90" stroke="#9CA3AF" stroke-width="2"/>
+                                <!-- Lantai Jembatan -->
+                                <line x1="60" y1="90" x2="140" y2="90" stroke="#A78BFA" stroke-width="6"/>
+                                
+                                <!-- Penyangga Jembatan (Diagonal ke atas kanan) -->
+                                <line x1="60" y1="90" x2="130" y2="20" stroke="#333" stroke-width="3"/>
+                                
+                                <!-- Lengkungan Sudut 125 derajat (Tertutup, antara jalan kiri dan penyangga) -->
+                                <path d="M 38 90 A 22 22 0 0 1 67 75 L 60 90 Z" fill="#FCD34D" opacity="0.6" stroke="#FCD34D" stroke-width="1"/>
+                                <text x="35" y="75" font-size="12" fill="#FCD34D" font-weight="bold">125°</text>
+                                
+                                <!-- Lengkungan Sudut ? (Tertutup, antara penyangga dan lantai jembatan) -->
+                                <path d="M 64 77 A 15 15 0 0 1 75 90 L 60 90 Z" fill="#A78BFA" opacity="0.6" stroke="#A78BFA" stroke-width="1"/>
+                                <text x="68" y="84" font-size="12" fill="#A78BFA" font-weight="bold">?</text>
                             </svg>
                             <div style="display:flex; align-items:center; gap:5px;">125° + <input type="text" id="q5_1" style="width: 60px;">° = 180°</div>
                         </div>
@@ -876,81 +901,170 @@
 
             <div class="game-area" id="game6">
                 <div class="game-grid">
-                    <!-- Q1 SVG -->
+                    <!-- Q1 SVG (Supp 45.5° & 134.5°) -->
                     <div class="question-block">
                         <div class="q-title"><i class="fas fa-ruler-combined"></i> 1. Find supplementary angle of 45.5° / Tentukan sudut pelurus dari 45,5°</div>
                         <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
-                            <svg width="120" height="50" viewBox="0 0 120 50"><line x1="10" y1="40" x2="110" y2="40" stroke="#333" stroke-width="3"/><line x1="60" y1="40" x2="60" y2="10" stroke="#A78BFA" stroke-width="2"/><path d="M 60 40 A 15 15 0 0 0 55 30" fill="#A78BFA" opacity="0.5"/><text x="45" y="25" font-size="11" fill="#A78BFA" font-weight="bold">45.5°</text><text x="65" y="25" font-size="11" fill="#F87171" font-weight="bold">?</text></svg>
+                            <svg width="140" height="70" viewBox="0 0 140 70">
+                                <line x1="10" y1="60" x2="130" y2="60" stroke="#333" stroke-width="3"/>
+                                <!-- Garis miring 45.5° dari horizontal kanan -->
+                                <line x1="70" y1="60" x2="110" y2="20" stroke="#A78BFA" stroke-width="3"/>
+                                <!-- Lekukan 45.5° (Kanan, Lancip menempel rapat) -->
+                                <path d="M 70 60 L 90 60 A 20 20 0 0 0 84 46 L 70 60 Z" fill="#A78BFA" opacity="0.5" stroke="#A78BFA" stroke-width="1"/>
+                                <text x="82" y="52" font-size="11" fill="#A78BFA" font-weight="bold">45.5°</text>
+                                <!-- Lekukan 134.5° (Kiri, Tumpul menempel rapat) -->
+                                <path d="M 70 60 L 50 60 A 20 20 0 1 1 84 46 Z" fill="#F87171" opacity="0.5" stroke="#F87171" stroke-width="1"/>
+                                <text x="52" y="42" font-size="12" fill="#F87171" font-weight="bold">?</text>
+                            </svg>
                             <input type="text" id="q6_1" style="width: 70px;">°
                         </div>
                         <div class="feedback" id="fb6_1"></div><div class="solution" id="sol6_1">Solusi: 180 - 45.5 = 134.5°</div>
                     </div>
 
-                    <!-- Q2 SVG -->
+                    <!-- Q2 SVG (Tetap dari sebelumnya - OK) -->
                     <div class="question-block">
                         <div class="q-title"><i class="fas fa-ruler-combined"></i> 2. Complementary: A=4x, B=5x. Find Angle A / Penyiku: A=4x, B=5x. Cari A</div>
                         <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
-                            <svg width="80" height="80" viewBox="0 0 80 80"><line x1="10" y1="70" x2="70" y2="70" stroke="#333" stroke-width="3"/><line x1="10" y1="70" x2="10" y2="10" stroke="#333" stroke-width="3"/><line x1="10" y1="70" x2="50" y2="30" stroke="#34D399" stroke-width="2"/><rect x="10" y="60" width="10" height="10" fill="none" stroke="#333"/><text x="20" y="50" font-size="11" fill="#34D399" font-weight="bold">4x</text><text x="15" y="65" font-size="11" fill="#FCD34D" font-weight="bold">5x</text></svg>
+                            <svg width="80" height="80" viewBox="0 0 80 80">
+                                <line x1="10" y1="70" x2="70" y2="70" stroke="#333" stroke-width="3"/>
+                                <line x1="10" y1="70" x2="10" y2="10" stroke="#333" stroke-width="3"/>
+                                <line x1="10" y1="70" x2="56" y2="31" stroke="#34D399" stroke-width="3"/>
+                                <rect x="10" y="60" width="10" height="10" fill="none" stroke="#333" stroke-width="2"/>
+                                <path d="M 10 70 L 30 70 A 20 20 0 0 0 25 55 L 10 70 Z" fill="#34D399" opacity="0.5" stroke="#34D399" stroke-width="1"/>
+                                <text x="28" y="60" font-size="11" fill="#34D399" font-weight="bold">4x</text>
+                                <path d="M 10 70 L 10 50 A 20 20 0 0 0 23 53 L 10 70 Z" fill="#FCD34D" opacity="0.5" stroke="#FCD34D" stroke-width="1"/>
+                                <text x="12" y="48" font-size="11" fill="#FCD34D" font-weight="bold">5x</text>
+                            </svg>
                             <input type="text" id="q6_2" style="width: 70px;">°
                         </div>
                         <div class="feedback" id="fb6_2"></div><div class="solution" id="sol6_2">Solusi: 9x=90 → x=10. A = 4(10) = 40°</div>
                     </div>
 
-                    <!-- Q3 SVG -->
+                    <!-- Q3 SVG (Sehadap 80° - Trigonometri Presisi) -->
                     <div class="question-block">
                         <div class="q-title"><i class="fas fa-ruler-combined"></i> 3. Parallel lines: Corresponding angle / Garis sejajar: Sudut sehadap</div>
                         <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
-                            <svg width="120" height="80" viewBox="0 0 120 80"><line x1="10" y1="20" x2="110" y2="20" stroke="#333" stroke-width="2"/><line x1="10" y1="60" x2="110" y2="60" stroke="#333" stroke-width="2"/><line x1="30" y1="10" x2="90" y2="70" stroke="#A78BFA" stroke-width="2"/><path d="M 50 40 A 10 10 0 0 0 45 35" fill="#FCD34D"/><text x="50" y="30" font-size="11" fill="#FCD34D" font-weight="bold">80°</text><text x="30" y="55" font-size="11" fill="#F87171" font-weight="bold">?</text></svg>
+                            <svg width="120" height="90" viewBox="0 0 120 90">
+                                <!-- Garis Sejajar -->
+                                <line x1="10" y1="30" x2="110" y2="30" stroke="#333" stroke-width="2"/>
+                                <line x1="10" y1="80" x2="110" y2="80" stroke="#333" stroke-width="2"/>
+                                <!-- Garis Transversal (Kemiringan 80° dari horizontal) -->
+                                <line x1="46" y1="110" x2="74" y2="-10" stroke="#34D399" stroke-width="2"/>
+                                
+                                <!-- Titik Potong Atas (60, 30) -->
+                                <!-- Lekukan 80° (Kanan Bawah, Lancip menempel rapat) -->
+                                <path d="M 75 30 A 15 15 0 0 0 62.6 15.2 L 60 30 Z" fill="#FCD34D" opacity="0.6" stroke="#FCD34D" stroke-width="1"/>
+                                <text x="66" y="20" font-size="11" fill="#FCD34D" font-weight="bold">80°</text>
+                                
+                                <!-- Titik Potong Bawah (51.4, 80) -->
+                                <!-- Lekukan ? (Kanan Bawah, Sehadap menempel rapat) -->
+                                <path d="M 66.4 80 A 15 15 0 0 0 54 65.2 L 51.4 80 Z" fill="#F87171" opacity="0.6" stroke="#F87171" stroke-width="1"/>
+                                <text x="57" y="70" font-size="11" fill="#F87171" font-weight="bold">?</text>
+                            </svg>
                             <input type="text" id="q6_3" style="width: 70px;">°
                         </div>
                         <div class="feedback" id="fb6_3"></div><div class="solution" id="sol6_3">Solusi: Sudut sehadap sama besar = 80°</div>
                     </div>
 
-                    <!-- Q4 SVG -->
+                    <!-- Q4 SVG (Berseberangan 110° - Tanpa Lengkungan) -->
                     <div class="question-block">
                         <div class="q-title"><i class="fas fa-ruler-combined"></i> 4. Alternate interior angle / Sudut dalam berseberangan</div>
                         <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
-                            <svg width="120" height="80" viewBox="0 0 120 80"><line x1="10" y1="20" x2="110" y2="20" stroke="#333" stroke-width="2"/><line x1="10" y1="60" x2="110" y2="60" stroke="#333" stroke-width="2"/><line x1="30" y1="10" x2="90" y2="70" stroke="#34D399" stroke-width="2"/><path d="M 60 50 A 10 10 0 0 1 70 45" fill="#FCD34D"/><text x="70" y="45" font-size="11" fill="#FCD34D" font-weight="bold">110°</text><text x="40" y="35" font-size="11" fill="#F87171" font-weight="bold">?</text></svg>
+                            <svg width="120" height="90" viewBox="0 0 120 90">
+                                <!-- Garis Sejajar -->
+                                <line x1="10" y1="30" x2="110" y2="30" stroke="#333" stroke-width="2"/>
+                                <line x1="10" y1="80" x2="110" y2="80" stroke="#333" stroke-width="2"/>
+                                <!-- Garis Transversal -->
+                                <line x1="20" y1="110" x2="80" y2="-10" stroke="#34D399" stroke-width="2"/>
+                                
+                                <!-- Teks 110° (Kiri Atas titik potong atas) -->
+                                <text x="38" y="28" font-size="12" fill="#FCD34D" font-weight="bold">110°</text>
+                                
+                                <!-- Teks ? (Kanan Bawah titik potong bawah - Berseberangan) -->
+                                <text x="42" y="78" font-size="13" fill="#F87171" font-weight="bold">?</text>
+                            </svg>
                             <input type="text" id="q6_4" style="width: 70px;">°
                         </div>
                         <div class="feedback" id="fb6_4"></div><div class="solution" id="sol6_4">Solusi: Dalam berseberangan sama besar = 110°</div>
                     </div>
 
-                    <!-- Q5 SVG -->
+                    <!-- Q5 SVG (Tetap dari sebelumnya - OK) -->
                     <div class="question-block">
                         <div class="q-title"><i class="fas fa-ruler-combined"></i> 5. Comp algebra: (2x+10) and x / Penyiku aljabar</div>
                         <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
-                            <svg width="80" height="80" viewBox="0 0 80 80"><line x1="10" y1="70" x2="70" y2="70" stroke="#333" stroke-width="3"/><line x1="10" y1="70" x2="10" y2="10" stroke="#333" stroke-width="3"/><line x1="10" y1="70" x2="50" y2="30" stroke="#F87171" stroke-width="2"/><rect x="10" y="60" width="10" height="10" fill="none" stroke="#333"/><text x="20" y="50" font-size="10" fill="#F87171" font-weight="bold">2x+10</text><text x="15" y="65" font-size="11" fill="#FCD34D" font-weight="bold">x</text></svg>
+                            <svg width="80" height="80" viewBox="0 0 80 80">
+                                <line x1="10" y1="70" x2="70" y2="70" stroke="#333" stroke-width="3"/>
+                                <line x1="10" y1="70" x2="10" y2="10" stroke="#333" stroke-width="3"/>
+                                <line x1="10" y1="70" x2="45" y2="1" stroke="#F87171" stroke-width="2"/>
+                                <rect x="10" y="60" width="10" height="10" fill="none" stroke="#333" stroke-width="2"/>
+                                <path d="M 10 70 L 35 70 A 25 25 0 0 0 27 48 L 10 70 Z" fill="#F87171" opacity="0.5" stroke="#F87171" stroke-width="1"/>
+                                <text x="25" y="58" font-size="9" fill="#F87171" font-weight="bold">2x+10</text>
+                                <path d="M 10 70 L 10 45 A 25 25 0 0 0 20 50 L 10 70 Z" fill="#FCD34D" opacity="0.5" stroke="#FCD34D" stroke-width="1"/>
+                                <text x="12" y="42" font-size="11" fill="#FCD34D" font-weight="bold">x</text>
+                            </svg>
                             <div>x = <input type="text" id="q6_5" style="width: 50px;">°</div>
                         </div>
                         <div class="feedback" id="fb6_5"></div><div class="solution" id="sol6_5">Solusi: 3x+10=90 → 3x=80 → x=26.6°</div>
                     </div>
 
-                    <!-- Q6 SVG -->
+                    <!-- Q6 SVG (Supp 3x=120°, x+20=60° - Presisi) -->
                     <div class="question-block">
                         <div class="q-title"><i class="fas fa-ruler-combined"></i> 6. Supp algebra: 3x and (x+20) / Pelurus aljabar</div>
                         <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
-                            <svg width="120" height="50" viewBox="0 0 120 50"><line x1="10" y1="40" x2="110" y2="40" stroke="#333" stroke-width="3"/><line x1="60" y1="40" x2="90" y2="10" stroke="#A78BFA" stroke-width="2"/><text x="25" y="35" font-size="11" fill="#34D399" font-weight="bold">3x</text><text x="80" y="25" font-size="10" fill="#A78BFA" font-weight="bold">x+20</text></svg>
+                            <svg width="140" height="70" viewBox="0 0 140 70">
+                                <line x1="10" y1="60" x2="130" y2="60" stroke="#333" stroke-width="3"/>
+                                <!-- Garis miring 60° dari kiri horizontal (membentuk 120° di kiri) -->
+                                <line x1="70" y1="60" x2="100" y2="8" stroke="#A78BFA" stroke-width="3"/>
+                                <!-- Lekukan 120° (Hijau, Kiri Tumpul) -->
+                                <path d="M 70 60 L 50 60 A 20 20 0 1 1 80 43 L 70 60 Z" fill="#34D399" opacity="0.5" stroke="#34D399" stroke-width="1"/>
+                                <text x="52" y="45" font-size="11" fill="#34D399" font-weight="bold">3x</text>
+                                <!-- Lekukan 60° (Ungu, Kanan Lancip) -->
+                                <path d="M 70 60 L 90 60 A 20 20 0 0 0 80 43 L 70 60 Z" fill="#A78BFA" opacity="0.5" stroke="#A78BFA" stroke-width="1"/>
+                                <text x="82" y="50" font-size="9" fill="#A78BFA" font-weight="bold">x+20</text>
+                            </svg>
                             <div>x = <input type="text" id="q6_6" style="width: 50px;">°</div>
                         </div>
                         <div class="feedback" id="fb6_6"></div><div class="solution" id="sol6_6">Solusi: 4x+20=180 → 4x=160 → x=40°</div>
                     </div>
 
-                    <!-- Q7 SVG -->
+                    <!-- Q7 SVG (Berhadapan 110° - Tanpa Lengkungan) -->
                     <div class="question-block">
                         <div class="q-title"><i class="fas fa-ruler-combined"></i> 7. Vertically opposite angles / Sudut berhadapan</div>
                         <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
-                            <svg width="80" height="80" viewBox="0 0 80 80"><line x1="10" y1="10" x2="70" y2="70" stroke="#333" stroke-width="2"/><line x1="70" y1="10" x2="10" y2="70" stroke="#333" stroke-width="2"/><text x="35" y="35" font-size="11" fill="#FCD34D" font-weight="bold">110°</text><text x="35" y="55" font-size="11" fill="#F87171" font-weight="bold">?</text></svg>
+                            <svg width="90" height="90" viewBox="0 0 90 90">
+                                <!-- Garis Horizontal -->
+                                <line x1="10" y1="50" x2="110" y2="50" stroke="#333" stroke-width="2"/>
+                                <!-- Garis Transversal -->
+                                <line x1="46" y1="90" x2="74" y2="10" stroke="#333" stroke-width="2"/>
+                                
+                                <!-- Teks 110° (Kiri Atas titik pusat) -->
+                                <text x="36" y="44" font-size="12" fill="#FCD34D" font-weight="bold">110°</text>
+                                
+                                <!-- Teks ? (Kanan Bawah titik pusat - Berhadapan) -->
+                                <text x="62" y="62" font-size="13" fill="#F87171" font-weight="bold">?</text>
+                            </svg>
                             <input type="text" id="q6_7" style="width: 70px;">°
                         </div>
                         <div class="feedback" id="fb6_7"></div><div class="solution" id="sol6_7">Solusi: Berhadapan sama besar = 110°</div>
                     </div>
 
-                    <!-- Q8 SVG -->
+                    <!-- Q8 SVG (Segitiga 50°, 60°, 70° - Presisi Trigonometri) -->
                     <div class="question-block">
                         <div class="q-title"><i class="fas fa-ruler-combined"></i> 8. Triangle angles sum / Sudut segitiga</div>
                         <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
-                            <svg width="80" height="70" viewBox="0 0 80 70"><polygon points="10,60 70,60 40,10" fill="none" stroke="#A78BFA" stroke-width="2"/><text x="10" y="55" font-size="11" fill="#34D399" font-weight="bold">50°</text><text x="55" y="55" font-size="11" fill="#FCD34D" font-weight="bold">60°</text><text x="35" y="25" font-size="11" fill="#F87171" font-weight="bold">?</text></svg>
+                            <svg width="120" height="90" viewBox="0 0 120 90">
+                                <!-- Kiri 50°, Kanan 60°, Atas 70° -->
+                                <polygon points="10,80 110,80 70,10" fill="none" stroke="#A78BFA" stroke-width="2"/>
+                                <!-- Lekukan 50° Kiri (Kuning) -->
+                                <path d="M 10 80 L 30 80 A 20 20 0 0 0 23 65 L 10 80 Z" fill="#FCD34D" opacity="0.5" stroke="#FCD34D" stroke-width="1"/>
+                                <text x="16" y="70" font-size="11" fill="#FCD34D" font-weight="bold">50°</text>
+                                <!-- Lekukan 60° Kanan (Hijau) -->
+                                <path d="M 110 80 L 90 80 A 20 20 0 0 1 100 63 L 110 80 Z" fill="#34D399" opacity="0.5" stroke="#34D399" stroke-width="1"/>
+                                <text x="93" y="70" font-size="11" fill="#34D399" font-weight="bold">60°</text>
+                                <!-- Lekukan 70° Atas (Merah) -->
+                                <path d="M 70 10 L 77 23 A 15 15 0 0 1 60 21 L 70 10 Z" fill="#F87171" opacity="0.5" stroke="#F87171" stroke-width="1"/>
+                                <text x="62" y="28" font-size="11" fill="#F87171" font-weight="bold">?</text>
+                            </svg>
                             <input type="text" id="q6_8" style="width: 70px;">°
                         </div>
                         <div class="feedback" id="fb6_8"></div><div class="solution" id="sol6_8">Solusi: 180 - (50+60) = 70°</div>
