@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hubungan Sudut dan Garis Sejajar - Interactive Lesson</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- KaTeX for Math -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+                    colors: {
+                        primary: '#6a0dad',
+                        accent: '#ff2d75',
+                        dark: '#1a0b2e',
+                        panel: 'rgba(255, 255, 255, 0.05)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #1a0b2e 0%, #3d1f5c 100%); color: #fff; }
+        .glass-card { background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); }
+        .btn-neon { background: linear-gradient(90deg, #ff2d75, #6a0dad); transition: all 0.3s ease; box-shadow: 0 0 15px rgba(255, 45, 117, 0.4); }
+        .btn-neon:hover { transform: translateY(-2px); box-shadow: 0 0 25px rgba(255, 45, 117, 0.6); }
+        .timer-badge { background: rgba(106, 13, 173, 0.5); border: 1px solid #ff2d75; }
+        .correct-answer { border-color: #10b981 !important; background: rgba(16, 185, 129, 0.1) !important; }
+        .wrong-answer { border-color: #ef4444 !important; background: rgba(239, 68, 68, 0.1) !important; }
+        .hint-box { background: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; padding: 8px; margin-top: 8px; border-radius: 4px; font-size: 0.85rem; }
+        input[type="text"], select { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px; border-radius: 8px; width: 100%; }
+        input[type="text"]:focus, select:focus { outline: none; border-color: #ff2d75; }
+        .section-divider { height: 2px; background: linear-gradient(90deg, transparent, #ff2d75, transparent); margin: 40px 0; }
+        
+        /* Animations */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
+        
+        @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 5px #ff2d75; } 50% { box-shadow: 0 0 20px #ff2d75; } }
+        .pulse-glow { animation: pulse-glow 2s infinite; }
+    </style>
+</head>
+<body class="min-h-screen pb-20">
+
+    <!-- HEADER -->
+    <header class="p-6 glass-card m-4 mt-6 flex flex-col md:flex-row justify-between items-center animate-fade-in-up">
+        <div class="flex items-center space-x-4">
+            <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-accent to-primary flex items-center justify-center text-2xl font-bold pulse-glow">
+                <i class="fa-solid fa-compass-drafting"></i>
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-purple-300">
+                    Hubungan Sudut dan Garis Sejajar
+                </h1>
+                <p class="text-sm text-purple-300">Angles and Parallel Lines Relationship</p>
+            </div>
+        </div>
+        <div class="mt-4 md:mt-0 text-right">
+            <p class="text-lg font-semibold text-white">Tutor: <span class="text-accent">Deni</span></p>
+            <p class="text-xs text-purple-300">Kurikulum Merdeka • 1 Hour Session</p>
+        </div>
+    </header>
+
+    <!-- CLASS RULES -->
+    <div class="p-6 glass-card m-4 animate-fade-in-up" style="animation-delay: 0.2s;">
+        <h3 class="text-xl font-bold text-accent mb-4"><i class="fa-solid fa-gavel mr-2"></i> Class Rules / Aturan Kelas</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex items-center space-x-3 bg-white/5 p-3 rounded-xl">
+                <i class="fa-solid fa-comments text-purple-400 text-xl"></i>
+                <span>Speak in turns / <i>Berbicara secara bergantian</i></span>
+            </div>
+            <div class="flex items-center space-x-3 bg-white/5 p-3 rounded-xl">
+                <i class="fa-solid fa-hand text-purple-400 text-xl"></i>
+                <span>Ask permission to leave Zoom / <i>Minta izin ketika ingin meninggalkan zoom (contoh: izin ke toilet/minum)</i></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 1: SPIRAL REVIEW WARM-UP -->
+    <section class="p-6 glass-card m-4 animate-fade-in-up" style="animation-delay: 0.4s;">
+        <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+            <h2 class="text-2xl font-bold text-white flex items-center">
+                <span class="bg-accent/20 text-accent w-10 h-10 rounded-full flex items-center justify-center mr-3 text-xl">1</span>
+                Spiral Review Warm-up
+            </h2>
+            <span class="timer-badge px-4 py-1 rounded-full text-sm font-mono"><i class="fa-regular fa-clock mr-1"></i> 00:00 - 00:10</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Theory (Left) -->
+            <div class="space-y-4">
+                <div class="bg-white/5 p-5 rounded-xl border-l-4 border-accent">
+                    <p class="mb-3"><span class="font-bold text-purple-300">Geometry is built upon the foundation of points, lines, and angles.</span> When two lines extend in the same direction without ever meeting, they are called parallel lines. / <i>Geometri dibangun di atas dasar titik, garis, dan sudut. Ketika dua garis memanjang ke arah yang sama tanpa pernah bertemu, mereka disebut garis sejajar.</i></p>
+                    <p><span class="font-bold text-purple-300">When a third line, known as a transversal, crosses two parallel lines, it creates special angle pairs.</span> These pairs include corresponding angles, alternate interior angles, and co-interior angles. / <i>Ketika garis ketiga, yang dikenal sebagai transversal, memotong dua garis sejajar, ia membentuk pasangan sudut khusus. Pasangan ini termasuk sudut sehadap, dalam berseberangan, dan dalam sepihak.</i></p>
+                </div>
+                <div class="bg-white/5 p-5 rounded-xl border-l-4 border-primary">
+                    <p class="mb-3"><span class="font-bold text-purple-300">Supplementary angles are two angles that add up to exactly 180 degrees.</span> They form a straight line when placed adjacent to each other. / <i>Sudut berpelurus adalah dua sudut yang jumlahnya tepat 180 derajat. Mereka membentuk garis lurus saat ditempatkan bersebelahan.</i></p>
+                    <p><span class="font-bold text-purple-300">Complementary angles, on the other hand, add up to exactly 90 degrees.</span> Recognizing these basic angle relationships is crucial before exploring complex parallel line theorems. / <i>Di sisi lain, sudut berpenyiku jumlahnya tepat 90 derajat. Mengenali hubungan sudut dasar ini sangat penting sebelum menjelajahi teorema garis sejajar yang kompleks.</i></p>
+                </div>
+                
+                <!-- Ilustrasi Animasi Sederhana -->
+                <div class="flex justify-center items-center space-x-8 mt-4">
+                    <div class="text-center">
+                        <svg width="80" height="80" viewBox="0 0 100 100"><line x1="10" y1="20" x2="90" y2="20" stroke="#ff2d75" stroke-width="4"/><line x1="10" y1="80" x2="90" y2="80" stroke="#ff2d75" stroke-width="4"/><line x1="30" y1="0" x2="70" y2="100" stroke="#fff" stroke-width="2" stroke-dasharray="5,5"/><text x="50" y="15" fill="#fff" font-size="10">l</text><text x="50" y="98" fill="#fff" font-size="10">m</text></svg>
+                        <p class="text-xs mt-2 text-purple-300">Parallel Lines / <i>Garis Sejajar</i></p>
+                    </div>
+                    <div class="text-center">
+                        <svg width="80" height="80" viewBox="0 0 100 100"><line x1="10" y1="10" x2="90" y2="90" stroke="#6a0dad" stroke-width="4"/><line x1="90" y1="10" x2="10" y2="90" stroke="#6a0dad" stroke-width="4"/><circle cx="50" cy="50" r="3" fill="#fff"/></svg>
+                        <p class="text-xs mt-2 text-purple-300">Intersecting / <i>Berpotongan</i></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activities (Right) -->
+            <div>
+                <div id="s1-activities" class="space-y-4">
+                    <!-- Questions will be injected via JS -->
+                </div>
+                <div class="flex space-x-4 mt-6">
+                    <button onclick="submitSection('s1')" class="btn-neon px-6 py-2 rounded-full font-semibold text-white"><i class="fa-solid fa-check mr-2"></i>Submit</button>
+                    <button onclick="resetSection('s1')" class="bg-white/10 px-6 py-2 rounded-full font-semibold text-white hover:bg-white/20"><i class="fa-solid fa-rotate-right mr-2"></i>Reset</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider mx-8"></div>
+
+    <!-- SECTION 2: INTRODUCTION & REAL-WORLD CONNECTION -->
+    <section class="p-6 glass-card m-4 animate-fade-in-up">
+        <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+            <h2 class="text-2xl font-bold text-white flex items-center">
+                <span class="bg-accent/20 text-accent w-10 h-10 rounded-full flex items-center justify-center mr-3 text-xl">2</span>
+                Introduction & Real-World Connection
+            </h2>
+            <span class="timer-badge px-4 py-1 rounded-full text-sm font-mono"><i class="fa-regular fa-clock mr-1"></i> 00:10 - 00:15</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Theory (Left) -->
+            <div class="space-y-4">
+                <div class="bg-white/5 p-5 rounded-xl border-l-4 border-accent">
+                    <p class="mb-3"><span class="font-bold text-purple-300">Architecture heavily relies on the principles of parallel lines and transversals to ensure structural integrity.</span> When architects design cable-stayed bridges, the cables must align perfectly to distribute weight evenly. / <i>Arsitektur sangat bergantung pada prinsip-prinsip garis sejajar dan transversal untuk memastikan integritas struktural. Ketika arsitek merancang jembatan kabel, kabel-kabel tersebut harus sejajar sempurna untuk mendistribusikan beban secara merata.</i></p>
+                    <p><span class="font-bold text-purple-300">If the angles formed by the bridge decks and cables are not calculated correctly, the structure could become unstable.</span> Understanding these angle relationships helps designers create buildings that are both safe and aesthetically pleasing. / <i>Jika sudut-sudut yang terbentuk oleh dek jembatan dan kabel tidak dihitung dengan benar, struktur bisa menjadi tidak stabil. Memahami hubungan sudut membantu desainer menciptakan bangunan yang aman dan menarik secara estetika.</i></p>
+                </div>
+                <div class="bg-white/5 p-5 rounded-xl border-l-4 border-primary">
+                    <p class="mb-3"><span class="font-bold text-purple-300">Skyscrapers utilize parallel steel beams to support floors that must remain perfectly level.</span> Transversal beams cross these parallel lines, creating predictable angle patterns that engineers analyze. / <i>Pencakar langit menggunakan balok baja sejajar untuk menopang lantai yang harus tetap sempurna rata. Balok transversal melintasi garis-garis sejajar ini, menciptakan pola sudut yang dapat diprediksi yang dianalisis oleh insinyur.</i></p>
+                    <p><span class="font-bold text-purple-300">Even in interior design, parallel lines are used to lay out tiles or floorboards seamlessly.</span> Without precise angle measurements, these patterns would appear crooked and unprofessional. / <i>Bahkan dalam desain interior, garis sejajar digunakan untuk menyusun ubin atau papan lantai dengan mulus. Tanpa pengukuran sudut yang tepat, pola-pola ini akan terlihat miring dan tidak profesional.</i></p>
+                </div>
+                
+                <!-- Tabel Ilustrasi -->
+                <div class="overflow-x-auto mt-4">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-accent/20 text-accent">
+                                <th class="p-3 rounded-tl-lg">Real-World Structure</th>
+                                <th class="p-3">Math Concept</th>
+                                <th class="p-3 rounded-tr-lg">Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white/5">
+                            <tr class="border-b border-white/10">
+                                <td class="p-3"><i class="fa-solid fa-bridge mr-2 text-purple-300"></i>Cable-stayed Bridge</td>
+                                <td>Transversal & Parallel</td>
+                                <td>Weight distribution</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3"><i class="fa-solid fa-building mr-2 text-purple-300"></i>Skyscraper Frame</td>
+                                <td>Corresponding Angles</td>
+                                <td>Level alignment</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Activities (Right) - True/False & Multiple Choice -->
+            <div>
+                <div id="s2-activities" class="space-y-4">
+                    <!-- Q1 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s2q1" data-answer="false">
+                        <p class="font-semibold mb-2">1. True/False: Parallel lines will eventually intersect if extended far enough.</p>
+                        <label class="mr-4 cursor-pointer"><input type="radio" name="s2q1" value="true" class="mr-1"> True</label>
+                        <label class="cursor-pointer"><input type="radio" name="s2q1" value="false" class="mr-1"> False</label>
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q2 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s2q2" data-answer="true">
+                        <p class="font-semibold mb-2">2. True/False: In a cable-stayed bridge, the main cable acts as a transversal line.</p>
+                        <label class="mr-4 cursor-pointer"><input type="radio" name="s2q2" value="true" class="mr-1"> True</label>
+                        <label class="cursor-pointer"><input type="radio" name="s2q2" value="false" class="mr-1"> False</label>
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q3 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s2q3" data-answer="b">
+                        <p class="font-semibold mb-2">3. Why do architects use parallel lines in building frames?</p>
+                        <label class="block cursor-pointer"><input type="radio" name="s2q3" value="a" class="mr-1"> a. To make the building look crooked</label>
+                        <label class="block cursor-pointer"><input type="radio" name="s2q3" value="b" class="mr-1"> b. To ensure structural stability and level floors</label>
+                        <label class="block cursor-pointer"><input type="radio" name="s2q3" value="c" class="mr-1"> c. To increase the weight of the building</label>
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q4 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s2q4" data-answer="c">
+                        <p class="font-semibold mb-2">4. If floor tiles are laid crookedly, which mathematical concept was likely ignored?</p>
+                        <label class="block cursor-pointer"><input type="radio" name="s2q4" value="a" class="mr-1"> a. Addition</label>
+                        <label class="block cursor-pointer"><input type="radio" name="s2q4" value="b" class="mr-1"> b. Fractions</label>
+                        <label class="block cursor-pointer"><input type="radio" name="s2q4" value="c" class="mr-1"> c. Parallel lines and angles</label>
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q5 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s2q5" data-answer="a">
+                        <p class="font-semibold mb-2">5. What do you call a line that crosses two or more parallel lines?</p>
+                        <label class="block cursor-pointer"><input type="radio" name="s2q5" value="a" class="mr-1"> a. Transversal</label>
+                        <label class="block cursor-pointer"><input type="radio" name="s2q5" value="b" class="mr-1"> b. Perpendicular</label>
+                        <label class="block cursor-pointer"><input type="radio" name="s2q5" value="c" class="mr-1"> c. Ray</label>
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q6 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s2q6" data-answer="true">
+                        <p class="font-semibold mb-2">6. True/False: Angle relationships in parallel lines are irrelevant to interior design.</p>
+                        <label class="mr-4 cursor-pointer"><input type="radio" name="s2q6" value="true" class="mr-1"> True</label>
+                        <label class="cursor-pointer"><input type="radio" name="s2q6" value="false" class="mr-1"> False</label>
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q7 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s2q7" data-answer="b">
+                        <p class="font-semibold mb-2">7. In a building, if vertical pillars are parallel, a horizontal beam connecting them acts as:</p>
+                        <label class="block cursor-pointer"><input type="radio" name="s2q7" value="a" class="mr-1"> a. A parallel line</label>
+                        <label class="block cursor-pointer"><input type="radio" name="s2q7" value="b" class="mr-1"> b. A transversal</label>
+                        <label class="block cursor-pointer"><input type="radio" name="s2q7" value="c" class="mr-1"> c. An intersecting line</label>
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q8 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s2q8" data-answer="c">
+                        <p class="font-semibold mb-2">8. What is the primary requirement for two lines to be considered parallel?</p>
+                        <label class="block cursor-pointer"><input type="radio" name="s2q8" value="a" class="mr-1"> a. They must intersect at \( 90^\circ \)</label>
+                        <label class="block cursor-pointer"><input type="radio" name="s2q8" value="b" class="mr-1"> b. They must be of equal length</label>
+                        <label class="block cursor-pointer"><input type="radio" name="s2q8" value="c" class="mr-1"> c. They must never intersect</label>
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q9 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s2q9" data-answer="true">
+                        <p class="font-semibold mb-2">9. True/False: The beams in a bridge framework form angles that must be precisely calculated.</p>
+                        <label class="mr-4 cursor-pointer"><input type="radio" name="s2q9" value="true" class="mr-1"> True</label>
+                        <label class="cursor-pointer"><input type="radio" name="s2q9" value="false" class="mr-1"> False</label>
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q10 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s2q10" data-answer="a">
+                        <p class="font-semibold mb-2">10. If a bridge cable is not angled correctly, what is the risk?</p>
+                        <label class="block cursor-pointer"><input type="radio" name="s2q10" value="a" class="mr-1"> a. Structural instability</label>
+                        <label class="block cursor-pointer"><input type="radio" name="s2q10" value="b" class="mr-1"> b. The bridge will be too colorful</label>
+                        <label class="block cursor-pointer"><input type="radio" name="s2q10" value="c" class="mr-1"> c. The bridge will be too long</label>
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                </div>
+                <div class="flex space-x-4 mt-6">
+                    <button onclick="submitSection('s2')" class="btn-neon px-6 py-2 rounded-full font-semibold text-white"><i class="fa-solid fa-check mr-2"></i>Submit</button>
+                    <button onclick="resetSection('s2')" class="bg-white/10 px-6 py-2 rounded-full font-semibold text-white hover:bg-white/20"><i class="fa-solid fa-rotate-right mr-2"></i>Reset</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider mx-8"></div>
+
+    <!-- SECTION 3: REVIEW OF PRIOR KNOWLEDGE -->
+    <section class="p-6 glass-card m-4 animate-fade-in-up">
+        <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+            <h2 class="text-2xl font-bold text-white flex items-center">
+                <span class="bg-accent/20 text-accent w-10 h-10 rounded-full flex items-center justify-center mr-3 text-xl">3</span>
+                Review of Prior Knowledge
+            </h2>
+            <span class="timer-badge px-4 py-1 rounded-full text-sm font-mono"><i class="fa-regular fa-clock mr-1"></i> 00:15 - 00:20</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Theory (Left) -->
+            <div class="space-y-4">
+                <div class="bg-white/5 p-5 rounded-xl border-l-4 border-accent">
+                    <p class="mb-3"><span class="font-bold text-purple-300">Let us recall the 'Z', 'F', and 'C' patterns formed when a transversal cuts two parallel lines.</span> The 'Z' pattern represents alternate interior angles, which are always equal in measure. / <i>Mari kita ingat pola 'Z', 'F', dan 'C' yang terbentuk ketika sebuah transversal memotong dua garis sejajar. Pola 'Z' mewakili sudut dalam berseberangan, yang selalu sama besar.</i></p>
+                    <p><span class="font-bold text-purple-300">The 'F' pattern highlights corresponding angles, which are also equal to each other.</span> Recognizing these visual patterns makes it much easier to identify equal angles without memorizing complex definitions. / <i>Pola 'F' menyoroti sudut sehadap, yang juga sama besar satu sama lain. Mengenali pola visual ini membuat jauh lebih mudah untuk mengidentifikasi sudut yang sama tanpa menghafal definisi yang rumit.</i></p>
+                </div>
+                <div class="bg-white/5 p-5 rounded-xl border-l-4 border-primary">
+                    <p class="mb-3"><span class="font-bold text-purple-300">Meanwhile, the 'C' pattern shows co-interior angles, also known as same-side interior angles.</span> Unlike the 'Z' and 'F' patterns, co-interior angles are not equal; they are supplementary. / <i>Sementara itu, pola 'C' menunjukkan sudut dalam sepihak. Tidak seperti pola 'Z' dan 'F', sudut dalam sepihak tidak sama besar; mereka berpelurus.</i></p>
+                    <p><span class="font-bold text-purple-300">Supplementary angles add up to exactly \( 180^\circ \).</span> Therefore, if you identify a 'C' pattern, you must add the two angles together to equal \( 180^\circ \). / <i>Oleh karena itu, jika Anda mengidentifikasi pola 'C', Anda harus menjumlahkan kedua sudut tersebut agar sama dengan \( 180^\circ \).</i></p>
+                </div>
+                
+                <!-- SVG Ilustrasi Pola -->
+                <div class="grid grid-cols-3 gap-4 mt-4 text-center text-xs text-purple-300">
+                    <div class="bg-white/5 p-2 rounded-lg">
+                        <svg viewBox="0 0 100 60"><line x1="10" y1="10" x2="90" y2="10" stroke="#fff" stroke-width="2"/><line x1="10" y1="50" x2="90" y2="50" stroke="#fff" stroke-width="2"/><line x1="30" y1="10" x2="70" y2="50" stroke="#ff2d75" stroke-width="2"/><path d="M 30 10 L 50 10 L 70 50 L 50 50 Z" fill="none" stroke="#ff2d75" stroke-width="2" stroke-dasharray="3"/></svg>
+                        <p>Z Pattern / <i>Pola Z</i></p>
+                    </div>
+                    <div class="bg-white/5 p-2 rounded-lg">
+                        <svg viewBox="0 0 100 60"><line x1="10" y1="10" x2="90" y2="10" stroke="#fff" stroke-width="2"/><line x1="10" y1="50" x2="90" y2="50" stroke="#fff" stroke-width="2"/><line x1="30" y1="10" x2="30" y2="50" stroke="#6a0dad" stroke-width="2"/><path d="M 30 10 L 50 10 L 50 50 L 30 50 Z" fill="none" stroke="#6a0dad" stroke-width="2" stroke-dasharray="3"/></svg>
+                        <p>F Pattern / <i>Pola F</i></p>
+                    </div>
+                    <div class="bg-white/5 p-2 rounded-lg">
+                        <svg viewBox="0 0 100 60"><line x1="10" y1="10" x2="90" y2="10" stroke="#fff" stroke-width="2"/><line x1="10" y1="50" x2="90" y2="50" stroke="#fff" stroke-width="2"/><line x1="30" y1="10" x2="70" y2="50" stroke="#10b981" stroke-width="2"/><path d="M 30 10 L 70 10 L 70 50 L 30 50 Z" fill="none" stroke="#10b981" stroke-width="2" stroke-dasharray="3"/></svg>
+                        <p>C Pattern / <i>Pola C</i></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activities (Right) - Dropdown / Classification -->
+            <div>
+                <div id="s3-activities" class="space-y-4">
+                    <!-- Q1-Q10 Dropdown Classification -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s3q1" data-answer="corresponding">
+                        <p class="font-semibold mb-2">1. Angles in the same relative position at each intersection are called...</p>
+                        <select name="s3q1" class="w-full mt-1">
+                            <option value="">-- Select --</option>
+                            <option value="alternate interior">Alternate Interior / Dalam Berseberangan</option>
+                            <option value="corresponding">Corresponding / Sehadap</option>
+                            <option value="co-interior">Co-interior / Dalam Sepihak</option>
+                        </select>
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s3q2" data-answer="alternate interior">
+                        <p class="font-semibold mb-2">2. Angles inside the parallel lines and on opposite sides of the transversal are...</p>
+                        <select name="s3q2" class="w-full mt-1">
+                            <option value="">-- Select --</option>
+                            <option value="alternate interior">Alternate Interior / Dalam Berseberangan</option>
+                            <option value="corresponding">Corresponding / Sehadap</option>
+                            <option value="co-interior">Co-interior / Dalam Sepihak</option>
+                        </select>
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s3q3" data-answer="180">
+                        <p class="font-semibold mb-2">3. Co-interior angles add up to \(\_\_\_^\circ\).</p>
+                        <input type="text" name="s3q3" class="mt-1" placeholder="Enter number">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s3q4" data-answer="Z">
+                        <p class="font-semibold mb-2">4. Alternate interior angles form which letter pattern?</p>
+                        <input type="text" name="s3q4" class="mt-1" placeholder="Enter a letter (Z, F, or C)">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s3q5" data-answer="F">
+                        <p class="font-semibold mb-2">5. Corresponding angles form which letter pattern?</p>
+                        <input type="text" name="s3q5" class="mt-1" placeholder="Enter a letter (Z, F, or C)">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s3q6" data-answer="C">
+                        <p class="font-semibold mb-2">6. Co-interior angles form which letter pattern?</p>
+                        <input type="text" name="s3q6" class="mt-1" placeholder="Enter a letter (Z, F, or C)">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s3q7" data-answer="equal">
+                        <p class="font-semibold mb-2">7. If corresponding angles are \( 75^\circ \) and \( x^\circ \), then \( x \) is \(\_\_\_\) to \( 75^\circ \). (equal / supplementary)</p>
+                        <input type="text" name="s3q7" class="mt-1" placeholder="equal or supplementary">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s3q8" data-answer="alternate exterior">
+                        <p class="font-semibold mb-2">8. Angles outside the parallel lines and on opposite sides of the transversal are...</p>
+                        <select name="s3q8" class="w-full mt-1">
+                            <option value="">-- Select --</option>
+                            <option value="alternate exterior">Alternate Exterior / Luar Berseberangan</option>
+                            <option value="corresponding">Corresponding / Sehadap</option>
+                            <option value="co-interior">Co-interior / Dalam Sepihak</option>
+                        </select>
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s3q9" data-answer="equal">
+                        <p class="font-semibold mb-2">9. Alternate exterior angles are always \(\_\_\_\). (equal / not equal)</p>
+                        <input type="text" name="s3q9" class="mt-1" placeholder="equal or not equal">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s3q10" data-answer="90">
+                        <p class="font-semibold mb-2">10. If a transversal is perpendicular to parallel lines, it forms angles of \(\_\_\_^\circ\).</p>
+                        <input type="text" name="s3q10" class="mt-1" placeholder="Enter number">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                </div>
+                <div class="flex space-x-4 mt-6">
+                    <button onclick="submitSection('s3')" class="btn-neon px-6 py-2 rounded-full font-semibold text-white"><i class="fa-solid fa-check mr-2"></i>Submit</button>
+                    <button onclick="resetSection('s3')" class="bg-white/10 px-6 py-2 rounded-full font-semibold text-white hover:bg-white/20"><i class="fa-solid fa-rotate-right mr-2"></i>Reset</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider mx-8"></div>
+
+    <!-- SECTION 4: PROBLEM INTRODUCTION -->
+    <section class="p-6 glass-card m-4 animate-fade-in-up">
+        <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+            <h2 class="text-2xl font-bold text-white flex items-center">
+                <span class="bg-accent/20 text-accent w-10 h-10 rounded-full flex items-center justify-center mr-3 text-xl">4</span>
+                Problem Introduction
+            </h2>
+            <span class="timer-badge px-4 py-1 rounded-full text-sm font-mono"><i class="fa-regular fa-clock mr-1"></i> 00:20 - 00:30</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Theory (Left) -->
+            <div class="space-y-4">
+                <div class="bg-white/5 p-5 rounded-xl border-l-4 border-accent">
+                    <p class="mb-3"><span class="font-bold text-purple-300">Sometimes, the measure of an angle is not given as a simple number, but as an algebraic expression.</span> For example, an angle might be represented as \( 3x + 10 \) instead of a specific degree. / <i>Terkadang, besar sudut tidak diberikan sebagai angka sederhana, tetapi sebagai ekspresi aljabar. Misalnya, sudut mungkin direpresentasikan sebagai \( 3x + 10 \), bukan derajat tertentu.</i></p>
+                    <p><span class="font-bold text-purple-300">To find the unknown variable, we apply the properties of parallel lines to set up an equation.</span> If two angles are corresponding, we equate their algebraic expressions, like \( 3x + 10 = 2x + 40 \). / <i>Untuk menemukan variabel yang tidak diketahui, kita menerapkan sifat-sifat garis sejajar untuk menyusun persamaan. Jika dua sudut sehadap, kita menyamakan ekspresi aljabarnya, seperti \( 3x + 10 = 2x + 40 \).</i></p>
+                </div>
+                <div class="bg-white/5 p-5 rounded-xl border-l-4 border-primary">
+                    <p class="mb-3"><span class="font-bold text-purple-300">Once the equation is set up, standard algebraic rules are used to solve for the variable.</span> In the equation \( 3x + 10 = 2x + 40 \), we subtract \( 2x \) and \( 10 \) from both sides to get \( x = 30 \). / <i>Setelah persamaan disusun, aturan aljabar standar digunakan untuk menyelesaikan variabel. Pada persamaan \( 3x + 10 = 2x + 40 \), kita kurangi \( 2x \) dan \( 10 \) dari kedua ruas untuk mendapatkan \( x = 30 \).</i></p>
+                    <p><span class="font-bold text-purple-300">After finding the value of \( x \), you substitute it back into the original expression to find the actual angle measure.</span> This ensures the structural design maintains mathematical integrity. / <i>Setelah menemukan nilai \( x \), Anda substitusikan kembali ke ekspresi semula untuk menemukan ukuran sudut sebenarnya. Ini memastikan desain struktural mempertahankan integritas matematis.</i></p>
+                </div>
+                
+                <!-- Step by Step Block -->
+                <div class="mt-4 p-4 bg-accent/10 border border-accent/30 rounded-xl">
+                    <h4 class="font-bold text-accent mb-2"><i class="fa-solid fa-wand-magic-sparkles mr-2"></i>Algebraic Steps</h4>
+                    <ul class="list-disc ml-5 space-y-1 text-sm">
+                        <li>Identify the relationship (e.g., Corresponding = Equal)</li>
+                        <li>Set up the equation: \( 3x + 10 = 2x + 40 \)</li>
+                        <li>Isolate \( x \): \( x = 30 \)</li>
+                        <li>Substitute back: \( 3(30) + 10 = 100^\circ \)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Activities (Right) - Math Text Input Equations -->
+            <div>
+                <div id="s4-activities" class="space-y-4">
+                    <!-- Q1 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s4q1" data-answer="15">
+                        <p class="font-semibold mb-2">1. If corresponding angles are \( 2x \) and \( x + 15 \), find \( x \).</p>
+                        <input type="text" name="s4q1" class="mt-1" placeholder="Value of x">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q2 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s4q2" data-answer="20">
+                        <p class="font-semibold mb-2">2. If alternate interior angles are \( 4x \) and \( 2x + 40 \), find \( x \).</p>
+                        <input type="text" name="s4q2" class="mt-1" placeholder="Value of x">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q3 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s4q3" data-answer="100">
+                        <p class="font-semibold mb-2">3. From question 2, what is the actual measure of each angle? (Substitute \( x \))</p>
+                        <input type="text" name="s4q3" class="mt-1" placeholder="Angle measure in degrees">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q4 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s4q4" data-answer="5">
+                        <p class="font-semibold mb-2">4. If corresponding angles are \( 5x + 10 \) and \( 3x + 20 \), find \( x \).</p>
+                        <input type="text" name="s4q4" class="mt-1" placeholder="Value of x">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q5 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s4q5" data-answer="35">
+                        <p class="font-semibold mb-2">5. If corresponding angles are \( 6x - 15 \) and \( 4x + 55 \), find \( x \).</p>
+                        <input type="text" name="s4q5" class="mt-1" placeholder="Value of x">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q6 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s4q6" data-answer="12">
+                        <p class="font-semibold mb-2">6. If alternate exterior angles are \( 7x \) and \( 84 \), find \( x \).</p>
+                        <input type="text" name="s4q6" class="mt-1" placeholder="Value of x">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q7 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s4q7" data-answer="90">
+                        <p class="font-semibold mb-2">7. If corresponding angles are \( x + 30 \) and \( 2x \), find the angle measure.</p>
+                        <input type="text" name="s4q7" class="mt-1" placeholder="Angle measure in degrees">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q8 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s4q8" data-answer="10">
+                        <p class="font-semibold mb-2">8. If alternate interior angles are \( x^2 \) and \( 100 \), find the positive value of \( x \).</p>
+                        <input type="text" name="s4q8" class="mt-1" placeholder="Value of x">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q9 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s4q9" data-answer="11">
+                        <p class="font-semibold mb-2">9. If corresponding angles are \( 3x + 2 \) and \( 35 \), find \( x \).</p>
+                        <input type="text" name="s4q9" class="mt-1" placeholder="Value of x">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q10 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s4q10" data-answer="60">
+                        <p class="font-semibold mb-2">10. If alternate interior angles are \( 2x - 10 \) and \( x + 50 \), find \( x \).</p>
+                        <input type="text" name="s4q10" class="mt-1" placeholder="Value of x">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                </div>
+                <div class="flex space-x-4 mt-6">
+                    <button onclick="submitSection('s4')" class="btn-neon px-6 py-2 rounded-full font-semibold text-white"><i class="fa-solid fa-check mr-2"></i>Submit</button>
+                    <button onclick="resetSection('s4')" class="bg-white/10 px-6 py-2 rounded-full font-semibold text-white hover:bg-white/20"><i class="fa-solid fa-rotate-right mr-2"></i>Reset</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider mx-8"></div>
+
+    <!-- SECTION 5: GUIDED PRACTICE -->
+    <section class="p-6 glass-card m-4 animate-fade-in-up">
+        <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+            <h2 class="text-2xl font-bold text-white flex items-center">
+                <span class="bg-accent/20 text-accent w-10 h-10 rounded-full flex items-center justify-center mr-3 text-xl">5</span>
+                Guided Practice
+            </h2>
+            <span class="timer-badge px-4 py-1 rounded-full text-sm font-mono"><i class="fa-regular fa-clock mr-1"></i> 00:30 - 00:45</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Theory (Left) -->
+            <div class="space-y-4">
+                <div class="bg-white/5 p-5 rounded-xl border-l-4 border-accent">
+                    <p class="mb-3"><span class="font-bold text-purple-300">When dealing with co-interior angles, remember that their sum must equal \( 180^\circ \).</span> If the angles are \( 5x \) and \( x + 30 \), the equation becomes \( 5x + x + 30 = 180 \). / <i>Ketika berhadapan dengan sudut dalam sepihak, ingat bahwa jumlahnya harus sama dengan \( 180^\circ \). Jika sudut-sudut tersebut adalah \( 5x \) dan \( x + 30 \), persamaannya menjadi \( 5x + x + 30 = 180 \).</i></p>
+                    <p><span class="font-bold text-purple-300">Solving this step-by-step, we combine like terms to get \( 6x + 30 = 180 \).</span> Subtracting 30 from both sides gives \( 6x = 150 \), and dividing by 6 yields \( x = 25 \). / <i>Menyelesaikan ini langkah demi langkah, kita menggabungkan suku sejenis untuk mendapatkan \( 6x + 30 = 180 \). Mengurangi 30 dari kedua ruas memberikan \( 6x = 150 \), dan membagi 6 menghasilkan \( x = 25 \).</i></p>
+                </div>
+                <div class="bg-white/5 p-5 rounded-xl border-l-4 border-primary">
+                    <p class="mb-3"><span class="font-bold text-purple-300">Substituting \( x = 25 \) back into the expressions gives the actual angle measures.</span> The first angle is \( 5(25) = 125^\circ \), and the second is \( 25 + 30 = 55^\circ \). / <i>Mensubstitusikan \( x = 25 \) kembali ke ekspresi memberikan ukuran sudut sebenarnya. Sudut pertama adalah \( 5(25) = 125^\circ \), dan sudut kedua adalah \( 25 + 30 = 55^\circ \).</i></p>
+                    <p><span class="font-bold text-purple-300">Always verify your answer by checking if the two angles add up to \( 180^\circ \).</span> Since \( 125^\circ + 55^\circ = 180^\circ \), the solution is correct. / <i>Selalu verifikasi jawaban Anda dengan memeriksa apakah kedua sudut tersebut berjumlah \( 180^\circ \). Karena \( 125^\circ + 55^\circ = 180^\circ \), solusinya benar.</i></p>
+                </div>
+            </div>
+
+            <!-- Activities (Right) - Co-Interior/Supplementary Algebra -->
+            <div>
+                <div id="s5-activities" class="space-y-4">
+                    <!-- Q1 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s5q1" data-answer="25">
+                        <p class="font-semibold mb-2">1. Co-interior angles are \( 5x \) and \( x + 30 \). Find \( x \).</p>
+                        <input type="text" name="s5q1" class="mt-1" placeholder="Value of x">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q2 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s5q2" data-answer="125">
+                        <p class="font-semibold mb-2">2. From question 1, what is the measure of the angle \( 5x \)?</p>
+                        <input type="text" name="s5q2" class="mt-1" placeholder="Angle in degrees">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q3 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s5q3" data-answer="15">
+                        <p class="font-semibold mb-2">3. Co-interior angles are \( 3x + 15 \) and \( 5x - 15 \). Find \( x \).</p>
+                        <input type="text" name="s5q3" class="mt-1" placeholder="Value of x">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q4 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s5q4" data-answer="60">
+                        <p class="font-semibold mb-2">4. From question 3, what is the measure of the angle \( 3x + 15 \)?</p>
+                        <input type="text" name="s5q4" class="mt-1" placeholder="Angle in degrees">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q5 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s5q5" data-answer="17">
+                        <p class="font-semibold mb-2">5. Co-interior angles are \( 4x + 2 \) and \( 6x - 6 \). Find \( x \).</p>
+                        <input type="text" name="s5q5" class="mt-1" placeholder="Value of x">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q6 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s5q6" data-answer="70">
+                        <p class="font-semibold mb-2">6. From question 5, what is the measure of \( 4x + 2 \)?</p>
+                        <input type="text" name="s5q6" class="mt-1" placeholder="Angle in degrees">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q7 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s5q7" data-answer="10">
+                        <p class="font-semibold mb-2">7. Co-interior angles are \( 7x \) and \( 2x + 30 \). Find \( x \).</p>
+                        <input type="text" name="s5q7" class="mt-1" placeholder="Value of x">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q8 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s5q8" data-answer="70">
+                        <p class="font-semibold mb-2">8. From question 7, what is the measure of \( 7x \)?</p>
+                        <input type="text" name="s5q8" class="mt-1" placeholder="Angle in degrees">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q9 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s5q9" data-answer="20">
+                        <p class="font-semibold mb-2">9. Co-interior angles are \( x^2 \) and \( 8x \). If \( x = 10 \), do they form a co-interior pair? (Yes/No). If No, find correct \( x \).</p>
+                        <input type="text" name="s5q9" class="mt-1" placeholder="Value of x">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <!-- Q10 -->
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s5q10" data-answer="40">
+                        <p class="font-semibold mb-2">10. If one co-interior angle is \( 140^\circ \) and the other is \( 2x + 20 \), find \( x \).</p>
+                        <input type="text" name="s5q10" class="mt-1" placeholder="Value of x">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                </div>
+                <div class="flex space-x-4 mt-6">
+                    <button onclick="submitSection('s5')" class="btn-neon px-6 py-2 rounded-full font-semibold text-white"><i class="fa-solid fa-check mr-2"></i>Submit</button>
+                    <button onclick="resetSection('s5')" class="bg-white/10 px-6 py-2 rounded-full font-semibold text-white hover:bg-white/20"><i class="fa-solid fa-rotate-right mr-2"></i>Reset</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider mx-8"></div>
+
+    <!-- SECTION 6: INDEPENDENT PRACTICE -->
+    <section class="p-6 glass-card m-4 animate-fade-in-up">
+        <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+            <h2 class="text-2xl font-bold text-white flex items-center">
+                <span class="bg-accent/20 text-accent w-10 h-10 rounded-full flex items-center justify-center mr-3 text-xl">6</span>
+                Independent Practice
+            </h2>
+            <span class="timer-badge px-4 py-1 rounded-full text-sm font-mono"><i class="fa-regular fa-clock mr-1"></i> 00:45 - 01:00</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Theory (Left) -->
+            <div class="space-y-4">
+                <div class="bg-white/5 p-5 rounded-xl border-l-4 border-accent">
+                    <p class="mb-3"><span class="font-bold text-purple-300">Complex problems might involve multiple parallel lines cut by more than one transversal.</span> In these scenarios, you must break the figure down into simpler, manageable parts. / <i>Masalah yang kompleks mungkin melibatkan beberapa garis sejajar yang dipotong oleh lebih dari satu transversal. Dalam skenario ini, Anda harus membagi gambar menjadi bagian-bagian yang lebih sederhana dan mudah dikelola.</i></p>
+                    <p><span class="font-bold text-purple-300">Drawing auxiliary lines can help reveal hidden parallel line relationships.</span> This strategic approach allows you to solve for unknown angles systematically. / <i>Menggambar garis bantu dapat membantu mengungkap hubungan garis sejajar yang tersembunyi. Pendekatan strategis ini memungkinkan Anda menyelesaikan sudut yang tidak diketahui secara sistematis.</i></p>
+                </div>
+                <div class="bg-white/5 p-5 rounded-xl border-l-4 border-primary">
+                    <p class="mb-3"><span class="font-bold text-purple-300">The transitive property of parallel lines states that if line \( a \) is parallel to line \( b \), and line \( b \) is parallel to line \( c \), then line \( a \) is parallel to line \( c \).</span> This property is extremely useful in multi-layered architectural designs. / <i>Sifat transitif garis sejajar menyatakan bahwa jika garis \( a \) sejajar dengan garis \( b \), dan garis \( b \) sejajar dengan garis \( c \), maka garis \( a \) sejajar dengan garis \( c \). Sifat ini sangat berguna dalam desain arsitektur berlapis.</i></p>
+                    <p><span class="font-bold text-purple-300">Always label your angles systematically when facing complex diagrams.</span> This prevents confusion and ensures that every equation you set up is based on the correct geometric relationship. / <i>Selalu beri label sudut Anda secara sistematis saat menghadapi diagram yang kompleks. Ini mencegah kebingungan dan memastikan bahwa setiap persamaan yang Anda susun didasarkan pada hubungan geometri yang benar.</i></p>
+                </div>
+            </div>
+
+            <!-- Activities (Right) -->
+            <div>
+                <div id="s6-activities" class="space-y-4">
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s6q1" data-answer="70">
+                        <p class="font-semibold mb-2">1. Lines \( a \parallel b \parallel c \). If an angle on line \( a \) is \( 70^\circ \), what is its corresponding angle on line \( c \)?</p>
+                        <input type="text" name="s6q1" class="mt-1" placeholder="Angle in degrees">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s6q2" data-answer="115">
+                        <p class="font-semibold mb-2">2. Transversal \( t \) cuts parallel lines \( m \) and \( n \). An angle on \( m \) is \( 115^\circ \). What is the alternate interior angle on \( n \)?</p>
+                        <input type="text" name="s6q2" class="mt-1" placeholder="Angle in degrees">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s6q3" data-answer="65">
+                        <p class="font-semibold mb-2">3. From question 2, what is the co-interior angle on line \( n \)?</p>
+                        <input type="text" name="s6q3" class="mt-1" placeholder="Angle in degrees">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s6q4" data-answer="40">
+                        <p class="font-semibold mb-2">4. \( a \parallel b \parallel c \). Angle on \( a \) is \( 2x \), angle on \( c \) is \( x + 40 \). Find \( x \).</p>
+                        <input type="text" name="s6q4" class="mt-1" placeholder="Value of x">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s6q5" data-answer="80">
+                        <p class="font-semibold mb-2">5. From question 4, what is the angle measure on line \( a \)?</p>
+                        <input type="text" name="s6q5" class="mt-1" placeholder="Angle in degrees">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s6q6" data-answer="5">
+                        <p class="font-semibold mb-2">6. \( x \parallel y \parallel z \). Angle on \( x \) is \( 3x + 5 \), angle on \( z \) is \( 5x - 5 \). Find \( x \).</p>
+                        <input type="text" name="s6q6" class="mt-1" placeholder="Value of x">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s6q7" data-answer="20">
+                        <p class="font-semibold mb-2">7. From question 6, what is the angle measure on line \( z \)?</p>
+                        <input type="text" name="s6q7" class="mt-1" placeholder="Angle in degrees">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s6q8" data-answer="30">
+                        <p class="font-semibold mb-2">8. Three parallel lines are cut by a transversal. Co-interior angles on the first two lines are \( 4x \) and \( 2x + 60 \). Find \( x \).</p>
+                        <input type="text" name="s6q8" class="mt-1" placeholder="Value of x">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s6q9" data-answer="120">
+                        <p class="font-semibold mb-2">9. From question 8, find the measure of the angle \( 4x \).</p>
+                        <input type="text" name="s6q9" class="mt-1" placeholder="Angle in degrees">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                    <div class="q-card bg-white/5 p-4 rounded-xl" id="s6q10" data-answer="100">
+                        <p class="font-semibold mb-2">10. A zig-zag pattern is formed by 2 transversals cutting 3 parallel lines. If the first angle is \( 100^\circ \), what is the alternate interior angle on the third line?</p>
+                        <input type="text" name="s6q10" class="mt-1" placeholder="Angle in degrees">
+                        <div class="feedback mt-2 hidden"></div>
+                    </div>
+                </div>
+                <div class="flex space-x-4 mt-6">
+                    <button onclick="submitSection('s6')" class="btn-neon px-6 py-2 rounded-full font-semibold text-white"><i class="fa-solid fa-check mr-2"></i>Submit</button>
+                    <button onclick="resetSection('s6')" class="bg-white/10 px-6 py-2 rounded-full font-semibold text-white hover:bg-white/20"><i class="fa-solid fa-rotate-right mr-2"></i>Reset</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider mx-8"></div>
+
+    <!-- SECTION 7: ASSESSMENT -->
+    <section class="p-6 glass-card m-4 animate-fade-in-up">
+        <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+            <h2 class="text-2xl font-bold text-white flex items-center">
+                <span class="bg-accent/20 text-accent w-10 h-10 rounded-full flex items-center justify-center mr-3 text-xl">7</span>
+                Assessment / Penilaian
+            </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div>
+                <label class="text-purple-300 text-sm">Student Name / <i>Nama Siswa</i></label>
+                <input type="text" id="studentName" class="mt-1 w-full" placeholder="Enter your name">
+            </div>
+            <div>
+                <label class="text-purple-300 text-sm">Date / <i>Tanggal</i></label>
+                <input type="date" id="studentDate" class="mt-1 w-full" style="color-scheme: dark;">
+            </div>
+        </div>
+
+        <div class="flex space-x-2 mb-6 overflow-x-auto pb-2">
+            <button onclick="switchGroup(1)" id="tab-1" class="tab-btn bg-accent px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all">Group 1: Basics</button>
+            <button onclick="switchGroup(2)" id="tab-2" class="tab-btn bg-white/10 px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all hover:bg-white/20">Group 2: Algebra</button>
+            <button onclick="switchGroup(3)" id="tab-3" class="tab-btn bg-white/10 px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all hover:bg-white/20">Group 3: Co-Interior</button>
+            <button onclick="switchGroup(4)" id="tab-4" class="tab-btn bg-white/10 px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all hover:bg-white/20">Group 4: Logic</button>
+            <button onclick="switchGroup(5)" id="tab-5" class="tab-btn bg-white/10 px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all hover:bg-white/20">Group 5: Expert</button>
+        </div>
+
+        <div id="assessment-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Injected via JS -->
+        </div>
+
+        <div class="flex space-x-4 mt-6">
+            <button onclick="submitAssessment()" class="btn-neon px-6 py-2 rounded-full font-semibold text-white"><i class="fa-solid fa-check mr-2"></i>Submit Group</button>
+            <button onclick="printAssessment()" class="bg-green-600 hover:bg-green-700 px-6 py-2 rounded-full font-semibold text-white transition-all"><i class="fa-solid fa-print mr-2"></i>Print Result</button>
+        </div>
+    </section>
+
+    <div class="section-divider mx-8"></div>
+
+    <!-- SECTION 8: CONSOLIDATION & REFLECTION -->
+    <section class="p-6 glass-card m-4 animate-fade-in-up">
+        <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+            <h2 class="text-2xl font-bold text-white flex items-center">
+                <span class="bg-accent/20 text-accent w-10 h-10 rounded-full flex items-center justify-center mr-3 text-xl">8</span>
+                Consolidation & Reflection
+            </h2>
+            <span class="timer-badge px-4 py-1 rounded-full text-sm font-mono"><i class="fa-regular fa-clock mr-1"></i> Wrap-up</span>
+        </div>
+
+        <div class="text-center space-y-6 py-8">
+            <i class="fa-solid fa-trophy text-6xl text-accent animate-bounce"></i>
+            <h3 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-purple-300">
+                Fantastic Job! / <i>Kerja Luar Biasa!</i>
+            </h3>
+            <p class="text-lg text-purple-200 max-w-2xl mx-auto">
+                You have proven that mathematics is the language of architecture. Understanding parallel lines and angles ensures the buildings of the future are safe and beautiful.
+                / <i>Anda telah membuktikan bahwa matematika adalah bahasa arsitektur. Memahami garis dan sudut sejajar memastikan bangunan masa depan aman dan indah.</i>
+            </p>
+            
+            <div class="bg-white/5 p-6 rounded-xl max-w-md mx-auto border border-purple-500/30">
+                <h4 class="font-bold text-white mb-2">Continue Your Journey</h4>
+                <p class="text-sm text-purple-300 mb-4">Access your notes and bridge assignments on our platform.</p>
+                <a href="https://learn.algonova.id/login" target="_blank" class="btn-neon px-8 py-3 rounded-full font-semibold text-white inline-block">
+                    <i class="fa-solid fa-arrow-right mr-2"></i> learn.algonova.id
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- GLOBAL STATE ---
+        let currentGroup = 1;
+        let assessmentAnswers = {}; 
+
+        // --- SECTION 1 DATA INJECTION ---
+        const s1Data = [
+            { id: 's1q1', q: 'If angle A and B are supplementary, and angle A is \( 75^\circ \), what is angle B?', answer: '105', hint: 'Supplementary angles add up to 180: 180 - 75 = 105' },
+            { id: 's1q2', q: 'What is the difference between parallel and intersecting lines?', answer: 'parallel never meet', hint: 'Intersecting lines cross each other, parallel lines do not.' },
+            { id: 's1q3', q: 'If two parallel lines are cut by a transversal, are corresponding angles always equal?', answer: 'yes', hint: 'Corresponding angles are always equal in parallel lines.' },
+            { id: 's1q4', q: 'If angle 1 is \( 110^\circ \), what is its alternate interior angle?', answer: '110', hint: 'Alternate interior angles are equal.' },
+            { id: 's1q5', q: 'If two angles form a straight line, they are called \_\_\_\_ angles.', answer: 'supplementary', hint: 'They add up to 180 degrees.' },
+            { id: 's1q6', q: 'Complementary angles add up to \_\_\_\_ degrees.', answer: '90', hint: 'Think of a corner of a square.' },
+            { id: 's1q7', q: 'If angle X is \( 45^\circ \), what is its complementary angle?', answer: '45', hint: '90 - 45 = 45' },
+            { id: 's1q8', q: 'A line that cuts two parallel lines is called a \_\_\_\_.', answer: 'transversal', hint: 'It transverses across the parallel lines.' },
+            { id: 's1q9', q: 'Do parallel lines ever intersect?', answer: 'no', hint: 'By definition, parallel lines never meet.' },
+            { id: 's1q10', q: 'If angle P is \( 120^\circ \) and angle Q is \( 60^\circ \), are they supplementary?', answer: 'yes', hint: '120 + 60 = 180. Yes, they are!' }
+        ];
+
+        // --- ASSESSMENT BANKS ---
+        const banks = {
+            1: [ 
+                { id: 'a1q1', type: 'radio', q: 'If two lines never intersect, they are...', options: ['Intersecting', 'Perpendicular', 'Parallel', 'Transversal'], answer: 'Parallel', hint: 'Parallel lines never meet.' },
+                { id: 'a1q2', type: 'dropdown', q: 'A line that cuts two parallel lines is called a...', options: ['--Select--', 'Transversal', 'Ray', 'Segment'], answer: 'Transversal', hint: 'It transverses (crosses) the parallel lines.' },
+                { id: 'a1q3', type: 'radio', q: 'Corresponding angles are often identified by which letter pattern?', options: ['Z', 'F', 'C', 'U'], answer: 'F', hint: 'The F pattern highlights angles in the same relative position.' },
+                { id: 'a1q4', type: 'dropdown', q: 'Alternate interior angles form which letter pattern?', options: ['--Select--', 'Z', 'F', 'C'], answer: 'Z', hint: 'The Z pattern crosses between the parallel lines.' },
+                { id: 'a1q5', type: 'radio', q: 'Co-interior angles add up to...', options: ['90°', '180°', '270°', '360°'], answer: '180°', hint: 'They are supplementary.' },
+                { id: 'a1q6', type: 'radio', q: 'If corresponding angles are equal, what can you conclude about the lines?', options: ['They are perpendicular', 'They are parallel', 'They intersect', 'Nothing'], answer: 'They are parallel', hint: 'Equal corresponding angles prove lines are parallel.' },
+                { id: 'a1q7', type: 'dropdown', q: 'Angles inside the parallel lines and on opposite sides of the transversal are...', options: ['--Select--', 'Alternate Interior', 'Corresponding', 'Co-Interior'], answer: 'Alternate Interior', hint: 'Alternate = opposite sides, Interior = inside.' },
+                { id: 'a1q8', type: 'radio', q: 'Are alternate exterior angles equal?', options: ['Yes', 'No'], answer: 'Yes', hint: 'Like alternate interior, they are equal.' },
+                { id: 'a1q9', type: 'dropdown', q: 'Co-interior angles form which letter pattern?', options: ['--Select--', 'Z', 'F', 'C'], answer: 'C', hint: 'The C pattern traps angles on the same side.' },
+                { id: 'a1q10', type: 'radio', q: 'If angle A is 45° and it is alternate interior to angle B, what is angle B?', options: ['45°', '135°', '90°', '180°'], answer: '45°', hint: 'Alternate interior angles are equal.' }
+            ],
+            2: [ 
+                { id: 'a2q1', type: 'text', q: 'Corresponding angles are \( 4x \) and \( x + 30 \). Find \( x \).', answer: '10', hint: 'Set equal: 4x = x + 30 -> 3x = 30' },
+                { id: 'a2q2', type: 'text', q: 'From Q1, what is the angle measure?', answer: '40', hint: 'Substitute x=10 into 4x.' },
+                { id: 'a2q3', type: 'text', q: 'Alternate interior angles are \( 3x + 10 \) and \( 2x + 40 \). Find \( x \).', answer: '30', hint: '3x + 10 = 2x + 40 -> x = 30' },
+                { id: 'a2q4', type: 'text', q: 'From Q3, what is the angle measure?', answer: '100', hint: 'Substitute x=30 into 3x+10.' },
+                { id: 'a2q5', type: 'text', q: 'Corresponding angles are \( 2x - 10 \) and \( x + 20 \). Find \( x \).', answer: '30', hint: '2x - 10 = x + 20 -> x = 30' },
+                { id: 'a2q6', type: 'text', q: 'Alternate exterior angles are \( 5x \) and \( 3x + 20 \). Find \( x \).', answer: '10', hint: '5x = 3x + 20 -> 2x = 20' },
+                { id: 'a2q7', type: 'text', q: 'From Q6, what is the angle measure?', answer: '50', hint: 'Substitute x=10 into 5x.' },
+                { id: 'a2q8', type: 'text', q: 'Corresponding angles are \( x^2 \) and \( 4x \). Find the positive value of \( x \).', answer: '4', hint: 'x^2 = 4x -> x = 4' },
+                { id: 'a2q9', type: 'text', q: 'Alternate interior angles are \( 7x - 10 \) and \( 60 \). Find \( x \).', answer: '10', hint: '7x - 10 = 60 -> 7x = 70' },
+                { id: 'a2q10', type: 'text', q: 'Corresponding angles are \( 2x + 5 \) and \( 45 \). Find \( x \).', answer: '20', hint: '2x + 5 = 45 -> 2x = 40' }
+            ],
+            3: [ 
+                { id: 'a3q1', type: 'text', q: 'Co-interior angles are \( 5x \) and \( x + 30 \). Find \( x \).', answer: '25', hint: '5x + x + 30 = 180 -> 6x = 150' },
+                { id: 'a3q2', type: 'text', q: 'From Q1, what is the measure of \( 5x \)?', answer: '125', hint: '5(25) = 125' },
+                { id: 'a3q3', type: 'text', q: 'Co-interior angles are \( 4x + 10 \) and \( 2x + 20 \). Find \( x \).', answer: '25', hint: '6x + 30 = 180 -> 6x = 150' },
+                { id: 'a3q4', type: 'text', q: 'From Q3, what is the measure of \( 2x + 20 \)?', answer: '70', hint: '2(25) + 20 = 70' },
+                { id: 'a3q5', type: 'text', q: 'Co-interior angles are \( 3x \) and \( 6x - 10 \). Find \( x \).', answer: '21.11', hint: '9x - 10 = 180 -> 9x = 190 -> x = 190/9' },
+                { id: 'a3q6', type: 'text', q: 'Co-interior angles are \( x \) and \( 2x + 30 \). Find \( x \).', answer: '50', hint: '3x + 30 = 180 -> 3x = 150' },
+                { id: 'a3q7', type: 'text', q: 'From Q6, what is the measure of \( 2x + 30 \)?', answer: '130', hint: '2(50) + 30 = 130' },
+                { id: 'a3q8', type: 'text', q: 'Co-interior angles are \( 7x + 5 \) and \( 3x - 5 \). Find \( x \).', answer: '18', hint: '10x = 180 -> x = 18' },
+                { id: 'a3q9', type: 'text', q: 'From Q8, what is the measure of \( 7x + 5 \)?', answer: '131', hint: '7(18) + 5 = 131' },
+                { id: 'a3q10', type: 'text', q: 'Co-interior angles are \( 8x \) and \( x + 90 \). Find \( x \).', answer: '10', hint: '9x + 90 = 180 -> 9x = 90' }
+            ],
+            4: [ 
+                { id: 'a4q1', type: 'checkbox', q: 'Which of the following angle pairs are ALWAYS equal? (Select all that apply)', options: ['Corresponding', 'Alternate Interior', 'Co-Interior', 'Alternate Exterior'], answer: ['Corresponding', 'Alternate Interior', 'Alternate Exterior'], hint: 'Co-interior are supplementary (180), not equal.' },
+                { id: 'a4q2', type: 'checkbox', q: 'Which pairs add up to 180°? (Select all that apply)', options: ['Co-Interior', 'Angles on a straight line', 'Corresponding', 'Supplementary angles'], answer: ['Co-Interior', 'Angles on a straight line', 'Supplementary angles'], hint: 'Corresponding are equal, not 180 sum.' },
+                { id: 'a4q3', type: 'radio', q: 'If two lines are cut by a transversal and corresponding angles are NOT equal, are the lines parallel?', options: ['Yes', 'No', 'Only if transversal is perpendicular'], answer: 'No', hint: 'Strict condition: equal corresponding angles prove parallelism.' },
+                { id: 'a4q4', type: 'radio', q: 'Angle A is 120°. Its co-interior pair Angle B is...', options: ['60°', '120°', '240°'], answer: '60°', hint: 'Co-interior = 180. 180 - 120 = 60.' },
+                { id: 'a4q5', type: 'checkbox', q: 'Which properties prove lines are parallel? (Select all that apply)', options: ['Corresponding angles equal', 'Alternate interior equal', 'Co-interior supplementary'], answer: ['Corresponding angles equal', 'Alternate interior equal', 'Co-interior supplementary'], hint: 'All three conditions are valid proofs for parallel lines.' },
+                { id: 'a4q6', type: 'radio', q: 'A transversal cuts two lines. Alternate interior angles are 80° and 100°. Are the lines parallel?', options: ['Yes', 'No'], answer: 'No', hint: 'Alternate interior must be EQUAL. 80 != 100.' },
+                { id: 'a4q7', type: 'radio', q: 'If a transversal is perpendicular to one parallel line, it is ____ to the other.', options: ['Parallel', 'Perpendicular', 'Oblique'], answer: 'Perpendicular', hint: 'Transitive property of perpendicular lines.' },
+                { id: 'a4q8', type: 'checkbox', q: 'Select the angle types that form an "F" or "Z" pattern.', options: ['Corresponding (F)', 'Alternate Interior (Z)', 'Co-Interior (C)'], answer: ['Corresponding (F)', 'Alternate Interior (Z)'], hint: 'C pattern is co-interior.' },
+                { id: 'a4q9', type: 'radio', q: 'If Angle X and Angle Y are supplementary and equal, they must be...', options: ['45° each', '90° each', '180° each'], answer: '90° each', hint: 'x + x = 180 -> 2x = 180 -> x = 90.' },
+                { id: 'a4q10', type: 'radio', q: 'Does the transitive property apply to parallel lines? (If a∥b and b∥c, then a∥c)', options: ['Yes', 'No'], answer: 'Yes', hint: 'Yes, this is a fundamental geometric property.' }
+            ],
+            5: [ 
+                { id: 'a5q1', type: 'matching', q: 'Match: Angles inside parallel lines on opposite sides.', options: ['--Select--', 'Corresponding', 'Alternate Interior', 'Co-Interior'], answer: 'Alternate Interior', hint: 'Alternate = opposite, Interior = inside.' },
+                { id: 'a5q2', type: 'matching', q: 'Match: Angles in the same relative position.', options: ['--Select--', 'Corresponding', 'Alternate Interior', 'Co-Interior'], answer: 'Corresponding', hint: 'They "correspond" to each other.' },
+                { id: 'a5q3', type: 'matching', q: 'Match: Angles inside parallel lines on the same side.', options: ['--Select--', 'Corresponding', 'Alternate Interior', 'Co-Interior'], answer: 'Co-Interior', hint: 'Same side = Co/Together.' },
+                { id: 'a5q4', type: 'text', q: 'Three parallel lines \( a, b, c \). Angle on \( a \) is \( 80^\circ \). What is the corresponding angle on \( c \)?', answer: '80', hint: 'Transitive property of parallel lines.' },
+                { id: 'a5q5', type: 'text', q: 'In a zig-zag, \( a \parallel b \parallel c \). Angle 1 on \( a \) is \( 110^\circ \). Alternate interior on \( c \) is...', answer: '110', hint: 'Transitive property of alternate angles.' },
+                { id: 'a5q6', type: 'text', q: 'Algebra Challenge: Co-interior angles \( x^2 + 20 \) and \( 100 - x \). Find positive \( x \).', answer: '5', hint: 'x^2 - x + 120 = 180 -> x^2 - x - 60 = 0. Factor: (x+?)(x-?)' },
+                { id: 'a5q7', type: 'matching', q: 'Match the property: Z Pattern.', options: ['--Select--', 'Corresponding', 'Alternate Interior', 'Co-Interior'], answer: 'Alternate Interior', hint: 'Z crosses between lines.' },
+                { id: 'a5q8', type: 'matching', q: 'Match the property: F Pattern.', options: ['--Select--', 'Corresponding', 'Alternate Interior', 'Co-Interior'], answer: 'Corresponding', hint: 'F shows same relative position.' },
+                { id: 'a5q9', type: 'text', q: 'Bridge design: Pilar angles are \( 7x - 5 \) and \( 3x + 15 \) (Co-interior). Is it stable (sum 180)? Find \( x \).', answer: '17', hint: '10x + 10 = 180 -> 10x = 170' },
+                { id: 'a5q10', type: 'text', q: 'From Q9, verify: What is the measure of the larger angle?', answer: '114', hint: '7(17) - 5 = 119 - 5 = 114' }
+            ]
+        };
+
+        // --- RENDERING FUNCTIONS ---
+        function renderSection1() {
+            const container = document.getElementById('s1-activities');
+            if(!container) return;
+            container.innerHTML = '';
+            s1Data.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'q-card bg-white/5 p-4 rounded-xl';
+                card.id = q.id;
+                card.dataset.answer = q.answer;
+                card.dataset.hint = q.hint;
+                card.innerHTML = `
+                    <p class="font-semibold mb-2 text-purple-100">${index + 1}. ${q.q}</p>
+                    <input type="text" name="${q.id}" class="mt-1 w-full" placeholder="Your answer">
+                    <div class="feedback mt-2 hidden"></div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function switchGroup(groupNum) {
+            currentGroup = groupNum;
+            for(let i=1; i<=5; i++) {
+                document.getElementById(`tab-${i}`).className = i === groupNum ? 
+                    'tab-btn bg-accent px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all' : 
+                    'tab-btn bg-white/10 px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all hover:bg-white/20';
+            }
+            renderAssessment();
+        }
+
+        function renderAssessment() {
+            const container = document.getElementById('assessment-container');
+            container.innerHTML = '';
+            const questions = banks[currentGroup];
+
+            questions.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'q-card bg-white/5 p-4 rounded-xl';
+                card.id = q.id;
+                card.dataset.answer = Array.isArray(q.answer) ? q.answer.join(',') : q.answer;
+                card.dataset.type = q.type;
+                card.dataset.hint = q.hint;
+
+                let inputHTML = '';
+                if (q.type === 'radio') {
+                    inputHTML = q.options.map(opt => `
+                        <label class="block cursor-pointer my-1"><input type="radio" name="${q.id}" value="${opt}" class="mr-2"> ${opt}</label>
+                    `).join('');
+                } else if (q.type === 'text') {
+                    inputHTML = `<input type="text" name="${q.id}" class="mt-1 w-full" placeholder="Your answer">`;
+                } else if (q.type === 'dropdown' || q.type === 'matching') {
+                    inputHTML = `<select name="${q.id}" class="mt-1 w-full">
+                        ${q.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                    </select>`;
+                } else if (q.type === 'checkbox') {
+                    inputHTML = q.options.map(opt => `
+                        <label class="block cursor-pointer my-1"><input type="checkbox" name="${q.id}" value="${opt}" class="mr-2"> ${opt}</label>
+                    `).join('');
+                }
+
+                card.innerHTML = `
+                    <p class="font-semibold mb-2 text-purple-100">${index + 1}. ${q.q}</p>
+                    <div class="mt-2">${inputHTML}</div>
+                    <div class="feedback mt-2 hidden"></div>
+                `;
+                container.appendChild(card);
+            });
+            renderMathInElement(container, { delimiters: [{left: '\\(', right: '\\)', display: false}] });
+        }
+
+        // --- EVALUATION FUNCTIONS ---
+        function submitSection(sectionId) {
+            const container = document.getElementById(`${sectionId}-activities`);
+            const cards = container.querySelectorAll('.q-card');
+            
+            cards.forEach(card => {
+                const answer = card.dataset.answer;
+                let userAnswer = '';
+
+                if (card.querySelector('input[type="radio"]')) {
+                    const checked = card.querySelector('input[type="radio"]:checked');
+                    userAnswer = checked ? checked.value : '';
+                } else if (card.querySelector('input[type="text"]')) {
+                    userAnswer = card.querySelector('input[type="text"]').value.trim().replace('°', '').replace('derajat', '');
+                } else if (card.querySelector('select')) {
+                    userAnswer = card.querySelector('select').value;
+                }
+
+                const feedbackDiv = card.querySelector('.feedback');
+                feedbackDiv.classList.remove('hidden');
+
+                if(userAnswer.toLowerCase() === answer.toLowerCase()) {
+                    card.classList.add('correct-answer');
+                    card.classList.remove('wrong-answer');
+                    feedbackDiv.innerHTML = '<span class="text-green-400 font-bold"><i class="fa-solid fa-check-circle mr-1"></i> Correct! / <i>Benar!</i></span>';
+                } else {
+                    card.classList.add('wrong-answer');
+                    card.classList.remove('correct-answer');
+                    feedbackDiv.innerHTML = `
+                        <span class="text-red-400 font-bold"><i class="fa-solid fa-times-circle mr-1"></i> Incorrect / <i>Salah</i></span>
+                        <div class="hint-box mt-2">
+                            <p class="font-bold text-red-300">Hint / <i>Petunjuk</i>:</p>
+                            <p>${card.dataset.hint || 'The correct answer is ' + answer}</p>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        function resetSection(sectionId) {
+            const container = document.getElementById(`${sectionId}-activities`);
+            const cards = container.querySelectorAll('.q-card');
+            
+            cards.forEach(card => {
+                card.classList.remove('correct-answer', 'wrong-answer');
+                const feedbackDiv = card.querySelector('.feedback');
+                feedbackDiv.classList.add('hidden');
+                feedbackDiv.innerHTML = '';
+
+                if (card.querySelector('input[type="radio"]')) {
+                    card.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+                } else if (card.querySelector('input[type="text"]')) {
+                    card.querySelector('input[type="text"]').value = '';
+                } else if (card.querySelector('select')) {
+                    card.querySelector('select').selectedIndex = 0;
+                }
+            });
+        }
+
+        function submitAssessment() {
+            const cards = document.querySelectorAll('#assessment-container .q-card');
+            let score = 0;
+            assessmentAnswers = {}; 
+
+            cards.forEach(card => {
+                const qId = card.id;
+                const answer = card.dataset.answer;
+                let userAnswer = '';
+
+                if (card.dataset.type === 'checkbox') {
+                    const checked = card.querySelectorAll('input[type="checkbox"]:checked');
+                    userAnswer = Array.from(checked).map(c => c.value).join(',');
+                } else if (card.querySelector('input[type="radio"]')) {
+                    const checked = card.querySelector('input[type="radio"]:checked');
+                    userAnswer = checked ? checked.value : '';
+                } else if (card.querySelector('input[type="text"]')) {
+                    userAnswer = card.querySelector('input[type="text"]').value.trim().replace('°', '').replace('derajat', '');
+                } else if (card.querySelector('select')) {
+                    userAnswer = card.querySelector('select').value;
+                }
+
+                assessmentAnswers[qId] = { question: card.querySelector('p').innerText, userAnswer: userAnswer || '(Empty)', correctAnswer: answer };
+
+                const feedbackDiv = card.querySelector('.feedback');
+                feedbackDiv.classList.remove('hidden');
+
+                if(userAnswer.toLowerCase() === answer.toLowerCase()) {
+                    card.classList.add('correct-answer');
+                    card.classList.remove('wrong-answer');
+                    feedbackDiv.innerHTML = '<span class="text-green-400 font-bold"><i class="fa-solid fa-check-circle mr-1"></i> Correct!</span>';
+                    score++;
+                } else {
+                    card.classList.add('wrong-answer');
+                    card.classList.remove('correct-answer');
+                    feedbackDiv.innerHTML = `
+                        <span class="text-red-400 font-bold"><i class="fa-solid fa-times-circle mr-1"></i> Incorrect</span>
+                        <div class="hint-box mt-2">
+                            <p class="font-bold text-red-300">Correct Answer / <i>Jawaban Benar</i>: ${answer}</p>
+                            <p>${card.dataset.hint}</p>
+                        </div>
+                    `;
+                }
+            });
+            alert(`Assessment Group ${currentGroup} Submitted!\nScore: ${score}/10`);
+        }
+
+        function printAssessment() {
+            const name = document.getElementById('studentName').value || 'Anonymous';
+            const date = document.getElementById('studentDate').value || 'N/A';
+            let score = 0;
+            const totalQ = 10;
+
+            let tableRows = '';
+            for (let qId in assessmentAnswers) {
+                const a = assessmentAnswers[qId];
+                if(a.userAnswer.toLowerCase() === a.correctAnswer.toLowerCase()) score++;
+                tableRows += `<tr style="border-bottom:1px solid #ddd;"><td style="padding:8px;">${qId.replace('a','G').replace('q','Q')}</td><td style="padding:8px;">${a.question}</td><td style="padding:8px;">${a.userAnswer}</td><td style="padding:8px;">${a.correctAnswer}</td></tr>`;
+            }
+
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html><head><title>Assessment Result</title><style>body{font-family:Arial,sans-serif;padding:20px;} table{width:100%;border-collapse:collapse;margin-top:20px;} th{background:#f3f4f6;text-align:left;padding:8px;}</style></head><body>
+                <h1 style="color:#6a0dad;">Assessment Result</h1>
+                <p><strong>Topic:</strong> Hubungan Sudut dan Garis Sejajar</p>
+                <p><strong>Student Name:</strong> ${name}</p>
+                <p><strong>Date:</strong> ${date}</p>
+                <p><strong>Assessment Group:</strong> ${currentGroup}</p>
+                <p><strong>Score:</strong> ${score}/${totalQ}</p>
+                <table border="1">
+                    <thead><tr><th>ID</th><th>Question</th><th>Student Answer</th><th>Correct Answer</th></tr></thead>
+                    <tbody>${tableRows}</tbody>
+                </table>
+                <script>window.print();<\/script>
+                </body></html>
+            `);
+            printWindow.document.close();
+        }
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSection1();
+            renderAssessment();
+            
+            // Render KaTeX for entire document
+            if(typeof renderMathInElement !== 'undefined') {
+                renderMathInElement(document.body, {
+                    delimiters: [{left: '\\(', right: '\\)', display: false}]
+                });
+            }
+        });
+    </script>
+</body>
+</html>
