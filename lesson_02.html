@@ -50,6 +50,26 @@
         
         @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 5px #ff2d75; } 50% { box-shadow: 0 0 20px #ff2d75; } }
         .pulse-glow { animation: pulse-glow 2s infinite; }
+        /* --- TAMBAHAN UNTUK EFEK INTERAKTIF --- */
+        .concept-card { transition: all 0.3s ease; cursor: pointer; }
+        .concept-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(255, 45, 117, 0.2); }
+        .concept-card .reveal-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out, opacity 0.3s ease; opacity: 0; }
+        .concept-card.active .reveal-content { max-height: 200px; opacity: 1; }
+        .concept-card .icon-play { transition: transform 0.3s; }
+        .concept-card.active .icon-play { transform: rotate(90deg); }
+
+        /* Animasi SVG menggambar garis */
+        @keyframes drawLine {
+            to { stroke-dashoffset: 0; }
+        }
+        .svg-draw { stroke-dasharray: 400; stroke-dashoffset: 400; animation: drawLine 2s ease-out forwards; }
+        .svg-draw-delay { animation-delay: 0.5s; }
+        
+        @keyframes pingDot {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(2.5); opacity: 0; }
+        }
+        .svg-ping { animation: pingDot 1.5s infinite; }
     </style>
 </head>
 <body class="min-h-screen pb-20">
@@ -99,28 +119,72 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <!-- Theory (Left) -->
+            <!-- Theory (Left) - SUDAH DISULAP INTERAKTIF -->
             <div class="space-y-4">
-                <div class="bg-white/5 p-5 rounded-xl border-l-4 border-accent">
-                    <p class="mb-3"><span class="font-bold text-purple-300">Geometry is built upon the foundation of points, lines, and angles.</span> When two lines extend in the same direction without ever meeting, they are called parallel lines. / <i>Geometri dibangun di atas dasar titik, garis, dan sudut. Ketika dua garis memanjang ke arah yang sama tanpa pernah bertemu, mereka disebut garis sejajar.</i></p>
-                    <p><span class="font-bold text-purple-300">When a third line, known as a transversal, crosses two parallel lines, it creates special angle pairs.</span> These pairs include corresponding angles, alternate interior angles, and co-interior angles. / <i>Ketika garis ketiga, yang dikenal sebagai transversal, memotong dua garis sejajar, ia membentuk pasangan sudut khusus. Pasangan ini termasuk sudut sehadap, dalam berseberangan, dan dalam sepihak.</i></p>
-                </div>
-                <div class="bg-white/5 p-5 rounded-xl border-l-4 border-primary">
-                    <p class="mb-3"><span class="font-bold text-purple-300">Supplementary angles are two angles that add up to exactly 180 degrees.</span> They form a straight line when placed adjacent to each other. / <i>Sudut berpelurus adalah dua sudut yang jumlahnya tepat 180 derajat. Mereka membentuk garis lurus saat ditempatkan bersebelahan.</i></p>
-                    <p><span class="font-bold text-purple-300">Complementary angles, on the other hand, add up to exactly 90 degrees.</span> Recognizing these basic angle relationships is crucial before exploring complex parallel line theorems. / <i>Di sisi lain, sudut berpenyiku jumlahnya tepat 90 derajat. Mengenali hubungan sudut dasar ini sangat penting sebelum menjelajahi teorema garis sejajar yang kompleks.</i></p>
-                </div>
                 
-                <!-- Ilustrasi Animasi Sederhana -->
-                <div class="flex justify-center items-center space-x-8 mt-4">
-                    <div class="text-center">
-                        <svg width="80" height="80" viewBox="0 0 100 100"><line x1="10" y1="20" x2="90" y2="20" stroke="#ff2d75" stroke-width="4"/><line x1="10" y1="80" x2="90" y2="80" stroke="#ff2d75" stroke-width="4"/><line x1="30" y1="0" x2="70" y2="100" stroke="#fff" stroke-width="2" stroke-dasharray="5,5"/><text x="50" y="15" fill="#fff" font-size="10">l</text><text x="50" y="98" fill="#fff" font-size="10">m</text></svg>
-                        <p class="text-xs mt-2 text-purple-300">Parallel Lines / <i>Garis Sejajar</i></p>
+                <!-- Card 1: Parallel Lines -->
+                <div class="concept-card bg-gradient-to-br from-purple-900/60 to-pink-900/40 p-5 rounded-2xl border border-purple-500/30" onclick="this.classList.toggle('active')">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-white flex items-center"><i class="fa-solid fa-grip-lines text-accent mr-2"></i> Parallel Lines</h3>
+                        <i class="fa-solid fa-chevron-right icon-play text-purple-300 text-sm"></i>
                     </div>
-                    <div class="text-center">
-                        <svg width="80" height="80" viewBox="0 0 100 100"><line x1="10" y1="10" x2="90" y2="90" stroke="#6a0dad" stroke-width="4"/><line x1="90" y1="10" x2="10" y2="90" stroke="#6a0dad" stroke-width="4"/><circle cx="50" cy="50" r="3" fill="#fff"/></svg>
-                        <p class="text-xs mt-2 text-purple-300">Intersecting / <i>Berpotongan</i></p>
+                    <p class="text-sm mt-2 text-purple-100">Two lines extending in the same direction without ever meeting.</p>
+                    <div class="reveal-content mt-3 border-t border-white/10 pt-3">
+                        <p class="text-sm text-purple-300 italic"><i class="fa-solid fa-language mr-1"></i> Ketika dua garis memanjang ke arah yang sama tanpa pernah bertemu, mereka disebut garis sejajar.</p>
                     </div>
                 </div>
+
+                <!-- Card 2: Transversal -->
+                <div class="concept-card bg-gradient-to-br from-purple-900/60 to-pink-900/40 p-5 rounded-2xl border border-purple-500/30" onclick="this.classList.toggle('active')">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-white flex items-center"><i class="fa-solid fa-slash text-accent mr-2"></i> Transversal Line</h3>
+                        <i class="fa-solid fa-chevron-right icon-play text-purple-300 text-sm"></i>
+                    </div>
+                    <p class="text-sm mt-2 text-purple-100">A line that crosses two parallel lines, creating special angle pairs (Corresponding, Alternate, Co-interior).</p>
+                    <div class="reveal-content mt-3 border-t border-white/10 pt-3">
+                        <p class="text-sm text-purple-300 italic"><i class="fa-solid fa-language mr-1"></i> Garis yang memotong dua garis sejajar, membentuk pasangan sudut khusus (Sehadap, Dalam Berseberangan, Sepihak).</p>
+                    </div>
+                </div>
+
+                <!-- Card 3: Supplementary & Complementary -->
+                <div class="concept-card bg-gradient-to-br from-purple-900/60 to-pink-900/40 p-5 rounded-2xl border border-purple-500/30" onclick="this.classList.toggle('active')">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-white flex items-center"><i class="fa-solid fa-ruler-combined text-accent mr-2"></i> Angle Sums</h3>
+                        <i class="fa-solid fa-chevron-right icon-play text-purple-300 text-sm"></i>
+                    </div>
+                    <p class="text-sm mt-2 text-purple-100"><strong>Supplementary:</strong> Adds to \( 180^\circ \). <strong>Complementary:</strong> Adds to \( 90^\circ \).</p>
+                    <div class="reveal-content mt-3 border-t border-white/10 pt-3">
+                        <p class="text-sm text-purple-300 italic"><i class="fa-solid fa-language mr-1"></i> Berpelurus (jumlahnya 180°) dan Berpenyiku (jumlahnya 90°). Dasar penting untuk teorema garis sejajar.</p>
+                    </div>
+                </div>
+
+                <!-- Ilustrasi Animasi SVG -->
+                <div class="bg-white/5 p-5 rounded-2xl border border-white/10 mt-2">
+                    <h4 class="text-sm font-bold text-purple-300 mb-4 text-center"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Visualizing Lines</h4>
+                    <div class="flex justify-center items-center space-x-10">
+                        <div class="text-center">
+                            <svg width="80" height="80" viewBox="0 0 100 100">
+                                <!-- Garis Sejajar Animasi -->
+                                <line x1="10" y1="25" x2="90" y2="25" stroke="#ff2d75" stroke-width="4" class="svg-draw" />
+                                <line x1="10" y1="75" x2="90" y2="75" stroke="#ff2d75" stroke-width="4" class="svg-draw svg-draw-delay" />
+                                <line x1="40" y1="5" x2="60" y2="95" stroke="#fff" stroke-width="2" stroke-dasharray="5,5" class="svg-draw" style="animation-delay:1s" />
+                            </svg>
+                            <p class="text-xs mt-3 text-purple-200 font-bold">Parallel / <i>Sejajar</i></p>
+                        </div>
+                        <div class="text-center">
+                            <svg width="80" height="80" viewBox="0 0 100 100">
+                                <!-- Garis Berpotongan Animasi -->
+                                <line x1="10" y1="10" x2="90" y2="90" stroke="#6a0dad" stroke-width="4" class="svg-draw" />
+                                <line x1="90" y1="10" x2="10" y2="90" stroke="#6a0dad" stroke-width="4" class="svg-draw svg-draw-delay" />
+                                <!-- Titik Potong Animasi -->
+                                <circle cx="50" cy="50" r="4" fill="#ff2d75" class="svg-ping" style="animation-delay:1.5s" />
+                                <circle cx="50" cy="50" r="3" fill="#fff" />
+                            </svg>
+                            <p class="text-xs mt-3 text-purple-200 font-bold">Intersecting / <i>Berpotongan</i></p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <!-- Activities (Right) -->
