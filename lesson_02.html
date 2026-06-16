@@ -940,7 +940,65 @@
             setTimeout(() => modal.classList.add('hidden'), 300);
         }
 
-        // Section 1 Render (SUDAH DITERJEMAHKAN)
+        // --- FUNGSI UNTUK TOMBOL CHECK & RETRY (SECTION 1 - 6) ---
+        function submitSection(sectionId) {
+            const container = document.getElementById(`${sectionId}-activities`);
+            const cards = container.querySelectorAll('.q-card');
+            
+            cards.forEach(card => {
+                const answer = card.dataset.answer;
+                let userAnswer = '';
+
+                if (card.querySelector('input[type="radio"]')) {
+                    const checked = card.querySelector('input[type="radio"]:checked');
+                    userAnswer = checked ? checked.value : '';
+                } else if (card.querySelector('select')) {
+                    userAnswer = card.querySelector('select').value;
+                } else if (card.querySelector('input[type="text"]')) {
+                    userAnswer = card.querySelector('input[type="text"]').value.trim().replace('°', '').replace('derajat', '');
+                }
+
+                const feedbackDiv = card.querySelector('.feedback');
+                feedbackDiv.classList.remove('hidden');
+
+                if(userAnswer.toLowerCase() === answer.toLowerCase()) {
+                    card.classList.add('correct-answer');
+                    card.classList.remove('wrong-answer');
+                    feedbackDiv.innerHTML = '<span class="text-duoGreen font-black text-sm"><i class="fa-solid fa-check-circle mr-1"></i> CORRECT!</span>';
+                } else {
+                    card.classList.add('wrong-answer');
+                    card.classList.remove('correct-answer');
+                    feedbackDiv.innerHTML = `
+                        <span class="text-duoRed font-black text-sm"><i class="fa-solid fa-times-circle mr-1"></i> INCORRECT</span>
+                        <div class="hint-box mt-2">
+                            <p class="font-bold text-duoRedDark text-xs mb-1">HINT:</p>
+                            <p class="text-duoText text-xs">${card.dataset.hint || 'The correct answer is ' + answer}</p>
+                        </div>
+                    `;
+                }
+            });
+            renderMathInElement(container, { delimiters: [{left: '\\(', right: '\\)', display: false}] });
+        }
+
+        function resetSection(sectionId) {
+            const container = document.getElementById(`${sectionId}-activities`);
+            const cards = container.querySelectorAll('.q-card');
+            cards.forEach(card => {
+                card.classList.remove('correct-answer', 'wrong-answer');
+                const feedbackDiv = card.querySelector('.feedback');
+                feedbackDiv.classList.add('hidden');
+                feedbackDiv.innerHTML = '';
+                if (card.querySelector('input[type="radio"]')) {
+                    card.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+                } else if (card.querySelector('select')) {
+                    card.querySelector('select').selectedIndex = 0;
+                } else if (card.querySelector('input[type="text"]')) {
+                    card.querySelector('input[type="text"]').value = '';
+                }
+            });
+        }
+
+        // --- SECTION 1 RENDER (Hanya 1x, Sudah Diterjemahkan) ---
         const s1Data = [
             { id: 's1q1', q: 'If angle A and B are supplementary, and angle A is \( 75^\circ \), what is angle B?<p class="translation"><i class="fa-solid fa-language mr-1"></i> Jika sudut A dan B berpelurus, dan sudut A adalah \( 75^\circ \), berapakah sudut B?</p>', answer: '105', hint: 'Supplementary angles add up to 180: 180 - 75 = 105' },
             { id: 's1q2', q: 'What is the difference between parallel and intersecting lines?<p class="translation"><i class="fa-solid fa-language mr-1"></i> Apa perbedaan antara garis sejajar dan garis berpotongan?</p>', answer: 'parallel never meet', hint: 'Intersecting lines cross each other, parallel lines do not.' },
@@ -953,6 +1011,7 @@
             { id: 's1q9', q: 'Do parallel lines ever intersect?<p class="translation"><i class="fa-solid fa-language mr-1"></i> Apakah garis sejajar pernah berpotongan?</p>', answer: 'no', hint: 'By definition, parallel lines never meet.' },
             { id: 's1q10', q: 'If angle P is \( 120^\circ \) and angle Q is \( 60^\circ \), are they supplementary?<p class="translation"><i class="fa-solid fa-language mr-1"></i> Jika sudut P adalah \( 120^\circ \) dan sudut Q adalah \( 60^\circ \), apakah mereka berpelurus?</p>', answer: 'yes', hint: '120 + 60 = 180. Yes, they are!' }
         ];
+        
         function renderSection1() {
             const container = document.getElementById('s1-activities');
             if(!container) return;
@@ -966,33 +1025,7 @@
             });
         }
 
-        // Section 1 Render (SUDAH DITERJEMAHKAN)
-        const s1Data = [
-            { id: 's1q1', q: 'If angle A and B are supplementary, and angle A is \( 75^\circ \), what is angle B?<p class="translation"><i class="fa-solid fa-language mr-1"></i> Jika sudut A dan B berpelurus, dan sudut A adalah \( 75^\circ \), berapakah sudut B?</p>', answer: '105', hint: 'Supplementary angles add up to 180: 180 - 75 = 105' },
-            { id: 's1q2', q: 'What is the difference between parallel and intersecting lines?<p class="translation"><i class="fa-solid fa-language mr-1"></i> Apa perbedaan antara garis sejajar dan garis berpotongan?</p>', answer: 'parallel never meet', hint: 'Intersecting lines cross each other, parallel lines do not.' },
-            { id: 's1q3', q: 'If two parallel lines are cut by a transversal, are corresponding angles always equal?<p class="translation"><i class="fa-solid fa-language mr-1"></i> Jika dua garis sejajar dipotong oleh sebuah transversal, apakah sudut-sudut sehadap selalu sama besar?</p>', answer: 'yes', hint: 'Corresponding angles are always equal in parallel lines.' },
-            { id: 's1q4', q: 'If angle 1 is \( 110^\circ \), what is its alternate interior angle?<p class="translation"><i class="fa-solid fa-language mr-1"></i> Jika sudut 1 adalah \( 110^\circ \), berapakah sudut dalam berseberangannya?</p>', answer: '110', hint: 'Alternate interior angles are equal.' },
-            { id: 's1q5', q: 'If two angles form a straight line, they are called \_\_\_\_ angles.<p class="translation"><i class="fa-solid fa-language mr-1"></i> Jika dua sudut membentuk garis lurus, mereka disebut sudut \_\_\_\_.</p>', answer: 'supplementary', hint: 'They add up to 180 degrees.' },
-            { id: 's1q6', q: 'Complementary angles add up to \_\_\_\_ degrees.<p class="translation"><i class="fa-solid fa-language mr-1"></i> Sudut berpenyiku berjumlah \_\_\_\_ derajat.</p>', answer: '90', hint: 'Think of a corner of a square.' },
-            { id: 's1q7', q: 'If angle X is \( 45^\circ \), what is its complementary angle?<p class="translation"><i class="fa-solid fa-language mr-1"></i> Jika sudut X adalah \( 45^\circ \), berapakah sudut penyikunya?</p>', answer: '45', hint: '90 - 45 = 45' },
-            { id: 's1q8', q: 'A line that cuts two parallel lines is called a \_\_\_\_.<p class="translation"><i class="fa-solid fa-language mr-1"></i> Garis yang memotong dua garis sejajar disebut \_\_\_\_.</p>', answer: 'transversal', hint: 'It transverses across the parallel lines.' },
-            { id: 's1q9', q: 'Do parallel lines ever intersect?<p class="translation"><i class="fa-solid fa-language mr-1"></i> Apakah garis sejajar pernah berpotongan?</p>', answer: 'no', hint: 'By definition, parallel lines never meet.' },
-            { id: 's1q10', q: 'If angle P is \( 120^\circ \) and angle Q is \( 60^\circ \), are they supplementary?<p class="translation"><i class="fa-solid fa-language mr-1"></i> Jika sudut P adalah \( 120^\circ \) dan sudut Q adalah \( 60^\circ \), apakah mereka berpelurus?</p>', answer: 'yes', hint: '120 + 60 = 180. Yes, they are!' }
-        ];
-        function renderSection1() {
-            const container = document.getElementById('s1-activities');
-            if(!container) return;
-            container.innerHTML = '';
-            s1Data.forEach((q, index) => {
-                const card = document.createElement('div');
-                card.className = 'q-card duo-card p-5';
-                card.id = q.id; card.dataset.answer = q.answer; card.dataset.hint = q.hint;
-                card.innerHTML = `<p class="font-bold mb-3 text-duoText">${index + 1}. ${q.q}</p><input type="text" name="${q.id}" placeholder="Type your answer..."><div class="feedback mt-2 hidden"></div>`;
-                container.appendChild(card);
-            });
-        }
-
-        // Assessment Engine (SUDAH DITERJEMAHKAN)
+        // --- ASSESSMENT ENGINE (Sudah Diterjemahkan) ---
         let currentAssessmentGroup = 1;
         let assessmentAnswers = {}; 
         const assessmentBanks = {
@@ -1017,8 +1050,8 @@
                 { id: 'a2q6', type: 'text', q: 'Alternate exterior angles are \( 5x \) and \( 3x + 20 \). Find \( x \).<p class="translation"><i class="fa-solid fa-language mr-1"></i> Sudut luar berseberangan adalah \( 5x \) dan \( 3x + 20 \). Tentukan \( x \).</p>', answer: '10', hint: '5x = 3x + 20 -> 2x = 20' },
                 { id: 'a2q7', type: 'text', q: 'From Q6, what is the angle measure?<p class="translation"><i class="fa-solid fa-language mr-1"></i> Dari soal nomor 6, berapakah besar sudutnya?</p>', answer: '50', hint: 'Substitute x=10 into 5x.' },
                 { id: 'a2q8', type: 'text', q: 'Corresponding angles are \( x^2 \) and \( 4x \). Find positive \( x \).<p class="translation"><i class="fa-solid fa-language mr-1"></i> Sudut sehadap adalah \( x^2 \) dan \( 4x \). Tentukan nilai \( x \) positif.</p>', answer: '4', hint: 'x^2 = 4x -> x = 4' },
-                { id: 'a2q9', type: 'text', q: 'Alternate interior angles are \( 7x - 10 \) dan \( 60 \). Find \( x \).<p class="translation"><i class="fa-solid fa-language mr-1"></i> Sudut dalam berseberangan adalah \( 7x - 10 \) dan \( 60 \). Tentukan \( x \).</p>', answer: '10', hint: '7x - 10 = 60 -> 7x = 70' },
-                { id: 'a2q10', type: 'text', q: 'Corresponding angles are \( 2x + 5 \) dan \( 45 \). Find \( x \).<p class="translation"><i class="fa-solid fa-language mr-1"></i> Sudut sehadap adalah \( 2x + 5 \) dan \( 45 \). Tentukan \( x \).</p>', answer: '20', hint: '2x + 5 = 45 -> 2x = 40' }
+                { id: 'a2q9', type: 'text', q: 'Alternate interior angles are \( 7x - 10 \) and \( 60 \). Find \( x \).<p class="translation"><i class="fa-solid fa-language mr-1"></i> Sudut dalam berseberangan adalah \( 7x - 10 \) dan \( 60 \). Tentukan \( x \).</p>', answer: '10', hint: '7x - 10 = 60 -> 7x = 70' },
+                { id: 'a2q10', type: 'text', q: 'Corresponding angles are \( 2x + 5 \) and \( 45 \). Find \( x \).<p class="translation"><i class="fa-solid fa-language mr-1"></i> Sudut sehadap adalah \( 2x + 5 \) dan \( 45 \). Tentukan \( x \).</p>', answer: '20', hint: '2x + 5 = 45 -> 2x = 40' }
             ],
             3: [
                 { id: 'a3q1', type: 'text', q: 'Co-interior angles are \( 5x \) and \( x + 30 \). Find \( x \).<p class="translation"><i class="fa-solid fa-language mr-1"></i> Sudut dalam sepihak adalah \( 5x \) dan \( x + 30 \). Tentukan \( x \).</p>', answer: '25', hint: '5x + x + 30 = 180 -> 6x = 150' },
@@ -1111,7 +1144,7 @@
             let tableRows = '';
             for (let qId in assessmentAnswers) { const a = assessmentAnswers[qId]; if(a.userAnswer.toLowerCase() === a.correctAnswer.toLowerCase()) score++; tableRows += `<tr style="border-bottom:1px solid #E5E5E5;"><td style="padding:8px; font-weight:bold;">${qId.replace('a','G').replace('q','Q')}</td><td style="padding:8px;">${a.question}</td><td style="padding:8px; color:#FF4B4B;">${a.userAnswer}</td><td style="padding:8px; color:#58CC02; font-weight:bold;">${a.correctAnswer}</td></tr>`; }
             const printWindow = window.open('', '_blank');
-            printWindow.document.write(`<html><head><title>Assessment Result</title><style>body{font-family:'Nunito',sans-serif;padding:20px; color:#4B4B4B;} table{width:100%;border-collapse:collapse;margin-top:20px;} th{background:#F0F0F0;text-align:left;padding:8px;}</style></head><body><h1 style="color:#58CC02;">Assessment Result</h1><p><strong>Topic:</strong> Hubungan Sudut dan Garis Sejajar</p><p><strong>Student Name:</strong> ${name}</p><p><strong>Date:</strong> ${date}</p><p><strong>Assessment Group:</strong> ${currentAssessmentGroup}</p><p style="font-size:1.5em; font-weight:800; color:#1CB0F6;">Score: ${score}/${totalQ}</p><table border="1"><thead><tr><th>ID</th><th>Question</th><th>Student Answer</th><th>Correct Answer</th></tr></thead><tbody>${tableRows}</tbody></table><script>window.print();<\/script></body></html>`);
+            printWindow.document.write(`<html><head><title>Assessment Result</title><style>body{font-family:'Nunito',sans-serif;padding:20px; color:#4B4B4B;} table{width:100%;border-collapse:collapse;margin-top:20px;} th{background:#F0F0F0;text-align:left;padding:8px;}</style></head><body><h1 style="color:#58CA02;">Assessment Result</h1><p><strong>Topic:</strong> Hubungan Sudut dan Garis Sejajar</p><p><strong>Student Name:</strong> ${name}</p><p><strong>Date:</strong> ${date}</p><p><strong>Assessment Group:</strong> ${currentAssessmentGroup}</p><p style="font-size:1.5em; font-weight:800; color:#1CB0F6;">Score: ${score}/${totalQ}</p><table border="1"><thead><tr><th>ID</th><th>Question</th><th>Student Answer</th><th>Correct Answer</th></tr></thead><tbody>${tableRows}</tbody></table><script>window.print();<\/script></body></html>`);
             printWindow.document.close();
         }
 
