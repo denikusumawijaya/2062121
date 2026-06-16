@@ -215,35 +215,63 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Theory (Left) -->
             <div class="space-y-4">
-                <div class="bg-white/5 p-5 rounded-xl border-l-4 border-accent">
-                    <p class="mb-3"><span class="font-bold text-purple-300">Architecture heavily relies on the principles of parallel lines and transversals to ensure structural integrity.</span> When architects design cable-stayed bridges, the cables must align perfectly to distribute weight evenly. / <i>Arsitektur sangat bergantung pada prinsip-prinsip garis sejajar dan transversal untuk memastikan integritas struktural. Ketika arsitek merancang jembatan kabel, kabel-kabel tersebut harus sejajar sempurna untuk mendistribusikan beban secara merata.</i></p>
-                    <p><span class="font-bold text-purple-300">If the angles formed by the bridge decks and cables are not calculated correctly, the structure could become unstable.</span> Understanding these angle relationships helps designers create buildings that are both safe and aesthetically pleasing. / <i>Jika sudut-sudut yang terbentuk oleh dek jembatan dan kabel tidak dihitung dengan benar, struktur bisa menjadi tidak stabil. Memahami hubungan sudut membantu desainer menciptakan bangunan yang aman dan menarik secara estetika.</i></p>
+                <!-- Card 1: Architecture -->
+                <div class="concept-card bg-gradient-to-br from-purple-900/60 to-pink-900/40 p-5 rounded-2xl border border-purple-500/30" onclick="this.classList.toggle('active')">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-white flex items-center"><i class="fa-solid fa-bridge text-accent mr-2"></i> Structural Integrity</h3>
+                        <i class="fa-solid fa-chevron-right icon-play text-purple-300 text-sm"></i>
+                    </div>
+                    <p class="text-sm mt-2 text-purple-100">Architecture relies on parallel lines and transversals. In cable-stayed bridges, cables must align perfectly to distribute weight.</p>
+                    <div class="reveal-content mt-3 border-t border-white/10 pt-3">
+                        <p class="text-sm text-purple-300 italic"><i class="fa-solid fa-language mr-1"></i> Arsitektur bergantung pada garis sejajar dan transversal. Kabel jembatan harus sejajar sempurna agar beban merata.</p>
+                    </div>
                 </div>
-                <div class="bg-white/5 p-5 rounded-xl border-l-4 border-primary">
-                    <p class="mb-3"><span class="font-bold text-purple-300">Skyscrapers utilize parallel steel beams to support floors that must remain perfectly level.</span> Transversal beams cross these parallel lines, creating predictable angle patterns that engineers analyze. / <i>Pencakar langit menggunakan balok baja sejajar untuk menopang lantai yang harus tetap sempurna rata. Balok transversal melintasi garis-garis sejajar ini, menciptakan pola sudut yang dapat diprediksi yang dianalisis oleh insinyur.</i></p>
-                    <p><span class="font-bold text-purple-300">Even in interior design, parallel lines are used to lay out tiles or floorboards seamlessly.</span> Without precise angle measurements, these patterns would appear crooked and unprofessional. / <i>Bahkan dalam desain interior, garis sejajar digunakan untuk menyusun ubin atau papan lantai dengan mulus. Tanpa pengukuran sudut yang tepat, pola-pola ini akan terlihat miring dan tidak profesional.</i></p>
+
+                <!-- Card 2: Skyscrapers -->
+                <div class="concept-card bg-gradient-to-br from-purple-900/60 to-pink-900/40 p-5 rounded-2xl border border-purple-500/30" onclick="this.classList.toggle('active')">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-white flex items-center"><i class="fa-solid fa-building text-accent mr-2"></i> Skyscrapers & Design</h3>
+                        <i class="fa-solid fa-chevron-right icon-play text-purple-300 text-sm"></i>
+                    </div>
+                    <p class="text-sm mt-2 text-purple-100">Parallel steel beams support level floors. Transversal beams cross them, creating predictable angle patterns for engineers.</p>
+                    <div class="reveal-content mt-3 border-t border-white/10 pt-3">
+                        <p class="text-sm text-purple-300 italic"><i class="fa-solid fa-language mr-1"></i> Balok baja sejajar menopang lantai rata. Balok transversal melintanginya, menciptakan pola sudut yang bisa diprediksi.</p>
+                    </div>
                 </div>
-                
-                <!-- Tabel Ilustrasi -->
-                <div class="overflow-x-auto mt-4">
-                    <table class="w-full text-left border-collapse">
+
+                <!-- Card 3: Interior -->
+                <div class="concept-card bg-gradient-to-br from-purple-900/60 to-pink-900/40 p-5 rounded-2xl border border-purple-500/30" onclick="this.classList.toggle('active')">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-white flex items-center"><i class="fa-solid fa-couch text-accent mr-2"></i> Interior Aesthetics</h3>
+                        <i class="fa-solid fa-chevron-right icon-play text-purple-300 text-sm"></i>
+                    </div>
+                    <p class="text-sm mt-2 text-purple-100">Even floor tiles use parallel lines. Without precise angle measurements, patterns would appear crooked and unprofessional.</p>
+                    <div class="reveal-content mt-3 border-t border-white/10 pt-3">
+                        <p class="text-sm text-purple-300 italic"><i class="fa-solid fa-language mr-1"></i> Ubin lantai pun menggunakan garis sejajar. Tanpa sudut yang tepat, polanya akan terlihat miring dan tidak profesional.</p>
+                    </div>
+                </div>
+
+                <!-- Tabel Ilustrasi Modern -->
+                <div class="bg-white/5 p-5 rounded-2xl border border-white/10 mt-2 overflow-x-auto">
+                    <h4 class="text-sm font-bold text-purple-300 mb-3"><i class="fa-solid fa-table mr-1"></i> Math in Real Life</h4>
+                    <table class="w-full text-left text-sm border-collapse">
                         <thead>
-                            <tr class="bg-accent/20 text-accent">
-                                <th class="p-3 rounded-tl-lg">Real-World Structure</th>
-                                <th class="p-3">Math Concept</th>
-                                <th class="p-3 rounded-tr-lg">Purpose</th>
+                            <tr class="border-b border-white/20">
+                                <th class="p-2 text-accent">Structure</th>
+                                <th class="p-2 text-accent">Concept</th>
+                                <th class="p-2 text-accent">Purpose</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white/5">
+                        <tbody class="text-purple-100">
                             <tr class="border-b border-white/10">
-                                <td class="p-3"><i class="fa-solid fa-bridge mr-2 text-purple-300"></i>Cable-stayed Bridge</td>
-                                <td>Transversal & Parallel</td>
-                                <td>Weight distribution</td>
+                                <td class="p-2"><i class="fa-solid fa-bridge-water mr-1 text-purple-400"></i> Bridge</td>
+                                <td class="p-2">Transversal</td>
+                                <td class="p-2">Weight load</td>
                             </tr>
                             <tr>
-                                <td class="p-3"><i class="fa-solid fa-building mr-2 text-purple-300"></i>Skyscraper Frame</td>
-                                <td>Corresponding Angles</td>
-                                <td>Level alignment</td>
+                                <td class="p-2"><i class="fa-solid fa-city mr-1 text-purple-400"></i> Skyscraper</td>
+                                <td class="p-2">Corresponding</td>
+                                <td class="p-2">Level align</td>
                             </tr>
                         </tbody>
                     </table>
@@ -353,28 +381,49 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Theory (Left) -->
             <div class="space-y-4">
-                <div class="bg-white/5 p-5 rounded-xl border-l-4 border-accent">
-                    <p class="mb-3"><span class="font-bold text-purple-300">Let us recall the 'Z', 'F', and 'C' patterns formed when a transversal cuts two parallel lines.</span> The 'Z' pattern represents alternate interior angles, which are always equal in measure. / <i>Mari kita ingat pola 'Z', 'F', dan 'C' yang terbentuk ketika sebuah transversal memotong dua garis sejajar. Pola 'Z' mewakili sudut dalam berseberangan, yang selalu sama besar.</i></p>
-                    <p><span class="font-bold text-purple-300">The 'F' pattern highlights corresponding angles, which are also equal to each other.</span> Recognizing these visual patterns makes it much easier to identify equal angles without memorizing complex definitions. / <i>Pola 'F' menyoroti sudut sehadap, yang juga sama besar satu sama lain. Mengenali pola visual ini membuat jauh lebih mudah untuk mengidentifikasi sudut yang sama tanpa menghafal definisi yang rumit.</i></p>
-                </div>
-                <div class="bg-white/5 p-5 rounded-xl border-l-4 border-primary">
-                    <p class="mb-3"><span class="font-bold text-purple-300">Meanwhile, the 'C' pattern shows co-interior angles, also known as same-side interior angles.</span> Unlike the 'Z' and 'F' patterns, co-interior angles are not equal; they are supplementary. / <i>Sementara itu, pola 'C' menunjukkan sudut dalam sepihak. Tidak seperti pola 'Z' dan 'F', sudut dalam sepihak tidak sama besar; mereka berpelurus.</i></p>
-                    <p><span class="font-bold text-purple-300">Supplementary angles add up to exactly \( 180^\circ \).</span> Therefore, if you identify a 'C' pattern, you must add the two angles together to equal \( 180^\circ \). / <i>Oleh karena itu, jika Anda mengidentifikasi pola 'C', Anda harus menjumlahkan kedua sudut tersebut agar sama dengan \( 180^\circ \).</i></p>
-                </div>
-                
-                <!-- SVG Ilustrasi Pola -->
-                <div class="grid grid-cols-3 gap-4 mt-4 text-center text-xs text-purple-300">
-                    <div class="bg-white/5 p-2 rounded-lg">
-                        <svg viewBox="0 0 100 60"><line x1="10" y1="10" x2="90" y2="10" stroke="#fff" stroke-width="2"/><line x1="10" y1="50" x2="90" y2="50" stroke="#fff" stroke-width="2"/><line x1="30" y1="10" x2="70" y2="50" stroke="#ff2d75" stroke-width="2"/><path d="M 30 10 L 50 10 L 70 50 L 50 50 Z" fill="none" stroke="#ff2d75" stroke-width="2" stroke-dasharray="3"/></svg>
-                        <p>Z Pattern / <i>Pola Z</i></p>
+                <!-- Card 1: Z & F -->
+                <div class="concept-card bg-gradient-to-br from-purple-900/60 to-pink-900/40 p-5 rounded-2xl border border-purple-500/30" onclick="this.classList.toggle('active')">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-white flex items-center"><i class="fa-solid fa-shapes text-accent mr-2"></i> 'Z' & 'F' Patterns (Equal)</h3>
+                        <i class="fa-solid fa-chevron-right icon-play text-purple-300 text-sm"></i>
                     </div>
-                    <div class="bg-white/5 p-2 rounded-lg">
-                        <svg viewBox="0 0 100 60"><line x1="10" y1="10" x2="90" y2="10" stroke="#fff" stroke-width="2"/><line x1="10" y1="50" x2="90" y2="50" stroke="#fff" stroke-width="2"/><line x1="30" y1="10" x2="30" y2="50" stroke="#6a0dad" stroke-width="2"/><path d="M 30 10 L 50 10 L 50 50 L 30 50 Z" fill="none" stroke="#6a0dad" stroke-width="2" stroke-dasharray="3"/></svg>
-                        <p>F Pattern / <i>Pola F</i></p>
+                    <p class="text-sm mt-2 text-purple-100">The 'Z' pattern represents alternate interior angles, and 'F' highlights corresponding angles. Both are ALWAYS equal.</p>
+                    <div class="reveal-content mt-3 border-t border-white/10 pt-3">
+                        <p class="text-sm text-purple-300 italic"><i class="fa-solid fa-language mr-1"></i> Pola 'Z' = sudut dalam berseberangan. Pola 'F' = sudut sehadap. Keduanya selalu SAMA BESAR.</p>
                     </div>
-                    <div class="bg-white/5 p-2 rounded-lg">
-                        <svg viewBox="0 0 100 60"><line x1="10" y1="10" x2="90" y2="10" stroke="#fff" stroke-width="2"/><line x1="10" y1="50" x2="90" y2="50" stroke="#fff" stroke-width="2"/><line x1="30" y1="10" x2="70" y2="50" stroke="#10b981" stroke-width="2"/><path d="M 30 10 L 70 10 L 70 50 L 30 50 Z" fill="none" stroke="#10b981" stroke-width="2" stroke-dasharray="3"/></svg>
-                        <p>C Pattern / <i>Pola C</i></p>
+                </div>
+
+                <!-- Card 2: C -->
+                <div class="concept-card bg-gradient-to-br from-purple-900/60 to-pink-900/40 p-5 rounded-2xl border border-purple-500/30" onclick="this.classList.toggle('active')">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-white flex items-center"><i class="fa-solid fa-plus text-accent mr-2"></i> 'C' Pattern (Supplementary)</h3>
+                        <i class="fa-solid fa-chevron-right icon-play text-purple-300 text-sm"></i>
+                    </div>
+                    <p class="text-sm mt-2 text-purple-100">The 'C' pattern shows co-interior angles. Unlike Z and F, they are NOT equal; they are supplementary (add to \( 180^\circ \)).</p>
+                    <div class="reveal-content mt-3 border-t border-white/10 pt-3">
+                        <p class="text-sm text-purple-300 italic"><i class="fa-solid fa-language mr-1"></i> Pola 'C' = sudut dalam sepihak. Tidak sama besar, melainkan berpelurus (jumlahnya \( 180^\circ \)).</p>
+                    </div>
+                </div>
+
+                <!-- Visual SVG Patterns -->
+                <div class="bg-white/5 p-5 rounded-2xl border border-white/10 mt-2">
+                    <h4 class="text-sm font-bold text-purple-300 mb-4 text-center"><i class="fa-solid fa-eye mr-1"></i> Visual Patterns</h4>
+                    <div class="grid grid-cols-3 gap-4 text-center text-xs text-purple-200">
+                        <div class="bg-white/5 p-3 rounded-lg">
+                            <svg viewBox="0 0 100 60" class="w-full mb-2"><line x1="10" y1="10" x2="90" y2="10" stroke="#fff" stroke-width="2"/><line x1="10" y1="50" x2="90" y2="50" stroke="#fff" stroke-width="2"/><line x1="30" y1="10" x2="70" y2="50" stroke="#ff2d75" stroke-width="2"/><path d="M 30 10 L 50 10 L 70 50 L 50 50 Z" fill="none" stroke="#ff2d75" stroke-width="2" stroke-dasharray="3"/></svg>
+                            <p class="font-bold text-accent">Z</p>
+                            <p>Alternate Int.</p>
+                        </div>
+                        <div class="bg-white/5 p-3 rounded-lg">
+                            <svg viewBox="0 0 100 60" class="w-full mb-2"><line x1="10" y1="10" x2="90" y2="10" stroke="#fff" stroke-width="2"/><line x1="10" y1="50" x2="90" y2="50" stroke="#fff" stroke-width="2"/><line x1="30" y1="10" x2="30" y2="50" stroke="#6a0dad" stroke-width="2"/><path d="M 30 10 L 50 10 L 50 50 L 30 50 Z" fill="none" stroke="#6a0dad" stroke-width="2" stroke-dasharray="3"/></svg>
+                            <p class="font-bold text-primary">F</p>
+                            <p>Corresponding</p>
+                        </div>
+                        <div class="bg-white/5 p-3 rounded-lg">
+                            <svg viewBox="0 0 100 60" class="w-full mb-2"><line x1="10" y1="10" x2="90" y2="10" stroke="#fff" stroke-width="2"/><line x1="10" y1="50" x2="90" y2="50" stroke="#fff" stroke-width="2"/><line x1="30" y1="10" x2="70" y2="50" stroke="#10b981" stroke-width="2"/><path d="M 30 10 L 70 10 L 70 50 L 30 50 Z" fill="none" stroke="#10b981" stroke-width="2" stroke-dasharray="3"/></svg>
+                            <p class="font-bold text-green-400">C</p>
+                            <p>Co-Interior</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -472,23 +521,50 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Theory (Left) -->
             <div class="space-y-4">
-                <div class="bg-white/5 p-5 rounded-xl border-l-4 border-accent">
-                    <p class="mb-3"><span class="font-bold text-purple-300">Sometimes, the measure of an angle is not given as a simple number, but as an algebraic expression.</span> For example, an angle might be represented as \( 3x + 10 \) instead of a specific degree. / <i>Terkadang, besar sudut tidak diberikan sebagai angka sederhana, tetapi sebagai ekspresi aljabar. Misalnya, sudut mungkin direpresentasikan sebagai \( 3x + 10 \), bukan derajat tertentu.</i></p>
-                    <p><span class="font-bold text-purple-300">To find the unknown variable, we apply the properties of parallel lines to set up an equation.</span> If two angles are corresponding, we equate their algebraic expressions, like \( 3x + 10 = 2x + 40 \). / <i>Untuk menemukan variabel yang tidak diketahui, kita menerapkan sifat-sifat garis sejajar untuk menyusun persamaan. Jika dua sudut sehadap, kita menyamakan ekspresi aljabarnya, seperti \( 3x + 10 = 2x + 40 \).</i></p>
+                <!-- Card 1: Algebraic Expressions -->
+                <div class="concept-card bg-gradient-to-br from-purple-900/60 to-pink-900/40 p-5 rounded-2xl border border-purple-500/30" onclick="this.classList.toggle('active')">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-white flex items-center"><i class="fa-solid fa-superscript text-accent mr-2"></i> Angles as Variables</h3>
+                        <i class="fa-solid fa-chevron-right icon-play text-purple-300 text-sm"></i>
+                    </div>
+                    <p class="text-sm mt-2 text-purple-100">Angles aren't always simple numbers; they can be algebraic expressions like \( 3x + 10 \).</p>
+                    <div class="reveal-content mt-3 border-t border-white/10 pt-3">
+                        <p class="text-sm text-purple-300 italic"><i class="fa-solid fa-language mr-1"></i> Sudut tidak selalu angka sederhana; bisa berupa ekspresi aljabar seperti \( 3x + 10 \).</p>
+                    </div>
                 </div>
-                <div class="bg-white/5 p-5 rounded-xl border-l-4 border-primary">
-                    <p class="mb-3"><span class="font-bold text-purple-300">Once the equation is set up, standard algebraic rules are used to solve for the variable.</span> In the equation \( 3x + 10 = 2x + 40 \), we subtract \( 2x \) and \( 10 \) from both sides to get \( x = 30 \). / <i>Setelah persamaan disusun, aturan aljabar standar digunakan untuk menyelesaikan variabel. Pada persamaan \( 3x + 10 = 2x + 40 \), kita kurangi \( 2x \) dan \( 10 \) dari kedua ruas untuk mendapatkan \( x = 30 \).</i></p>
-                    <p><span class="font-bold text-purple-300">After finding the value of \( x \), you substitute it back into the original expression to find the actual angle measure.</span> This ensures the structural design maintains mathematical integrity. / <i>Setelah menemukan nilai \( x \), Anda substitusikan kembali ke ekspresi semula untuk menemukan ukuran sudut sebenarnya. Ini memastikan desain struktural mempertahankan integritas matematis.</i></p>
+
+                <!-- Card 2: Setting up Equations -->
+                <div class="concept-card bg-gradient-to-br from-purple-900/60 to-pink-900/40 p-5 rounded-2xl border border-purple-500/30" onclick="this.classList.toggle('active')">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-white flex items-center"><i class="fa-solid fa-equals text-accent mr-2"></i> Creating Equations</h3>
+                        <i class="fa-solid fa-chevron-right icon-play text-purple-300 text-sm"></i>
+                    </div>
+                    <p class="text-sm mt-2 text-purple-100">If two angles are corresponding, equate their expressions: \( 3x + 10 = 2x + 40 \). Solve for \( x \)!</p>
+                    <div class="reveal-content mt-3 border-t border-white/10 pt-3">
+                        <p class="text-sm text-purple-300 italic"><i class="fa-solid fa-language mr-1"></i> Jika dua sudut sehadap, samakan ekspresinya: \( 3x + 10 = 2x + 40 \). Selesaikan untuk mencari \( x \)!</p>
+                    </div>
                 </div>
-                
-                <!-- Step by Step Block -->
-                <div class="mt-4 p-4 bg-accent/10 border border-accent/30 rounded-xl">
-                    <h4 class="font-bold text-accent mb-2"><i class="fa-solid fa-wand-magic-sparkles mr-2"></i>Algebraic Steps</h4>
-                    <ul class="list-disc ml-5 space-y-1 text-sm">
-                        <li>Identify the relationship (e.g., Corresponding = Equal)</li>
-                        <li>Set up the equation: \( 3x + 10 = 2x + 40 \)</li>
-                        <li>Isolate \( x \): \( x = 30 \)</li>
-                        <li>Substitute back: \( 3(30) + 10 = 100^\circ \)</li>
+
+                <!-- Step by Step Block Modern -->
+                <div class="bg-white/5 p-5 rounded-2xl border border-white/10 mt-2">
+                    <h4 class="font-bold text-accent mb-3 text-sm"><i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Algebraic Steps to Solve</h4>
+                    <ul class="space-y-3 text-sm text-purple-100">
+                        <li class="flex items-start">
+                            <span class="bg-accent/20 text-accent rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-0.5 shrink-0 text-xs font-bold">1</span>
+                            <span>Identify relationship (e.g., Corresponding = Equal)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="bg-accent/20 text-accent rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-0.5 shrink-0 text-xs font-bold">2</span>
+                            <span>Set up equation: \( 3x + 10 = 2x + 40 \)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="bg-accent/20 text-accent rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-0.5 shrink-0 text-xs font-bold">3</span>
+                            <span>Isolate \( x \): \( x = 30 \)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="bg-accent/20 text-accent rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-0.5 shrink-0 text-xs font-bold">4</span>
+                            <span>Substitute back: \( 3(30) + 10 = 100^\circ \)</span>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -580,13 +656,41 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Theory (Left) -->
             <div class="space-y-4">
-                <div class="bg-white/5 p-5 rounded-xl border-l-4 border-accent">
-                    <p class="mb-3"><span class="font-bold text-purple-300">When dealing with co-interior angles, remember that their sum must equal \( 180^\circ \).</span> If the angles are \( 5x \) and \( x + 30 \), the equation becomes \( 5x + x + 30 = 180 \). / <i>Ketika berhadapan dengan sudut dalam sepihak, ingat bahwa jumlahnya harus sama dengan \( 180^\circ \). Jika sudut-sudut tersebut adalah \( 5x \) dan \( x + 30 \), persamaannya menjadi \( 5x + x + 30 = 180 \).</i></p>
-                    <p><span class="font-bold text-purple-300">Solving this step-by-step, we combine like terms to get \( 6x + 30 = 180 \).</span> Subtracting 30 from both sides gives \( 6x = 150 \), and dividing by 6 yields \( x = 25 \). / <i>Menyelesaikan ini langkah demi langkah, kita menggabungkan suku sejenis untuk mendapatkan \( 6x + 30 = 180 \). Mengurangi 30 dari kedua ruas memberikan \( 6x = 150 \), dan membagi 6 menghasilkan \( x = 25 \).</i></p>
+                <!-- Card 1: Sum is 180 -->
+                <div class="concept-card bg-gradient-to-br from-purple-900/60 to-pink-900/40 p-5 rounded-2xl border border-purple-500/30" onclick="this.classList.toggle('active')">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-white flex items-center"><i class="fa-solid fa-calculator text-accent mr-2"></i> Co-Interior Sum: \( 180^\circ \)</h3>
+                        <i class="fa-solid fa-chevron-right icon-play text-purple-300 text-sm"></i>
+                    </div>
+                    <p class="text-sm mt-2 text-purple-100">Co-interior angles always sum to \( 180^\circ \). If angles are \( 5x \) and \( x + 30 \), the equation is \( 5x + x + 30 = 180 \).</p>
+                    <div class="reveal-content mt-3 border-t border-white/10 pt-3">
+                        <p class="text-sm text-purple-300 italic"><i class="fa-solid fa-language mr-1"></i> Sudut dalam sepihak selalu berjumlah \( 180^\circ \). Jika sudutnya \( 5x \) dan \( x + 30 \), persamaannya \( 5x + x + 30 = 180 \).</p>
+                    </div>
                 </div>
-                <div class="bg-white/5 p-5 rounded-xl border-l-4 border-primary">
-                    <p class="mb-3"><span class="font-bold text-purple-300">Substituting \( x = 25 \) back into the expressions gives the actual angle measures.</span> The first angle is \( 5(25) = 125^\circ \), and the second is \( 25 + 30 = 55^\circ \). / <i>Mensubstitusikan \( x = 25 \) kembali ke ekspresi memberikan ukuran sudut sebenarnya. Sudut pertama adalah \( 5(25) = 125^\circ \), dan sudut kedua adalah \( 25 + 30 = 55^\circ \).</i></p>
-                    <p><span class="font-bold text-purple-300">Always verify your answer by checking if the two angles add up to \( 180^\circ \).</span> Since \( 125^\circ + 55^\circ = 180^\circ \), the solution is correct. / <i>Selalu verifikasi jawaban Anda dengan memeriksa apakah kedua sudut tersebut berjumlah \( 180^\circ \). Karena \( 125^\circ + 55^\circ = 180^\circ \), solusinya benar.</i></p>
+
+                <!-- Card 2: Solving Steps -->
+                <div class="concept-card bg-gradient-to-br from-purple-900/60 to-pink-900/40 p-5 rounded-2xl border border-purple-500/30" onclick="this.classList.toggle('active')">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-white flex items-center"><i class="fa-solid fa-check-double text-accent mr-2"></i> Solving & Verifying</h3>
+                        <i class="fa-solid fa-chevron-right icon-play text-purple-300 text-sm"></i>
+                    </div>
+                    <p class="text-sm mt-2 text-purple-100">Combine terms: \( 6x + 30 = 180 \) \(\rightarrow\) \( 6x = 150 \) \(\rightarrow\) \( x = 25 \). Always verify if sum equals 180!</p>
+                    <div class="reveal-content mt-3 border-t border-white/10 pt-3">
+                        <p class="text-sm text-purple-300 italic"><i class="fa-solid fa-language mr-1"></i> Gabungkan suku: \( 6x + 30 = 180 \) \(\rightarrow\) \( 6x = 150 \) \(\rightarrow\) \( x = 25 \). Selalu verifikasi bahwa jumlahnya 180!</p>
+                    </div>
+                </div>
+
+                <!-- Interactive Equation Visual -->
+                <div class="bg-white/5 p-5 rounded-2xl border border-white/10 mt-2 text-center">
+                    <p class="text-purple-300 text-xs mb-2">Substitution Result</p>
+                    <div class="flex items-center justify-center space-x-3 text-xl font-bold text-white">
+                        <span class="bg-accent/20 px-3 py-1 rounded-lg">5(25) = 125°</span>
+                        <span>+</span>
+                        <span class="bg-primary/30 px-3 py-1 rounded-lg">25+30 = 55°</span>
+                    </div>
+                    <div class="mt-3 pt-3 border-t border-white/10 text-green-400 font-bold">
+                        125° + 55° = 180° ✓
+                    </div>
                 </div>
             </div>
 
@@ -677,13 +781,40 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Theory (Left) -->
             <div class="space-y-4">
-                <div class="bg-white/5 p-5 rounded-xl border-l-4 border-accent">
-                    <p class="mb-3"><span class="font-bold text-purple-300">Complex problems might involve multiple parallel lines cut by more than one transversal.</span> In these scenarios, you must break the figure down into simpler, manageable parts. / <i>Masalah yang kompleks mungkin melibatkan beberapa garis sejajar yang dipotong oleh lebih dari satu transversal. Dalam skenario ini, Anda harus membagi gambar menjadi bagian-bagian yang lebih sederhana dan mudah dikelola.</i></p>
-                    <p><span class="font-bold text-purple-300">Drawing auxiliary lines can help reveal hidden parallel line relationships.</span> This strategic approach allows you to solve for unknown angles systematically. / <i>Menggambar garis bantu dapat membantu mengungkap hubungan garis sejajar yang tersembunyi. Pendekatan strategis ini memungkinkan Anda menyelesaikan sudut yang tidak diketahui secara sistematis.</i></p>
+                <!-- Card 1: Complex Problems -->
+                <div class="concept-card bg-gradient-to-br from-purple-900/60 to-pink-900/40 p-5 rounded-2xl border border-purple-500/30" onclick="this.classList.toggle('active')">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-white flex items-center"><i class="fa-solid fa-project-diagram text-accent mr-2"></i> Multi-Line Problems</h3>
+                        <i class="fa-solid fa-chevron-right icon-play text-purple-300 text-sm"></i>
+                    </div>
+                    <p class="text-sm mt-2 text-purple-100">Complex figures may have multiple parallel lines cut by more than one transversal. Break them into simpler parts!</p>
+                    <div class="reveal-content mt-3 border-t border-white/10 pt-3">
+                        <p class="text-sm text-purple-300 italic"><i class="fa-solid fa-language mr-1"></i> Gambar kompleks bisa punya banyak garis sejajar dan beberapa transversal. Pecah menjadi bagian yang lebih sederhana!</p>
+                    </div>
                 </div>
-                <div class="bg-white/5 p-5 rounded-xl border-l-4 border-primary">
-                    <p class="mb-3"><span class="font-bold text-purple-300">The transitive property of parallel lines states that if line \( a \) is parallel to line \( b \), and line \( b \) is parallel to line \( c \), then line \( a \) is parallel to line \( c \).</span> This property is extremely useful in multi-layered architectural designs. / <i>Sifat transitif garis sejajar menyatakan bahwa jika garis \( a \) sejajar dengan garis \( b \), dan garis \( b \) sejajar dengan garis \( c \), maka garis \( a \) sejajar dengan garis \( c \). Sifat ini sangat berguna dalam desain arsitektur berlapis.</i></p>
-                    <p><span class="font-bold text-purple-300">Always label your angles systematically when facing complex diagrams.</span> This prevents confusion and ensures that every equation you set up is based on the correct geometric relationship. / <i>Selalu beri label sudut Anda secara sistematis saat menghadapi diagram yang kompleks. Ini mencegah kebingungan dan memastikan bahwa setiap persamaan yang Anda susun didasarkan pada hubungan geometri yang benar.</i></p>
+
+                <!-- Card 2: Transitive Property -->
+                <div class="concept-card bg-gradient-to-br from-purple-900/60 to-pink-900/40 p-5 rounded-2xl border border-purple-500/30" onclick="this.classList.toggle('active')">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-white flex items-center"><i class="fa-solid fa-layer-group text-accent mr-2"></i> Transitive Property</h3>
+                        <i class="fa-solid fa-chevron-right icon-play text-purple-300 text-sm"></i>
+                    </div>
+                    <p class="text-sm mt-2 text-purple-100">If line \( a \parallel b \) and \( b \parallel c \), then \( a \parallel c \). This is vital for multi-layered architectural designs.</p>
+                    <div class="reveal-content mt-3 border-t border-white/10 pt-3">
+                        <p class="text-sm text-purple-300 italic"><i class="fa-solid fa-language mr-1"></i> Jika garis \( a \parallel b \) dan \( b \parallel c \), maka \( a \parallel c \). Sangat penting untuk desain berlapis.</p>
+                    </div>
+                </div>
+
+                <!-- Card 3: Labeling -->
+                <div class="concept-card bg-gradient-to-br from-purple-900/60 to-pink-900/40 p-5 rounded-2xl border border-purple-500/30" onclick="this.classList.toggle('active')">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-white flex items-center"><i class="fa-solid fa-tags text-accent mr-2"></i> Systematic Labeling</h3>
+                        <i class="fa-solid fa-chevron-right icon-play text-purple-300 text-sm"></i>
+                    </div>
+                    <p class="text-sm mt-2 text-purple-100">Always label angles systematically to prevent confusion and ensure correct geometric relationships.</p>
+                    <div class="reveal-content mt-3 border-t border-white/10 pt-3">
+                        <p class="text-sm text-purple-300 italic"><i class="fa-solid fa-language mr-1"></i> Selalu beri label sudut secara sistematis agar tidak bingung dan persamaan yang dibuat benar.</p>
+                    </div>
                 </div>
             </div>
 
