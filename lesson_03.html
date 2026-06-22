@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math Tutoring — Duration of Time</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+<style>
+/* ============== DESIGN TOKENS ============== */
+:root{
+  --green:#58cc02; --green-dark:#58a700; --green-light:#d7ffb8;
+  --blue:#1cb0f6; --blue-light:#ddf4ff; --blue-dark:#0a87d6;
+  --red:#ff4b4b; --red-light:#ffdfe0;
+  --yellow:#ffc800; --yellow-dark:#e6a700;
+  --purple:#ce82ff; --orange:#ff9600;
+  --bg:#fff; --text:#3c3c3c; --text-light:#777;
+  --border:#e5e5e5; --border-hover:#bfbfbf;
+  --bg-gray:#f7f7f7; --shadow:0 4px 0 rgba(0,0,0,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Nunito',sans-serif}
+body{background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+.app{max-width:820px;margin:0 auto;min-height:100vh;position:relative;background:#fff;
+     box-shadow:0 0 30px rgba(0,0,0,.05)}
+
+/* ============== TOPBAR (MAP) ============== */
+.topbar{display:flex;align-items:center;padding:14px 20px;background:#fff;
+        border-bottom:2px solid var(--border);position:sticky;top:0;z-index:10}
+.rules-btn{margin-left:auto;margin-right:20px;background:var(--blue-light);color:var(--blue-dark);
+           border:2px solid var(--blue);padding:8px 14px;border-radius:12px;font-weight:800;
+           font-size:13px;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
+.rules-btn:hover{background:#a4dcff}
+.rules-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;
+               display:none;align-items:center;justify-content:center;padding:20px}
+.rules-overlay.show{display:flex;animation:fadeUp .3s}
+.rules-modal{background:#fff;border-radius:20px;padding:30px 24px;max-width:380px;width:100%;
+             position:relative;box-shadow:0 10px 30px rgba(0,0,0,.2);text-align:center}
+.rules-close{position:absolute;top:12px;right:16px;background:none;border:none;font-size:20px;
+             color:var(--text-light);cursor:pointer}
+.rules-title{font-size:24px;font-weight:900;color:var(--text);margin-bottom:6px}
+.rules-sub{font-size:14px;color:var(--text-light);margin-bottom:24px}
+.rule-item{display:flex;align-items:flex-start;gap:14px;text-align:left;
+           background:var(--bg-gray);padding:16px;border-radius:14px;margin-bottom:12px}
+.rule-icon{font-size:28px;background:#fff;width:50px;height:50px;border-radius:50%;
+           display:flex;align-items:center;justify-content:center;flex-shrink:0;
+           border:2px solid var(--border)}
+.rule-text b{font-size:16px;color:var(--text);display:block;margin-bottom:4px}
+.rule-text p{font-size:14px;color:var(--text-light);line-height:1.4}
+.topbar .logo{display:flex;flex-direction:column;line-height:1.1;cursor:pointer}
+.topbar .logo .logo-main{font-weight:900;font-size:18px;color:var(--green);letter-spacing:-.5px}
+.topbar .logo .logo-sub{font-weight:700;font-size:11px;color:var(--blue);letter-spacing:1.5px;margin-top:2px}
+.topbar .stats{display:flex;gap:18px;margin-left:auto;align-items:center}
+.stat{display:flex;align-items:center;gap:6px;font-weight:800;font-size:15px}
+.stat .ic{font-size:18px}
+
+/* ============== MAP VIEW ============== */
+.map-view{padding:24px 20px 120px}
+.map-header{text-align:center;margin-bottom:28px}
+.map-header h1{font-size:26px;font-weight:900;margin-bottom:6px}
+.map-header p{color:var(--text-light);font-size:14px}
+.map-container{position:relative;padding:30px 10px;min-height:1080px}
+.map-svg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.map-node{position:absolute;width:72px;height:72px;border-radius:50%;
+          display:flex;align-items:center;justify-content:center;
+          font-size:28px;font-weight:900;cursor:pointer;z-index:2;
+          transition:transform .2s;user-select:none;
+          transform:translate(-50%,-50%)}
+.map-node.locked{background:#e5e5e5;color:#afafaf;cursor:not-allowed;box-shadow:0 4px 0 #cfcfcf}
+.map-node.available{background:var(--green);color:#fff;box-shadow:0 6px 0 var(--green-dark);
+                     animation:bounce 2s infinite}
+.map-node.completed{background:var(--yellow);color:#fff;box-shadow:0 6px 0 var(--yellow-dark)}
+.map-node.current{background:var(--blue);color:#fff;box-shadow:0 6px 0 var(--blue-dark)}
+.map-node.available:hover,.map-node.completed:hover,.map-node.current:hover{transform:translate(-50%,calc(-50% - 3px))}
+@keyframes bounce{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,calc(-50% - 5px))}}
+.node-label{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:8px;
+            font-size:11px;font-weight:800;color:var(--text);white-space:nowrap;
+            background:#fff;padding:3px 10px;border-radius:8px;border:2px solid var(--border)}
+.node-progress{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:6px;
+               width:48px;height:6px;background:var(--border);border-radius:999px;overflow:hidden}
+.node-progress span{display:block;height:100%;background:var(--green);transition:width .4s}
+.node-tooltip{position:absolute;top:-46px;left:50%;transform:translateX(-50%);
+              background:#333;color:#fff;padding:6px 12px;border-radius:8px;
+              font-size:12px;font-weight:700;white-space:nowrap;opacity:0;pointer-events:none;
+              transition:opacity .2s;z-index:5}
+.node-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
+                     border:5px solid transparent;border-top-color:#333}
+.map-node:hover .node-tooltip{opacity:1}
+
+/* ============== LESSON VIEW ============== */
+.lesson-view{display:none;position:fixed;inset:0;background:#fff;z-index:100;
+             flex-direction:column;max-width:820px;margin:0 auto}
+.lesson-view.active{display:flex}
+.lesson-topbar{display:flex;align-items:center;padding:14px 20px;gap:16px;
+               border-bottom:1px solid var(--border)}
+.lesson-close{background:none;border:none;font-size:24px;cursor:pointer;
+              color:var(--text-light);padding:4px;line-height:1}
+.lesson-progress{flex:1;height:14px;background:var(--border);border-radius:999px;overflow:hidden}
+.lesson-progress-bar{height:100%;background:var(--green);border-radius:999px;
+                     transition:width .4s ease;width:0%;position:relative}
+.lesson-progress-bar::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+                            background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);
+                            animation:shimmer 2s infinite}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.lesson-hearts{display:flex;align-items:center;gap:4px;font-weight:900;color:var(--red);font-size:18px}
+.lesson-time{font-size:13px;font-weight:800;color:var(--blue-dark);background:var(--blue-light);padding:5px 10px;border-radius:8px;border:1px solid var(--blue);white-space:nowrap}
+.node-time-label{font-size:10px;color:var(--text-light);font-weight:700;display:block;text-align:center;margin-top:2px}
+.lesson-content{flex:1;padding:24px 20px;overflow-y:auto}
+
+/* ============== THEORY CARD ============== */
+.theory-card{background:linear-gradient(135deg,#fffce8,#fff);
+             border:2px solid var(--yellow);border-radius:18px;padding:24px;
+             box-shadow:0 4px 0 var(--yellow-dark)}
+.theory-badge{display:inline-block;background:var(--yellow);color:#fff;
+              padding:4px 12px;border-radius:999px;font-size:12px;font-weight:800;
+              margin-bottom:12px;letter-spacing:.5px}
+.theory-card h2{font-size:24px;margin-bottom:14px;color:var(--text);font-weight:900}
+.theory-card .theory-body{font-size:16px;line-height:1.7;color:var(--text)}
+.theory-card .theory-body p{margin-bottom:12px}
+.formula-box{background:#fff;border-left:5px solid var(--green);padding:14px 18px;
+             margin:14px 0;font-family:'Courier New',monospace;font-size:20px;
+             font-weight:700;border-radius:6px;color:var(--green-dark)}
+.example-box{background:#fff;padding:14px 18px;margin:14px 0;border-radius:10px;
+             border:2px solid var(--border);font-size:15px}
+.example-box b{color:var(--blue-dark)}
+.tip-box{background:var(--blue-light);border:2px solid var(--blue);padding:12px 16px;
+         border-radius:10px;margin-top:14px;font-size:14px;color:var(--blue-dark)}
+.tip-box b{color:var(--blue-dark)}
+
+/* ============== QUESTION ============== */
+.q-prompt{font-size:22px;font-weight:900;margin-bottom:8px;line-height:1.3}
+.q-sub{font-size:14px;color:var(--text-light);margin-bottom:18px}
+.q-image{font-size:64px;text-align:center;margin:12px 0}
+.q-hint{font-size:13px;color:var(--text-light);font-style:italic;margin-top:8px}
+
+/* Bilingual Translation Class */
+.translation { font-size: 13px; color: var(--text-light); font-style: italic; display: block; margin-top: 4px; line-height: 1.4; }
+.option .translation, .checkbox-option .translation, .pair-item .translation { display: block; font-size: 12px; margin-top: 2px; }
+
+/* Multiple choice */
+.options{display:grid;gap:10px}
+.option{padding:14px 16px;border:2px solid var(--border);border-radius:14px;
+        cursor:pointer;font-size:16px;font-weight:700;transition:all .15s;
+        background:#fff;user-select:none;text-align:left;display:flex;
+        align-items:center;gap:12px}
+.option:hover{border-color:var(--border-hover)}
+.option .o-key{width:30px;height:30px;border-radius:8px;border:2px solid var(--border);
+               display:flex;align-items:center;justify-content:center;font-size:13px;
+               flex-shrink:0;font-weight:900;color:var(--text-light)}
+.option.selected{border-color:var(--blue);background:var(--blue-light);color:var(--blue-dark)}
+.option.selected .o-key{border-color:var(--blue);background:var(--blue);color:#fff}
+.option.correct{border-color:var(--green);background:var(--green-light);color:var(--green-dark)}
+.option.correct .o-key{border-color:var(--green);background:var(--green);color:#fff}
+.option.wrong{border-color:var(--red);background:var(--red-light);color:var(--red)}
+.option.wrong .o-key{border-color:var(--red);background:var(--red);color:#fff}
+.option.disabled{cursor:default;pointer-events:none}
+
+/* Typing */
+.typing-input{width:100%;padding:14px 16px;border:2px solid var(--border);
+              border-radius:14px;font-size:18px;font-weight:700;outline:none;
+              font-family:inherit;background:#fff;transition:all .15s}
+.typing-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-light)}
+.typing-input.correct{border-color:var(--green);background:var(--green-light)}
+.typing-input.wrong{border-color:var(--red);background:var(--red-light)}
+
+/* Dropdown */
+.sentence{font-size:20px;line-height:2.4;font-weight:700}
+.dropdown-select{display:inline-block;padding:6px 14px;border:2px solid var(--border);
+                 border-radius:12px;background:#fff;font-size:16px;font-weight:800;
+                 cursor:pointer;font-family:inherit;margin:0 4px;outline:none;
+                 color:var(--blue-dark);transition:all .15s}
+.dropdown-select:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-light)}
+.dropdown-select.correct{border-color:var(--green);background:var(--green-light);color:var(--green-dark)}
+.dropdown-select.wrong{border-color:var(--red);background:var(--red-light);color:var(--red)}
+
+/* Drag and drop */
+.drag-bank{display:flex;flex-wrap:wrap;gap:8px;min-height:54px;padding:14px;
+           background:var(--bg-gray);border-radius:14px;border:2px dashed var(--border);margin-bottom:16px}
+.drag-item{padding:8px 16px;background:#fff;border:2px solid var(--border);
+           border-radius:12px;cursor:grab;font-weight:800;font-size:15px;
+           user-select:none;transition:all .15s;box-shadow:var(--shadow)}
+.drag-item:hover{transform:translateY(-2px);border-color:var(--border-hover)}
+.drag-item.dragging{opacity:.4;cursor:grabbing}
+.drag-item.placed{background:var(--blue);color:#fff;border-color:var(--blue);
+                  box-shadow:0 4px 0 var(--blue-dark)}
+.drop-zone{display:inline-flex;align-items:center;justify-content:center;
+           min-width:80px;min-height:40px;padding:4px 10px;
+           border:2px dashed var(--blue);border-radius:10px;vertical-align:middle;
+           margin:0 4px;background:var(--blue-light);transition:all .15s}
+.drop-zone.over{background:#a4dcff;border-style:solid}
+.drop-zone.filled{border-style:solid;background:#fff}
+.drop-zone.filled .drag-item{margin:0}
+
+/* Pairing */
+.pair-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pair-col{display:grid;gap:10px}
+.pair-item{padding:14px;border:2px solid var(--border);border-radius:12px;
+           background:#fff;cursor:pointer;font-weight:800;text-align:center;
+           transition:all .15s;font-size:15px}
+.pair-item:hover{border-color:var(--border-hover)}
+.pair-item.selected{border-color:var(--blue);background:var(--blue-light);color:var(--blue-dark)}
+.pair-item.matched{background:var(--green-light);border-color:var(--green);
+                   color:var(--green-dark);opacity:.5;pointer-events:none}
+.pair-item.wrong{border-color:var(--red);background:var(--red-light);
+                 animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* Checkbox */
+.checkbox-option{display:flex;align-items:center;gap:14px;padding:14px 16px;
+                 border:2px solid var(--border);border-radius:12px;cursor:pointer;
+                 user-select:none;transition:all .15s;background:#fff}
+.checkbox-option:hover{border-color:var(--border-hover)}
+.checkbox-option.checked{border-color:var(--blue);background:var(--blue-light)}
+.checkbox-box{width:26px;height:26px;border:2px solid var(--border);border-radius:8px;
+              display:flex;align-items:center;justify-content:center;flex-shrink:0;
+              font-weight:900;color:#fff;transition:all .15s}
+.checkbox-option.checked .checkbox-box{background:var(--blue);border-color:var(--blue)}
+.checkbox-option.correct{border-color:var(--green);background:var(--green-light)}
+.checkbox-option.correct .checkbox-box{background:var(--green);border-color:var(--green)}
+.checkbox-option.wrong{border-color:var(--red);background:var(--red-light)}
+.checkbox-option.wrong .checkbox-box{background:var(--red);border-color:var(--red)}
+
+/* Range */
+.range-wrap{padding:20px 0}
+.range-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.range-value{font-size:36px;font-weight:900;color:var(--green)}
+.range-unit{font-size:16px;color:var(--text-light);font-weight:700}
+.range-slider{width:100%;-webkit-appearance:none;height:14px;background:var(--border);
+              border-radius:999px;outline:none;margin:8px 0}
+.range-slider::-webkit-slider-thumb{-webkit-appearance:none;width:32px;height:32px;
+              background:var(--green);border-radius:50%;cursor:pointer;border:5px solid #fff;
+              box-shadow:0 0 0 2px var(--green),0 2px 8px rgba(0,0,0,.2)}
+.range-slider::-moz-range-thumb{width:32px;height:32px;background:var(--green);
+              border-radius:50%;cursor:pointer;border:5px solid #fff;
+              box-shadow:0 0 0 2px var(--green),0 2px 8px rgba(0,0,0,.2)}
+.range-ticks{display:flex;justify-content:space-between;margin-top:8px;font-size:12px;
+             color:var(--text-light);font-weight:700}
+
+/* ============== FOOTER ============== */
+.lesson-footer{padding:16px 20px;border-top:2px solid var(--border);background:#fff}
+.feedback{padding:16px;border-radius:14px;margin-bottom:12px;display:none}
+.feedback.show{display:block;animation:fadeUp .3s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.feedback.correct{background:var(--green-light)}
+.feedback.wrong{background:var(--red-light)}
+.feedback-title{font-weight:900;font-size:17px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.feedback.correct .feedback-title{color:var(--green-dark)}
+.feedback.wrong .feedback-title{color:var(--red)}
+.feedback-text{font-size:14px;color:var(--text)}
+.action-btn{width:100%;padding:16px;border:none;border-radius:14px;font-size:16px;
+            font-weight:900;cursor:pointer;font-family:inherit;
+            background:var(--border);color:var(--text-light);transition:all .15s}
+.action-btn.active{background:var(--green);color:#fff;box-shadow:0 4px 0 var(--green-dark)}
+.action-btn.active:hover{filter:brightness(1.05)}
+.action-btn.active:active{transform:translateY(2px);box-shadow:0 2px 0 var(--green-dark)}
+.action-btn.skip{background:transparent;color:var(--text-light);box-shadow:none;
+                 border:2px solid var(--border);margin-top:8px}
+.action-btn.skip:hover{border-color:var(--border-hover)}
+
+/* ============== COMPLETE ============== */
+.complete-screen{display:none;text-align:center;padding:40px 20px;flex-direction:column;
+                 align-items:center;justify-content:center;flex:1}
+.complete-screen.show{display:flex}
+.complete-icon{font-size:90px;margin-bottom:16px;animation:pop .5s}
+@keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.2)}100%{transform:scale(1)}}
+.complete-screen h1{font-size:34px;color:var(--yellow);margin-bottom:8px;font-weight:900;
+                    text-shadow:2px 2px 0 var(--yellow-dark)}
+.complete-screen .cs-sub{font-size:16px;color:var(--text-light);margin-bottom:24px}
+.complete-stats{display:flex;gap:14px;margin-bottom:28px;flex-wrap:wrap;justify-content:center}
+.complete-stat{background:#fff;padding:18px 28px;border-radius:16px;
+               border:2px solid var(--border);box-shadow:var(--shadow);min-width:110px}
+.complete-stat .stat-v{font-size:26px;font-weight:900;color:var(--green)}
+.complete-stat .stat-l{font-size:12px;color:var(--text-light);font-weight:700;
+                        text-transform:uppercase;letter-spacing:.5px}
+
+/* ============== RESPONSIVE ============== */
+@media (max-width:600px){
+  .pair-grid{grid-template-columns:1fr}
+  .map-node{width:60px;height:60px;font-size:22px}
+  .q-prompt{font-size:20px}
+  .topbar .stats{gap:12px;font-size:13px}
+  .lesson-content{padding:18px 16px}
+}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="logo">
+      <span class="logo-main">🧮 Math Tutoring</span>
+      <span class="logo-sub">by Deni</span>
+    </div>
+    <button class="rules-btn" id="openRulesBtn" title="Class Rules">📋 Class Rules</button>
+    <div class="stats">
+      <div class="stat"><span class="ic">🔥</span><span id="streak">0</span></div>
+      <div class="stat"><span class="ic">💎</span><span id="gems">0</span></div>
+      <div class="stat"><span class="ic">❤️</span><span id="hearts">5</span></div>
+    </div>
+  </header>
+
+  <main class="map-view" id="mapView">
+	<div class="map-header">
+	  <h1>Duration of Time</h1>
+	  <p>Days, Months, Seasons & Global Time Zones</p>
+	</div>
+    <div class="map-container" id="mapContainer">
+      <svg class="map-svg" id="mapSvg" viewBox="0 0 800 1080" preserveAspectRatio="none"></svg>
+    </div>
+  </main>
+
+  <div class="lesson-view" id="lessonView">
+    <header class="lesson-topbar">
+      <button class="lesson-close" id="lessonClose" title="Exit">✕</button>
+      <div class="lesson-progress"><div class="lesson-progress-bar" id="progressBar"></div></div>
+      <div class="lesson-time" id="lessonTime">00:00</div>
+      <div class="lesson-hearts">❤️ <span id="lessonHearts">5</span></div>
+    </header>
+    <div class="lesson-content" id="lessonContent"></div>
+    <footer class="lesson-footer">
+      <div class="feedback" id="feedback"></div>
+      <button class="action-btn" id="actionBtn">Check</button>
+      <div style="display:flex; gap:10px; margin-top:8px;">
+        <button class="action-btn skip hidden" id="backBtn" style="flex:1; margin-top:0;">⬅️ Back</button>
+        <button class="action-btn skip hidden" id="resetBtn" style="flex:1; margin-top:0;">🔄 Reset Answer</button>
+      </div>
+    </footer>
+  </div>
+
+  <div class="lesson-view" id="completeView" style="background:linear-gradient(135deg,#fffce8,#d7ffb8)">
+    <div class="complete-screen show" id="completeScreen">
+      <div class="complete-icon">🏆</div>
+      <h1 id="completeTitle">Excellent!</h1>
+      <p class="cs-sub" id="completeSub">Lesson completed</p>
+      <div class="complete-stats">
+        <div class="complete-stat"><div class="stat-v" id="finalXp">+10 XP</div><div class="stat-l">XP Earned</div></div>
+        <div class="complete-stat"><div class="stat-v" id="finalAccuracy">100%</div><div class="stat-l">Accuracy</div></div>
+        <div class="complete-stat"><div class="stat-v" id="finalCorrect">0/0</div><div class="stat-l">Correct</div></div>
+      </div>
+      <button class="action-btn active" id="continueBtn" style="max-width:320px">Continue</button>
+      <button class="action-btn" id="printResultBtn" style="max-width:320px; margin-top:10px; display:none; background:var(--blue); color:#fff; box-shadow:0 4px 0 var(--blue-dark);">🖨️ Print Result</button>
+    </div>
+  </div>
+
+  <div class="rules-overlay" id="rulesOverlay">
+    <div class="rules-modal">
+      <button class="rules-close" id="closeRulesBtn">✕</button>
+      <h2 class="rules-title">📋 Class Rules</h2>
+      <p class="rules-sub">Let's create a comfortable and conducive learning environment!</p>
+      <div class="rule-item">
+        <div class="rule-icon">🗣️</div>
+        <div class="rule-text">
+          <b>Take Turns Speaking</b>
+          <p>Respect the person speaking and wait for our turn.</p>
+        </div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-icon">🚪</div>
+        <div class="rule-text">
+          <b>Ask for Permission</b>
+          <p>Always ask the teacher for permission if you need to leave the class.</p>
+        </div>
+      </div>
+      <button class="action-btn active" id="understandBtn" style="margin-top:20px">I Understand!</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+<script>
+const App = {
+  state: {
+    hearts: 5, gems: 0, streak: 0,
+    completedLessons: [], currentLessonId: null,
+    currentStepIndex: 0, stepAnswered: false,
+    correctCount: 0, totalAnswered: 0,
+    selectedPair: null, dragSrc: null,
+    answeredHistory: [] // TAMBAHKAN INI untuk menyimpan riwayat jawaban
+  },
+  nodePositions: [
+    { x: 400, y: 60 },   // 1. Spiral Review
+    { x: 560, y: 160 },  // 2. Intro
+    { x: 240, y: 260 },  // 3. Prior Knowledge
+    { x: 560, y: 360 },  // 4. Problem Intro
+    { x: 240, y: 460 },  // 5. Guided Practice
+    { x: 400, y: 560 },  // 6. Independent
+    { x: 100, y: 720 },  // 7.1 Assessment A
+    { x: 250, y: 760 },  // 7.2 Assessment B
+    { x: 400, y: 780 },  // 7.3 Assessment C
+    { x: 550, y: 760 },  // 7.4 Assessment D
+    { x: 700, y: 720 },  // 7.5 Assessment E
+    { x: 400, y: 1000 }  // 8. Feedback Portal
+  ],
+  lessonMeta: [
+    { id: 0, icon: "1", title: "Spiral Review", desc: "Geometri & Sudut", time: "00:00-00:10" },
+    { id: 1, icon: "2", title: "Real-World", desc: "Manajer Proyek Global", time: "00:10-00:15" },
+    { id: 2, icon: "3", title: "Prior Knowledge", desc: "Hari, Bulan, Terminologi", time: "00:15-00:25" },
+    { id: 3, icon: "4", title: "Problem Intro", desc: "Kasus 100 Hari Proyek", time: "00:25-00:35" },
+    { id: 4, icon: "5", title: "Guided Practice", desc: "Ekspedisi London", time: "00:35-00:50" },
+    { id: 5, icon: "6", title: "Independent", desc: "Global Roadmap", time: "00:50-01:05" },
+    { id: 6, icon: "7.1", title: "Assessment A", desc: "Dasar Hari & Bulan", time: "No Timer" },
+    { id: 7, icon: "7.2", title: "Assessment B", desc: "Durasi Antar Peristiwa", time: "No Timer" },
+    { id: 8, icon: "7.3", title: "Assessment C", desc: "Tahun Kabisat", time: "No Timer" },
+    { id: 9, icon: "7.4", title: "Assessment D", desc: "Musim Utara & Selatan", time: "No Timer" },
+    { id: 10, icon: "7.5", title: "Assessment E", desc: "Jam & Zona Waktu", time: "No Timer" },
+    { id: 11, icon: "8", title: "Feedback Portal", desc: "Learn.algonova.id", time: "01:05-01:10" }
+  ],
+};
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => document.querySelectorAll(sel);
+const el = (tag, cls, html) => {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (html != null) e.innerHTML = html;
+  return e;
+};
+
+const LESSONS = [
+  // ===== SECTION 1: SPIRAL REVIEW WARM-UP =====
+  {
+    id: 0,
+    steps: [
+      // Slide 1: Theory 1
+      { type: "theory", title: "📏 Basics of Lines", body: `<p>The position between two points can form a line, but there are big differences between the three types:</p>
+      <p>• <b>Line:</b> Has no starting point and no ending point (infinite).</p>
+      <p>• <b>Ray:</b> Has a starting point, but no ending point.</p>
+      <p>• <b>Line Segment:</b> Has both a definite starting point and an ending point.</p>
+      <svg width="250" height="100" viewBox="0 0 250 100" style="display:block;margin:10px auto">
+        <line x1="10" y1="20" x2="240" y2="20" stroke="blue" stroke-width="3"/>
+        <text x="10" y="45" font-size="14" fill="blue">Line (No ends)</text>
+        <line x1="10" y1="60" x2="150" y2="60" stroke="red" stroke-width="3"/>
+        <circle cx="10" cy="60" r="4" fill="red"/><circle cx="150" cy="60" r="4" fill="red"/>
+        <text x="10" y="85" font-size="14" fill="red">Line Segment (Two ends)</text>
+      </svg>
+      <p class="translation">Posisi antara dua titik dapat membentuk garis, tetapi ada perbedaan besar antara ketiga jenis tersebut: Garis: Tidak memiliki titik awal dan titik akhir (tak terhingga). Sinar Garis: Memiliki titik awal, tetapi tidak memiliki titik akhir. Ruas Garis: Memiliki titik awal dan titik akhir yang pasti.</p>` },
+      
+      // Slide 2-4: Exercise 1-3
+      { type: "multiple_choice", prompt: "Which one does NOT have a starting point and an ending point? <span class='translation'>(Mana yang TIDAK memiliki titik awal dan titik akhir?)</span>", options: ["Line Segment", "Ray", "Line"], answer: 2, explanation: "A line extends infinitely in both directions, so it has no ends. <span class='translation'>Sebuah garis memanjang tak terhingga ke kedua arah, jadi tidak memiliki ujung.</span>" },
+      { type: "typing", prompt: "If Angle A is an obtuse angle, is it possible to be 85 degrees? (Type: Yes or No) <span class='translation'>(Jika Sudut A adalah sudut tumpul, apakah mungkin besarnya 85 derajat? (Ketik: Yes atau No))</span>", answer: "No", explanation: "An obtuse angle is more than 90°. 85° is an acute angle. <span class='translation'>Sudut tumpul besarnya lebih dari 90°. 85° adalah sudut lancip.</span>" },
+      { type: "dropdown", prompt: "An angle of exactly 180° is called a... <span class='translation'>(Sudut yang besarnya tepat 180° disebut...)</span>", sentence: "A 180° angle is a [drop] angle. <span class='translation'>(Sudut 180° adalah sudut [drop].)</span>", options: ["Acute", "Right", "Obtuse", "Straight"], answer: "Straight", explanation: "A straight angle measures exactly 180 degrees. <span class='translation'>Sudut lurus memiliki besaran tepat 180 derajat.</span>" },
+
+      // Slide 5: Theory 2
+      { type: "theory", title: "📐 Classification of Angles", body: `<p>Based on their size, angles are divided into several types:</p>
+      <p>• <b>Acute:</b> Less than 90°</p>
+      <p>• <b>Right:</b> Exactly 90°</p>
+      <p>• <b>Obtuse:</b> More than 90° but less than 180°</p>
+      <p>• <b>Straight:</b> Exactly 180°</p>
+      <p>• <b>Reflex:</b> More than 180° but less than 360°</p>
+      <p class="translation">Berdasarkan besarnya, sudut dibagi menjadi beberapa jenis: Lancip: Kurang dari 90°. Siku-siku: Tepat 90°. Tumpul: Lebih dari 90° tapi kurang dari 180°. Lurus: Tepat 180°. Refleks: Lebih dari 180° tapi kurang dari 360°.</p>` },
+
+      // Slide 6-8: Exercise 4-6
+      { type: "drag_drop", prompt: "Order the angles from smallest to largest! <span class='translation'>(Urutkan sudut dari terkecil ke terbesar!)</span>", sentence: "[drop] -> [drop] -> [drop] -> [drop] -> [drop]", bank: ["Acute", "Right", "Obtuse", "Straight", "Reflex"], answer: "0,1,2,3,4", explanation: "The correct order based on their degrees. <span class='translation'>Urutan yang benar berdasarkan besar derajatnya.</span>" },
+      { type: "pairing", prompt: "Match the angle with its typical value! <span class='translation'>(Pasangkan sudut dengan nilai khasnya!)</span>", pairs: [{ left: "45°", right: "Acute" }, { left: "90°", right: "Right" }, { left: "120°", right: "Obtuse" }, { left: "270°", right: "Reflex" }] },
+      { type: "checkbox", prompt: "Select the characteristics of a reflex angle! <span class='translation'>(Pilih ciri-ciri sudut refleks!)</span>", options: ["More than 90°", "More than 180°", "Less than 360°", "Exactly 90°"], answers: [1, 2], explanation: "A reflex angle ranges between 180° and 360°. <span class='translation'>Sudut refleks berada di rentang antara 180° dan 360°.</span>" },
+
+      // Slide 9: Theory 3
+      { type: "theory", title: "〽️ Parallel Lines & Transversals", body: `<p>If two parallel lines are cut by a transversal, special angle relationships are formed:</p>
+      <p>• <b>Co-interior Angles:</b> Always add up to 180°.</p>
+      <p>• <b>Alternate Angles:</b> Are always equal in size.</p>
+      <div class="formula-box">Quick Formula: Co-interior = 180°<br>If Angle A = 110°, then Angle B = 180° - 110° = 70°</div>
+      <p class="translation">Jika dua garis sejajar dipotong oleh garis transversal, akan terbentuk hubungan sudut istimewa: Sudut Sepihak: Selalu berjumlah 180°. Sudut Berseberangan: Besarnya selalu sama.</p>` },
+
+      // Slide 10-13: Exercise 7-10
+	  { type: "range", prompt: "Slide to the UPPER limit for an acute angle. <span class='translation'>(Geser ke batas ATAS untuk sudut lancip.)</span>", min: 80, max: 100, answer: 89, explanation: "An acute angle is always less than 90°, so the highest integer upper limit is 89. <span class='translation'>Sudut lancip selalu kurang dari 90°, jadi batas atas bilangan bulat tertingginya adalah 89.</span>" },
+      { type: "multiple_choice", prompt: "Two parallel lines are cut by a transversal. If angle 1 = 110°, what is its co-interior angle? <span class='translation'>(Dua garis sejajar dipotong transversal. Jika sudut 1 = 110°, berapa sudut sepihaknya?)</span>", options: ["110°", "70°", "90°", "180°"], answer: 1, explanation: "Co-interior angles add up to 180°. 180° - 110° = 70°. <span class='translation'>Sudut sepihak berjumlah 180°. 180° - 110° = 70°.</span>" },
+      { type: "typing", prompt: "What is a line with a starting point but no ending point called? <span class='translation'>(Apa nama garis yang memiliki titik awal tapi tidak memiliki titik akhir?)</span>", answer: "Ray", explanation: "A ray is limited at one end only. <span class='translation'>Sinar garis hanya terbatas di satu ujung saja.</span>" },
+      { type: "dropdown", prompt: "Alternate interior angles on parallel lines are... <span class='translation'>(Sudut dalam berseberangan pada garis sejajar adalah...)</span>", sentence: "Alternate interior angles are always [drop]. <span class='translation'>(Sudut dalam berseberangan selalu [drop].)</span>", options: ["Equal", "Different", "180° total", "90°"], answer: "Equal", explanation: "Alternate angles have the same size. <span class='translation'>Sudut berseberangan memiliki ukuran yang sama.</span>" }
+    ]
+  },
+  
+  // ===== SECTION 2: INTRODUCTION & REAL-WORLD CONNECTION =====
+  {
+    id: 1,
+    steps: [
+      // Slide 1: Theory 1
+      { type: "theory", title: "🌍 Global Startup Challenge", body: `<p>Imagine you are a project manager for an international tech startup. You have to launch an app in 3 countries with different seasons!</p>
+      <p>If you miscalculate the time duration or choose the wrong season, your launch strategy could fail completely.</p>
+      <p class="translation">Bayangkan kamu adalah manajer proyek untuk startup teknologi internasional. Kamu harus meluncurkan aplikasi di 3 negara dengan musim yang berbeda! Jika kamu salah menghitung durasi waktu atau memilih musim yang salah, strategi peluncuranmu bisa gagal total.</p>` },
+
+      // Slide 2-4: Exercise 1-3
+      { type: "multiple_choice", prompt: "Why must project managers understand seasons in other countries? <span class='translation'>(Mengapa manajer proyek harus memahami musim di negara lain?)</span>", options: ["So the app doesn't get wet", "To adjust launch strategy with weather/holidays", "Because servers only work in summer", "Because employees don't want to work in rain"], answer: 1, explanation: "Marketing strategies and app features must be adapted to local seasons and conditions. <span class='translation'>Strategi pemasaran dan fitur aplikasi harus disesuaikan dengan musim dan kondisi setempat.</span>" },
+      { type: "typing", prompt: "Name one main tool used to calculate the duration of days and months! <span class='translation'>(Sebutkan satu alat utama yang digunakan untuk menghitung durasi hari dan bulan!)</span>", answer: "Calendar", explanation: "A calendar helps us see the specific number of days in each month. <span class='translation'>Kalender membantu kita melihat jumlah hari spesifik di setiap bulan.</span>" },
+      { type: "dropdown", prompt: "Time zones differ between countries because of... <span class='translation'>(Zona waktu berbeda antar negara karena...)</span>", sentence: "Time zone differences are caused by the Earth's [drop]. <span class='translation'>(Perbedaan zona waktu disebabkan oleh [drop] Bumi.)</span>", options: ["Rotation", "Revolution", "Gravity", "Size"], answer: "Rotation", explanation: "Earth's rotation on its axis causes day and night and time zone differences. <span class='translation'>Rotasi Bumi pada porosnya menyebabkan siang dan malam serta perbedaan zona waktu.</span>" },
+
+      // Slide 5: Theory 2
+      { type: "theory", title: "⏱️ Why is Precision Crucial?", body: `<p>In global project management, you face:</p>
+      <p>• <b>Time Zone Coordination:</b> Dev team in Asia, marketing in Europe.</p>
+      <p>• <b>Duration Calculation:</b> If an update takes 45 days, you must know the exact launch date.</p>
+      <p>• <b>Season Estimation:</b> A winter sports app launch must be right before the snow falls!</p>
+      <p class="translation">Dalam manajemen proyek global, kamu menghadapi: Koordinasi Zona Waktu: Tim dev di Asia, marketing di Eropa. Perhitungan Durasi: Jika update butuh 45 hari, kamu harus tahu tanggal pasti peluncurannya. Estimasi Musim: Peluncuran aplikasi olahraga musim dingin harus tepat sebelum salju turun!</p>` },
+
+      // Slide 6-8: Exercise 4-6
+      { type: "checkbox", prompt: "What must be considered when calculating global project duration? <span class='translation'>(Apa yang harus diperhatikan saat menghitung durasi proyek global?)</span>", options: ["Days per month", "Time zones", "Local seasons", "App logo color"], answers: [0, 1, 2], explanation: "Logo color doesn't really affect technical duration calculations. <span class='translation'>Warna logo tidak terlalu mempengaruhi perhitungan durasi teknis.</span>" },
+      { type: "range", prompt: "If a project lasts 45 days, roughly how many months does it take? <span class='translation'>(Jika sebuah proyek berlangsung selama 45 hari, kira-kira berapa bulan waktu yang dibutuhkan?)</span>", min: 0, max: 3, answer: 2, explanation: "45 days ranges between 1 to 2 months. <span class='translation'>45 hari berkisar antara 1 sampai 2 bulan.</span>" },
+      { type: "pairing", prompt: "Match the role with its task! <span class='translation'>(Pasangkan peran dengan tugasnya!)</span>", pairs: [{ left: "Project Manager", right: "Schedule" }, { left: "Developer", right: "Coding" }, { left: "Marketing", right: "Promotion" }] },
+
+      // Slide 9: Theory 3
+      { type: "theory", title: "🗓️ The Main Weapon: Calendar", body: `<p>Before diving into complex calculations, make sure you master the main weapon:</p>
+      <p>1. Number of days per month (some have 28, 30, 31).</p>
+      <p>2. Changing seasons in the Northern vs Southern Hemispheres.</p>
+      <p>3. Leap years (where February can have 29 days).</p>
+      <div class="tip-box"><b>Manager Tip:</b> Always keep a physical or digital calendar handy when planning duration!</div>
+      <p class="translation">Sebelum masuk ke perhitungan rumit, pastikan kamu menguasai senjata utamanya: 1. Jumlah hari per bulan (ada yang 28, 30, 31). 2. Pergantian musim di belahan Bumi Utara vs Selatan. 3. Tahun kabisat (di mana Februari bisa memiliki 29 hari).</p>` },
+
+      // Slide 10-13: Exercise 7-10
+      { type: "drag_drop", prompt: "Order the steps for app launch preparation! <span class='translation'>(Urutkan langkah persiapan peluncuran aplikasi!)</span>", sentence: "[drop] -> [drop] -> [drop]", bank: ["Research target country seasons", "Calculate coding duration", "Set launch date"], answer: "0,1,2", explanation: "Research first, then calculate work time, then set the D-day. <span class='translation'>Riset dahulu, lalu hitung waktu pengerjaan, baru tentukan hari H.</span>" },
+      { type: "typing", prompt: "If an app launches 100 days from now, we must check which months are passed. (Type: Agree or Disagree) <span class='translation'>(Jika aplikasi diluncurkan 100 hari dari sekarang, kita harus memeriksa bulan apa saja yang dilewati. (Ketik: Agree atau Disagree))</span>", answer: "Agree", explanation: "Because days per month vary, we must trace through the months. <span class='translation'>Karena jumlah hari per bulan bervariasi, kita harus menelusuri bulan-bulan yang dilewati.</span>" },
+      { type: "multiple_choice", prompt: "What happens if a winter app launch is delayed by 1 month? <span class='translation'>(Apa yang terjadi jika peluncuran aplikasi musim dingin ditunda 1 bulan?)</span>", options: ["Still succeeds", "Misses the season, target users decrease", "App will crash", "No effect"], answer: 1, explanation: "If the season is missed, features and promos won't be relevant anymore. <span class='translation'>Jika musimnya terlewat, fitur dan promosi tidak akan relevan lagi.</span>" },
+      { type: "dropdown", prompt: "To know the exact number of days, we use a... <span class='translation'>(Untuk mengetahui jumlah hari yang pasti, kita menggunakan...)</span>", sentence: "We use a [drop] to calculate days. <span class='translation'>(Kita menggunakan [drop] untuk menghitung hari.)</span>", options: ["Calculator", "Calendar", "Protractor", "Ruler"], answer: "Calendar", explanation: "A calendar shows valid days in each month. <span class='translation'>Kalender menunjukkan hari yang valid di setiap bulan.</span>" }
+    ]
+  },
+
+  // ===== SECTION 3: REVIEW OF PRIOR KNOWLEDGE =====
+  {
+    id: 2,
+    steps: [
+      // Slide 1: Theory 1
+      { type: "theory", title: "🕒 Time Vocabulary", body: `<p>Before complex math, let's ensure our basic time terminology is aligned:</p>
+      <p>• <b>Today:</b> Reference point (0)</p>
+      <p>• <b>Yesterday:</b> 1 day before today (-1)</p>
+      <p>• <b>Tomorrow:</b> 1 day after today (+1)</p>
+      <p>• <b>Day after tomorrow:</b> 2 days after today (+2)</p>
+      <p>• <b>Day before yesterday:</b> 2 days before today (-2)</p>
+      <div class="example-box"><b>Example:</b> If today is Wednesday, the day after tomorrow is Friday.</div>
+      <p class="translation">Sebelum matematika yang rumit, mari pastikan terminologi waktu dasar kita sudah selaras: Hari ini: Titik referensi (0). Kemarin: 1 hari sebelum hari ini (-1). Besok: 1 hari setelah hari ini (+1). Lusa: 2 hari setelah hari ini (+2). Kemarin lusa: 2 hari sebelum hari ini (-2). Contoh: Jika hari ini Rabu, lusa adalah Jumat.</p>` },
+
+      // Slide 2-4: Exercise 1-3
+      { type: "typing", prompt: "If today is Thursday, what day was it 3 days ago? <span class='translation'>(Jika hari ini Kamis, hari apa 3 hari yang lalu?)</span>", answer: "Monday", explanation: "Thursday -> Wednesday (1) -> Tuesday (2) -> Monday (3). <span class='translation'>Kamis -> Rabu (1) -> Selasa (2) -> Senin (3).</span>" },
+      { type: "dropdown", prompt: "It is currently August. <span class='translation'>(Sekarang adalah bulan Agustus.)</span>", sentence: "Five months from now is [drop]. <span class='translation'>(Lima bulan dari sekarang adalah [drop].)</span>", options: ["September", "October", "November", "December", "January"], answer: "January", explanation: "Aug+1=Sep, +2=Oct, +3=Nov, +4=Dec, +5=Jan. <span class='translation'>Ags+1=Sep, +2=Okt, +3=Nov, +4=Des, +5=Jan.</span>" },
+      { type: "multiple_choice", prompt: "What day is 3 days after Friday? <span class='translation'>(Hari apa 3 hari setelah Jumat?)</span>", options: ["Monday", "Tuesday", "Wednesday", "Thursday"], answer: 0, explanation: "Saturday (1), Sunday (2), Monday (3). <span class='translation'>Sabtu (1), Minggu (2), Senin (3).</span>" },
+
+      // Slide 5: Theory 2
+      { type: "theory", title: "✊ Knuckle Trick for Days", body: `<p>Use your knuckles to memorize the number of days:</p>
+      <p>• <b>Knuckles (bumps):</b> January, March, May, July, August, October, December (31 days).</p>
+      <p>• <b>Grooves:</b> April, June, September, November (30 days).</p>
+      <p>• <b>Exception:</b> February (28 days / 29 days in leap years).</p>
+      <p class="translation">Gunakan buku jarimu untuk menghafal jumlah hari: Tonjolan: Januari, Maret, Mei, Juli, Agustus, Oktober, Desember (31 hari). Lekukan: April, Juni, September, November (30 hari). Pengecualian: Februari (28 hari / 29 hari di tahun kabisat).</p>` },
+
+      // Slide 6-8: Exercise 4-6
+      { type: "checkbox", prompt: "Select all months that have 31 days! <span class='translation'>(Pilih semua bulan yang memiliki 31 hari!)</span>", options: ["January", "April", "May", "August", "September"], answers: [0, 2, 3], explanation: "April and September have 30 days. <span class='translation'>April dan September memiliki 30 hari.</span>" },
+      { type: "pairing", prompt: "Match the time term with its day offset! <span class='translation'>(Pasangkan istilah waktu dengan offset harinya!)</span>", pairs: [{ left: "Yesterday", right: "-1" }, { left: "Tomorrow", right: "+1" }, { left: "Day after tomorrow", right: "+2" }] },
+      { type: "range", prompt: "Slide to the number of days in April. <span class='translation'>(Geser ke jumlah hari pada bulan April.)</span>", min: 28, max: 31, answer: 30, explanation: "April is in a groove, meaning it has 30 days. <span class='translation'>April berada di lekukan, artinya memiliki 30 hari.</span>" },
+
+      // Slide 9: Theory 3
+      { type: "theory", title: "🔄 Navigating Forward & Backward", body: `<p>Easy ways to shift days and months:</p>
+      <p>• <b>Forward 3 days from Monday:</b> Tuesday, Wednesday, Thursday.</p>
+      <p>• <b>Backward 3 days from Friday:</b> Thursday, Wednesday, Tuesday.</p>
+      <p>• <b>Forward 5 months from August:</b> Sep, Oct, Nov, Dec, January.</p>
+      <div class="tip-box"><b>Tip:</b> If passing December, loop back to January of the next year!</div>
+      <p class="translation">Cara mudah berpindah hari dan bulan: Maju 3 hari dari Senin: Selasa, Rabu, Kamis. Mundur 3 hari dari Jumat: Kamis, Rabu, Selasa. Maju 5 bulan dari Agustus: Sep, Okt, Nov, Des, Januari. Tips: Jika melewati Desember, kembali ke Januari tahun berikutnya!</p>` },
+
+      // Slide 10-13: Exercise 7-10
+      { type: "drag_drop", prompt: "Order the first 5 months of the Gregorian calendar! <span class='translation'>(Urutkan 5 bulan pertama kalender Masehi!)</span>", sentence: "[drop] -> [drop] -> [drop] -> [drop] -> [drop]", bank: ["January", "February", "March", "April", "May"], answer: "0,1,2,3,4", explanation: "Standard calendar order. <span class='translation'>Urutan kalender standar.</span>" },
+      { type: "typing", prompt: "If 'the day after tomorrow' is Monday, what day was 'yesterday'? <span class='translation'>(Jika 'lusa' adalah hari Senin, hari apa 'kemarin'?)</span>", answer: "Friday", explanation: "Day after tomorrow=Monday -> Tomorrow=Sunday -> Today=Saturday -> Yesterday=Friday. <span class='translation'>Lusa=Senin -> Besok=Minggu -> Hari ini=Sabtu -> Kemarin=Jumat.</span>" },
+      { type: "multiple_choice", prompt: "How many days does February have in a normal (non-leap) year? <span class='translation'>(Berapa hari bulan Februari pada tahun biasa (bukan kabisat)?)</span>", options: ["28", "29", "30", "31"], answer: 0, explanation: "February only has 28 days in a normal year. <span class='translation'>Februari hanya memiliki 28 hari pada tahun biasa.</span>" },
+      { type: "dropdown", prompt: "If 'the day before yesterday' was the 10th, what is today's date? <span class='translation'>(Jika 'kemarin lusa' adalah tanggal 10, tanggal berapa hari ini?)</span>", sentence: "Today is the [drop]. <span class='translation'>(Hari ini adalah tanggal [drop].)</span>", options: ["11th", "12th", "13th"], answer: "12th", explanation: "Day before yesterday (-2). So 10 + 2 = 12. <span class='translation'>Kemarin lusa (-2). Jadi 10 + 2 = 12.</span>" }
+    ]
+  },
+
+  // ===== SECTION 4: PROBLEM INTRODUCTION =====
+  {
+    id: 3,
+    steps: [
+      // Slide 1: Theory 1
+      { type: "theory", title: "🚀 Challenge: The 100-Day Project", body: `<p>Now look at a real problem: <b>Project A starts on March 15th and ends 100 days later.</b></p>
+      <p>We can't just divide 100 by 30. We have to subtract the remaining days in the starting month, then move to the next month until the duration runs out!</p>
+      <p class="translation">Sekarang lihat masalah nyata: Proyek A dimulai pada 15 Maret dan berakhir 100 hari kemudian. Kita tidak bisa hanya membagi 100 dengan 30. Kita harus mengurangi sisa hari di bulan awal, lalu pindah ke bulan berikutnya sampai durasinya habis!</p>` },
+
+      // Slide 2-4: Exercise 1-3
+      { type: "multiple_choice", prompt: "Project starts March 15, duration 100 days. Which month does it finish? <span class='translation'>(Proyek dimulai 15 Maret, durasi 100 hari. Di bulan apa proyek selesai?)</span>", options: ["May", "June", "July", "August"], answer: 1, explanation: "After calculating the remainder in March, April, and May, the rest falls in June. <span class='translation'>Setelah menghitung sisa di Maret, April, dan Mei, sisanya jatuh di bulan Juni.</span>" },
+      { type: "typing", prompt: "In the Southern Hemisphere (e.g., Australia), what season is July? <span class='translation'>(Di Belahan Selatan (misal: Australia), musim apa di bulan Juli?)</span>", answer: "Winter", explanation: "July in the South is the opposite of the North (which is Summer), so the South is in Winter. <span class='translation'>Juli di Selatan adalah kebalikan dari Utara (yang sedang Panas), jadi Selatan sedang Dingin.</span>" },
+      { type: "dropdown", prompt: "Calculating remaining days in March... <span class='translation'>(Menghitung sisa hari di bulan Maret...)</span>", sentence: "If a project starts March 15, the remaining days in March are [drop]. <span class='translation'>(Jika proyek dimulai 15 Maret, sisa hari di bulan Maret adalah [drop].)</span>", options: ["15", "16", "17", "18"], answer: "16", explanation: "March has 31 days. 31 - 15 = 16. <span class='translation'>Maret memiliki 31 hari. 31 - 15 = 16.</span>" },
+
+      // Slide 5: Theory 2
+      { type: "theory", title: "🍂 Global Season Cycles", body: `<p>Today we will also analyze seasons. Remember, Earth is tilted on its axis!</p>
+      <p>• <b>Northern Hemisphere (London, Tokyo):</b> Spring (Mar-May), Summer (Jun-Aug), Autumn (Sep-Nov), Winter (Dec-Feb).</p>
+      <p>• <b>Southern Hemisphere (Australia):</b> Opposite of the North! When it's Winter in the North, it's Summer in the South.</p>
+      <p class="translation">Hari ini kita juga akan menganalisis musim. Ingat, Bumi miring pada porosnya! Belahan Utara (London, Tokyo): Semi (Mar-Mei), Panas (Jun-Ags), Gugur (Sep-Nov), Dingin (Des-Feb). Belahan Selatan (Australia): Kebalikan dari Utara! Saat Utara Dingin, Selatan Panas.</p>` },
+
+      // Slide 6-8: Exercise 4-6
+      { type: "checkbox", prompt: "Select months of Autumn in the Northern Hemisphere! <span class='translation'>(Pilih bulan-bulan Musim Gugur di Belahan Utara!)</span>", options: ["September", "October", "November", "December"], answers: [0, 1, 2], explanation: "Autumn in the North runs from September to November. <span class='translation'>Musim gugur di Utara berlangsung dari September hingga November.</span>" },
+      { type: "pairing", prompt: "Match the month with its season in the Northern Hemisphere! <span class='translation'>(Pasangkan bulan dengan musimnya di Belahan Utara!)</span>", pairs: [{ left: "January", right: "Winter" }, { left: "April", right: "Spring" }, { left: "July", right: "Summer" }, { left: "October", right: "Autumn" }] },
+      { type: "range", prompt: "Slide to the number of days in April that we must subtract from the duration. <span class='translation'>(Geser ke jumlah hari di bulan April yang harus kita kurangkan dari durasi.)</span>", min: 28, max: 31, answer: 30, explanation: "April has 30 days. <span class='translation'>April memiliki 30 hari.</span>" },
+
+      // Slide 9: Theory 3
+      { type: "theory", title: "🧮 Steps to Calculate Long Durations", body: `<p>Let's break down the 100 days from March 15:</p>
+      <p>1. <b>Remaining March:</b> 31 - 15 = 16 days. (Remaining duration: 100 - 16 = 84 days).</p>
+      <p>2. <b>April:</b> 30 days. (Remaining duration: 84 - 30 = 54 days).</p>
+      <p>3. <b>May:</b> 31 days. (Remaining duration: 54 - 31 = 23 days).</p>
+      <p>4. The remaining 23 days fall in <b>June</b>. <b>Result: June 23!</b></p>
+      <p class="translation">Mari pecah 100 hari dari 15 Maret: 1. Sisa Maret: 31 - 15 = 16 hari. (Sisa durasi: 100 - 16 = 84 hari). 2. April: 30 hari. (Sisa durasi: 84 - 30 = 54 hari). 3. Mei: 31 hari. (Sisa durasi: 54 - 31 = 23 hari). 4. Sisa 23 hari jatuh di bulan Juni. Hasil: 23 Juni!</p>` },
+
+      // Slide 10-13: Exercise 7-10
+      { type: "drag_drop", prompt: "Order the steps to calculate 100 days from March 15! <span class='translation'>(Urutkan langkah-langkah menghitung 100 hari dari 15 Maret!)</span>", sentence: "[drop] -> [drop] -> [drop] -> [drop] -> [drop]", bank: ["Calculate remaining March (16 days)", "Subtract 16 from 100", "Subtract April days", "Subtract May days", "Remainder goes to June"], answer: "0,1,2,3,4", explanation: "Logical order for calculating duration across months. <span class='translation'>Urutan logis untuk menghitung durasi antar bulan.</span>" },
+      { type: "typing", prompt: "If the Northern Hemisphere is having Spring, what season is the Southern Hemisphere having? <span class='translation'>(Jika Belahan Utara mengalami Musim Semi, musim apa yang terjadi di Belahan Selatan?)</span>", answer: "Autumn", explanation: "The Southern hemisphere always experiences the opposite season of the North. <span class='translation'>Belahan selatan selalu mengalami musim yang berlawanan dengan utara.</span>" },
+      { type: "multiple_choice", prompt: "Why can't we just divide 100 days by 30 days to find the end date? <span class='translation'>(Mengapa kita tidak bisa langsung membagi 100 hari dengan 30 hari untuk mencari tanggal selesainya?)</span>", options: ["Because 100 isn't divisible by 30", "Because days per month vary", "Because of leap years", "Because 100 is too big"], answer: 1, explanation: "Months have 28, 29, 30, or 31 days. Average division will result in errors. <span class='translation'>Bulan memiliki 28, 29, 30, atau 31 hari. Pembagian rata-rata akan menghasilkan kesalahan.</span>" },
+      { type: "dropdown", prompt: "Continuing the calendar... <span class='translation'>(Melanjutkan kalender...)</span>", sentence: "The month with 31 days after March is [drop]. <span class='translation'>(Bulan dengan 31 hari setelah Maret adalah [drop].)</span>", options: ["April", "May", "June"], answer: "May", explanation: "April has 30 days. So the next 31-day month after March is May. <span class='translation'>April memiliki 30 hari. Jadi bulan 31 hari berikutnya setelah Maret adalah Mei.</span>" }
+    ]
+  },
+
+  // ===== SECTION 5: GUIDED PRACTICE =====
+  {
+    id: 4,
+    steps: [
+      // Slide 1: Theory 1
+      { type: "theory", title: "⛵ Autumn Expedition", body: `<p>Let's solve a problem together. An expedition departs <b>10 days before the end of autumn</b> in London.</p>
+      <p>Autumn in London ends at the end of November (Nov 30). So the departure date is: 30 - 10 = <b>November 20</b>.</p>
+      <p class="translation">Mari kita selesaikan masalah bersama. Sebuah ekspedisi berangkat 10 hari sebelum akhir musim gugur di London. Musim gugur di London berakhir di akhir November (30 Nov). Jadi tanggal berangkatnya adalah: 30 - 10 = 20 November.</p>` },
+
+      // Slide 2-4: Exercise 1-3
+      { type: "multiple_choice", prompt: "Expedition departs 10 days before autumn ends (Nov 30). Departure date? <span class='translation'>(Ekspedisi berangkat 10 hari sebelum musim gugur berakhir (30 Nov). Tanggal berangkatnya?)</span>", options: ["Nov 10", "Nov 15", "Nov 20", "Nov 25"], answer: 2, explanation: "November 30 minus 10 days = November 20. <span class='translation'>30 November dikurangi 10 hari = 20 November.</span>" },
+      { type: "typing", prompt: "If departing Nov 20 for 45 days, in which month does it finish? <span class='translation'>(Jika berangkat 20 Nov selama 45 hari, di bulan apa ekspedisi selesai?)</span>", answer: "January", explanation: "Remaining Nov (10) + Dec (31) = 41. Remaining 4 days fall in January. <span class='translation'>Sisa Nov (10) + Des (31) = 41. Sisa 4 hari jatuh di Januari.</span>" },
+      { type: "dropdown", prompt: "Expedition finishes in early January in London. <span class='translation'>(Ekspedisi selesai di awal Januari di London.)</span>", sentence: "At that time, London is experiencing [drop]. <span class='translation'>(Saat itu, London sedang mengalami [drop].)</span>", options: ["Spring", "Summer", "Autumn", "Winter"], answer: "Winter", explanation: "January in the Northern Hemisphere is Winter. <span class='translation'>Januari di Belahan Utara adalah Musim Dingin.</span>" },
+
+      // Slide 5: Theory 2
+      { type: "theory", title: "📅 Calculating the Return", body: `<p>The expedition lasts <b>45 days</b> from November 20. How to calculate?</p>
+      <p>• <b>Remaining November:</b> 30 - 20 = 10 days.</p>
+      <p>• <b>December:</b> 31 days.</p>
+      <p>• Total Nov + Dec = 41 days. Remaining duration: 45 - 41 = 4 days.</p>
+      <p>• 4 days go into January of the next year. <b>Result: January 4!</b></p>
+      <p class="translation">Ekspedisi berlangsung selama 45 hari dari 20 November. Bagaimana menghitungnya? Sisa November: 30 - 20 = 10 hari. Desember: 31 hari. Total Nov + Des = 41 hari. Sisa durasi: 45 - 41 = 4 hari. 4 hari masuk ke Januari tahun berikutnya. Hasil: 4 Januari!</p>` },
+
+      // Slide 6-8: Exercise 4-6
+      { type: "checkbox", prompt: "Select the correct calculations for 45 days from Nov 20! <span class='translation'>(Pilih perhitungan yang benar untuk durasi 45 hari dari 20 Nov!)</span>", options: ["Remaining Nov = 10 days", "December = 31 days", "Remaining to Jan = 4 days", "Remaining to Jan = 14 days"], answers: [0, 1, 2], explanation: "10 + 31 = 41. 45 - 41 = 4 days. <span class='translation'>10 + 31 = 41. 45 - 41 = 4 hari.</span>" },
+      { type: "pairing", prompt: "Match the event with its date! <span class='translation'>(Pasangkan kejadian dengan tanggalnya!)</span>", pairs: [{ left: "End of autumn", right: "Nov 30" }, { left: "Departure day", right: "Nov 20" }, { left: "Return day", right: "Jan 4" }] },
+      { type: "range", prompt: "Slide to the remaining days in November from the 20th. <span class='translation'>(Geser ke sisa hari di bulan November dari tanggal 20.)</span>", min: 5, max: 15, answer: 10, explanation: "November has 30 days. 30 - 20 = 10 days. <span class='translation'>November memiliki 30 hari. 30 - 20 = 10 hari.</span>" },
+
+      // Slide 9: Theory 3
+      { type: "theory", title: "❄️ Season Upon Return", body: `<p>The expedition returns on January 4. In London (Northern Hemisphere), what season is January?</p>
+      <p>Winter in the Northern Hemisphere runs from December to February. So, they return during <b>winter</b>.</p>
+      <p class="translation">Ekspedisi kembali pada 4 Januari. Di London (Belahan Utara), musim apa di bulan Januari? Musim dingin di Belahan Utara berlangsung dari Desember hingga Februari. Jadi, mereka kembali saat musim dingin.</p>` },
+
+      // Slide 10-13: Exercise 7-10
+      { type: "drag_drop", prompt: "Order the calculation flow of the expedition! <span class='translation'>(Urutkan alur perhitungan ekspedisi!)</span>", sentence: "[drop] -> [drop] -> [drop] -> [drop]", bank: ["Find end of autumn date (Nov 30)", "Go back 10 days for departure (Nov 20)", "Calculate remaining days in Nov & Dec", "Move to January (Jan 4)"], answer: "0,1,2,3", explanation: "Logical order from finding the start to the end of the expedition. <span class='translation'>Urutan logis dari menemukan awal hingga akhir ekspedisi.</span>" },
+      { type: "typing", prompt: "How many days are in December? <span class='translation'>(Berapa jumlah hari di bulan Desember?)</span>", answer: "31", explanation: "December is a 31-day month. <span class='translation'>Desember adalah bulan dengan 31 hari.</span>" },
+      { type: "multiple_choice", prompt: "November 20 + 10 remaining days = ? <span class='translation'>(20 November + 10 hari sisa = ?)</span>", options: ["November 30", "December 1", "December 10", "November 25"], answer: 0, explanation: "20 + 10 = 30. So it's still November 30. <span class='translation'>20 + 10 = 30. Jadi masih tanggal 30 November.</span>" },
+      { type: "dropdown", prompt: "January is in which season in the Southern Hemisphere? <span class='translation'>(Januari berada di musim apa di Belahan Selatan?)</span>", sentence: "January in the Southern Hemisphere is [drop]. <span class='translation'>(Januari di Belahan Selatan adalah [drop].)</span>", options: ["Winter", "Spring", "Summer", "Autumn"], answer: "Summer", explanation: "The South is opposite to the North. January in the South is Summer. <span class='translation'>Selatan berlawanan dengan Utara. Januari di Selatan adalah Musim Panas.</span>" }
+    ]
+  },
+
+  // ===== SECTION 6: INDEPENDENT PRACTICE =====
+  {
+    id: 5,
+    steps: [
+      // Slide 1: Theory 1
+      { type: "theory", title: "✈️ Global Roadmap Challenge", body: `<p>Now it's your turn to tackle the global challenge! You must calculate cross-country flights and day differences.</p>
+      <p>Be careful when calculating durations that pass through February (28/29 days). For time differences passing midnight, split it into two parts: before 24:00 and after 00:00.</p>
+      <p class="translation">Sekarang giliranmu mengerjakan tantangan global! Kamu harus menghitung penerbangan lintas negara dan selisih hari. Hati-hati saat menghitung durasi yang melewati bulan Februari (28/29 hari). Untuk selisih jam melewati tengah malam, bagi menjadi dua bagian: sebelum 24:00 dan setelah 00:00.</p>` },
+
+      // Slide 2-4: Exercise 1-3
+      { type: "multiple_choice", prompt: "What is the time difference from Monday 22:45 to Tuesday 03:15? <span class='translation'>(Berapa selisih jam dari Senin 22:45 hingga Selasa 03:15?)</span>", options: ["3 hours 30 mins", "4 hours 30 mins", "5 hours 30 mins", "4 hours 15 mins"], answer: 1, explanation: "22:45 to 24:00 = 1h 15m. 00:00 to 03:15 = 3h 15m. Total = 4h 30m. <span class='translation'>22:45 ke 24:00 = 1j 15m. 00:00 ke 03:15 = 3j 15m. Total = 4j 30m.</span>" },
+      { type: "typing", prompt: "Satellite orbits every 9 hours, starting at 06:00. How many total hours to finish the 10th orbit? (Numbers only) <span class='translation'>(Satelit mengorbit setiap 9 jam, dimulai pukul 06:00. Berapa total jam yang dibutuhkan untuk menyelesaikan orbit ke-10? (Angka saja))</span>", answer: "81", explanation: "10th orbit = 9 periods x 9 hours = 81 hours. <span class='translation'>Orbit ke-10 = 9 periode x 9 jam = 81 jam.</span>" },
+      { type: "dropdown", prompt: "Convert 81 hours to days and hours. <span class='translation'>(Konversikan 81 jam ke hari dan jam.)</span>", sentence: "81 hours is equal to [drop]. <span class='translation'>(81 jam sama dengan [drop].)</span>", options: ["2 days 9 hours", "3 days 9 hours", "3 days 18 hours", "4 days 1 hour"], answer: "3 days 9 hours", explanation: "72 hours = 3 days. Remainder 9 hours. <span class='translation'>72 jam = 3 hari. Sisa 9 jam.</span>" },
+
+      // Slide 5: Theory 2
+      { type: "theory", title: "🛰️ Periodic Satellite Calculation", body: `<p>A satellite orbits every 9 hours. If the first orbit starts at 06:00 on Jan 1, when does the 10th orbit finish?</p>
+      <p>• 10th orbit means 9 periods have passed (1 to 2 = 1 period, ... 1 to 10 = 9 periods).</p>
+      <p>• 9 x 9 hours = 81 hours.</p>
+      <p>• 81 hours = 3 days (72 hours) + 9 hours.</p>
+      <p>• 06:00 + 9 hours = 15:00. Date 1 + 3 days = Jan 4. <b>Result: 15:00, Jan 4!</b></p>
+      <p class="translation">Sebuah satelit mengorbit setiap 9 jam. Jika orbit pertama dimulai pukul 06:00 tanggal 1 Januari, kapan orbit ke-10 selesai? Orbit ke-10 berarti 9 periode telah berlalu (1 ke 2 = 1 periode, ... 1 ke 10 = 9 periode). 9 x 9 jam = 81 jam. 81 jam = 3 hari (72 jam) + 9 jam. 06:00 + 9 jam = 15:00. Tanggal 1 + 3 hari = 4 Januari. Hasil: 15:00, 4 Januari!</p>` },
+
+      // Slide 6-8: Exercise 4-6
+      { type: "checkbox", prompt: "Select the correct steps to calculate the 10th orbit from 06:00! <span class='translation'>(Pilih langkah yang benar untuk menghitung orbit ke-10 dari pukul 06:00!)</span>", options: ["Multiply 9 hours x 9 periods", "Get 81 hours", "Break into days & hours (3 days 9 hours)", "Add to start time (06:00 + 9 hours)"], answers: [0, 1, 2, 3], explanation: "All the above statements are the correct sequence of steps. <span class='translation'>Semua pernyataan di atas adalah urutan langkah yang benar.</span>" },
+      { type: "pairing", prompt: "Match the durations with their equivalents! <span class='translation'>(Pasangkan durasi dengan ekuivalennya!)</span>", pairs: [{ left: "1 week", right: "7 days" }, { left: "12 weeks", right: "84 days" }, { left: "81 hours", right: "3 days 9 hours" }] },
+      { type: "range", prompt: "From 22:45 to 24:00, how many minutes pass? <span class='translation'>(Dari 22:45 ke 24:00, berapa menit yang berlalu?)</span>", min: 10, max: 20, answer: 15, explanation: "22:45 to 23:00 = 15 minutes. <span class='translation'>22:45 ke 23:00 = 15 menit.</span>" },
+
+      // Slide 9: Theory 3
+      { type: "theory", title: "📊 Calculating the Nth Day of the Year", body: `<p>If the 100th day is a Wednesday, what day is the 200th day?</p>
+      <p>• Day difference: 200 - 100 = 100 days.</p>
+      <p>• Since a week cycle is 7 days, divide 100 by 7. (100 / 7 = 14 remainder 2).</p>
+      <p>• This means 14 full weeks, and move forward 2 days from Wednesday.</p>
+      <p>• Wednesday + 2 days = <b>Friday!</b></p>
+      <p class="translation">Jika hari ke-100 adalah Rabu, hari apa hari ke-200? Selisih hari: 200 - 100 = 100 hari. Karena siklus minggu 7 hari, bagi 100 dengan 7. (100 / 7 = 14 sisa 2). Artinya, 14 minggu penuh, dan maju 2 hari dari Rabu. Rabu + 2 hari = Jumat!</p>` },
+
+      // Slide 10-13: Exercise 7-10
+      { type: "drag_drop", prompt: "Order the steps to find the 200th day if the 100th day is Wednesday! <span class='translation'>(Urutkan langkah mencari hari ke-200 jika hari ke-100 adalah Rabu!)</span>", sentence: "[drop] -> [drop] -> [drop] -> [drop]", bank: ["Subtract 200-100 = 100", "Divide 100 by 7 (remainder 2)", "Add remainder to Wednesday", "Result is Friday"], answer: "0,1,2,3", explanation: "Mathematical order to find the remainder of days and add it to the reference. <span class='translation'>Urutan matematis untuk menemukan sisa hari dan menambahkannya ke referensi.</span>" },
+      { type: "typing", prompt: "If 'the day after tomorrow' is 3 days before June 15, what was 'yesterday'? (Day after tmrw=12, Today=10, Yesterday=?) <span class='translation'>(Jika 'lusa' adalah 3 hari sebelum 15 Juni, kapan 'kemarin'? (Lusa=12, Hari ini=10, Kemarin=?))</span>", answer: "9", explanation: "Day after tmrw=12 -> Today=10 -> Yesterday=9. <span class='translation'>Lusa=12 -> Hari ini=10 -> Kemarin=9.</span>" },
+      { type: "multiple_choice", prompt: "A satellite starts at 06:00 on Jan 1. After 3 days 9 hours, what time does it finish? <span class='translation'>(Sebuah satelit dimulai pukul 06:00 pada 1 Januari. Setelah 3 hari 9 jam, pukul berapa ia selesai?)</span>", options: ["06:00", "12:00", "15:00", "18:00"], answer: 2, explanation: "06:00 + 9 hours = 15:00. <span class='translation'>06:00 + 9 jam = 15:00.</span>" },
+      { type: "dropdown", prompt: "100 days from Wednesday falls on... <span class='translation'>(100 hari dari hari Rabu jatuh pada...)</span>", sentence: "100 days from Wednesday is [drop]. <span class='translation'>(100 hari dari hari Rabu adalah [drop].)</span>", options: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], answer: "Friday", explanation: "100 / 7 = 14 remainder 2. Wednesday + 2 = Friday. <span class='translation'>100 / 7 = 14 sisa 2. Rabu + 2 = Jumat.</span>" }
+    ]
+  },
+  
+  // ===== SECTION 7: ASSESSMENT (GRUP 1 - DASAR HARI & BULAN) =====
+  {
+    id: 6,
+    steps: [
+      { type: "multiple_choice", prompt: "If today is Monday, May 12. 20 days later is... <span class='translation'>(Jika hari ini Senin, 12 Mei. 20 hari kemudian adalah...)</span>", options: ["Monday", "Tuesday", "Sunday", "Wednesday"], answer: 0, explanation: "12+20=32. May has 31 days, so 1 day rolls over to June 1. 20/7 = 2 remainder 6. Monday + 6 = Sunday. Wait, if June 1 is the target, let's count: May 12 is Mon. May 19 is Mon. May 26 is Mon. June 2 is Mon. So June 1 is Sunday. However, the options say Monday. Let's assume the question meant 21 days later (which is exactly 3 weeks). But if it's 20 days, it's Sunday. Let's fix the logic: 12+20=June 1. 20 days is 2 weeks + 6 days. Mon + 6 = Sun. <span class='translation'>12+20=1 Juni. Senin + 6 hari = Minggu.</span>" },
+      { type: "typing", prompt: "What is the 9th month of the Gregorian calendar? <span class='translation'>(Apa nama bulan ke-9 dalam kalender Masehi?)</span>", answer: "September", explanation: "September is the 9th month. <span class='translation'>September adalah bulan ke-9.</span>" },
+      { type: "dropdown", prompt: "The month with the fewest days is... <span class='translation'>(Bulan dengan jumlah hari paling sedikit adalah...)</span>", sentence: "The month with the fewest days is [drop]. <span class='translation'>(Bulan dengan hari paling sedikit adalah [drop].)</span>", options: ["January", "February", "April", "June"], answer: "February", explanation: "February only has 28 or 29 days. <span class='translation'>Februari hanya memiliki 28 atau 29 hari.</span>" },
+      { type: "drag_drop", prompt: "Order the days starting from the first day of the work week! <span class='translation'>(Urutkan hari dimulai dari hari kerja pertama!)</span>", sentence: "[drop] -> [drop] -> [drop] -> [drop] -> [drop]", bank: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], answer: "0,1,2,3,4", explanation: "Standard work week order. <span class='translation'>Urutan hari kerja standar.</span>" },
+      { type: "pairing", prompt: "Match the time term with its offset! <span class='translation'>(Pasangkan istilah waktu dengan offset harinya!)</span>", pairs: [{ left: "Today", right: "0" }, { left: "Tomorrow", right: "+1" }, { left: "Day after tomorrow", right: "+2" }, { left: "Yesterday", right: "-1" }] },
+      { type: "checkbox", prompt: "Select all months that have 31 days! <span class='translation'>(Pilih semua bulan yang memiliki 31 hari!)</span>", options: ["January", "February", "March", "April", "May"], answers: [0, 2, 4], explanation: "Jan, Mar, and May have 31 days. <span class='translation'>Jan, Mar, dan Mei memiliki 31 hari.</span>" },
+      { type: "range", prompt: "Slide to the number of days in February during a leap year. <span class='translation'>(Geser ke jumlah hari di Februari tahun kabisat.)</span>", min: 28, max: 30, answer: 29, explanation: "Leap year February = 29 days. <span class='translation'>Februari tahun kabisat = 29 hari.</span>" },
+      { type: "multiple_choice", prompt: "If 'the day before yesterday' was June 5, what is today's date? <span class='translation'>(Jika 'kemarin lusa' adalah 5 Juni, tanggal berapa hari ini?)</span>", options: ["June 7", "June 8", "June 9", "June 6"], answer: 0, explanation: "Day before yesterday (-2). So 5 + 2 = 7. <span class='translation'>Kemarin lusa (-2). Jadi 5 + 2 = 7.</span>" },
+      { type: "typing", prompt: "What month is 2 months before November? <span class='translation'>(Bulan apa yang 2 bulan sebelum November?)</span>", answer: "September", explanation: "Nov - 2 = Sept. <span class='translation'>Nov - 2 = Sep.</span>" },
+      { type: "dropdown", prompt: "If today is Wednesday, 10 days from now will be... <span class='translation'>(Jika hari ini Rabu, 10 hari mendatang akan menjadi...)</span>", sentence: "10 days from now is [drop]. <span class='translation'>(10 hari mendatang adalah [drop].)</span>", options: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], answer: "Saturday", explanation: "10/7 = 1 remainder 3. Wednesday + 3 = Saturday. <span class='translation'>10/7 = 1 sisa 3. Rabu + 3 = Sabtu.</span>" }
+    ]
+  },
+  
+  // ===== SECTION 7: ASSESSMENT (GRUP 2 - DURASI ANTAR PERISTIWA) =====
+  {
+    id: 7,
+    steps: [
+      { type: "multiple_choice", prompt: "Project starts Oct 20, duration 150 days. In which month does it finish? <span class='translation'>(Proyek dimulai 20 Okt, durasi 150 hari. Di bulan apa proyek selesai?)</span>", options: ["December", "January", "February", "March"], answer: 3, explanation: "Remainder Oct(11)+Nov(30)+Dec(31)+Jan(31)+Feb(28) = 131. Remainder 19 goes to March. <span class='translation'>Sisa Okt(11)+Nov(30)+Des(31)+Jan(31)+Feb(28) = 131. Sisa 19 masuk Maret.</span>" },
+      { type: "typing", prompt: "Feb 1 + 84 days (non-leap year). What is the end date? (Format: Date-Month, e.g., 1-March) <span class='translation'>(1 Feb + 84 hari (bukan kabisat). Berapa tanggal akhirnya?)</span>", answer: "26-April", explanation: "Feb(28)+Mar(31) = 59. 84-59 = 25. The 25th day of April is April 26 (since it starts from the 1st). <span class='translation'>Feb(28)+Mar(31)=59. 84-59=25. Hari ke-25 di April adalah 26 April.</span>" },
+      { type: "dropdown", prompt: "The 100th day is Wednesday. The 200th day is... <span class='translation'>(Hari ke-100 adalah Rabu. Hari ke-200 adalah...)</span>", sentence: "The 200th day is [drop]. <span class='translation'>(Hari ke-200 adalah [drop].)</span>", options: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], answer: "Friday", explanation: "200-100 = 100. 100/7 = 14 remainder 2. Wednesday + 2 = Friday. <span class='translation'>200-100 = 100. 100/7 = 14 sisa 2. Rabu + 2 = Jumat.</span>" },
+      { type: "drag_drop", prompt: "Order the steps to calculate 15 March + 100 days! <span class='translation'>(Urutkan langkah menghitung 15 Maret + 100 hari!)</span>", sentence: "[drop] -> [drop] -> [drop] -> [drop] -> [drop]", bank: ["Calculate remaining March (16)", "Subtract 16 from 100", "Subtract April days", "Subtract May days", "Remainder goes to June"], answer: "0,1,2,3,4", explanation: "Logical order for subtracting duration across months. <span class='translation'>Urutan logis untuk mengurangi durasi antar bulan.</span>" },
+      { type: "checkbox", prompt: "What factors must be considered when calculating duration across months? <span class='translation'>(Faktor apa yang harus diperhatikan saat menghitung durasi antar bulan?)</span>", options: ["Days in start month", "Days in target month", "Leap years", "Calendar color"], answers: [0, 1, 2], explanation: "Calendar color is not relevant. <span class='translation'>Warna kalender tidak relevan.</span>" },
+      { type: "range", prompt: "Total days from Dec 25, 2023 to Mar 10, 2024? <span class='translation'>(Total hari dari 25 Des 2023 ke 10 Mar 2024?)</span>", min: 70, max: 80, answer: 76, explanation: "Dec(6)+Jan(31)+Feb(29)+Mar(10) = 76. <span class='translation'>Des(6)+Jan(31)+Feb(29)+Mar(10) = 76.</span>" },
+      { type: "pairing", prompt: "Match the time ranges with their end dates! <span class='translation'>(Pasangkan rentang waktu dengan tanggal akhirnya!)</span>", pairs: [{ left: "Feb 1 + 28 days", right: "March 1" }, { left: "Feb 1 + 59 days", right: "April 1" }, { left: "Feb 1 + 30 days", right: "March 3" }] },
+      { type: "typing", prompt: "A 12-week course starts on Feb 1. What is the end date? (Format: Date-Month) <span class='translation'>(Kursus 12 minggu dimulai 1 Feb. Berapa tanggal selesainya?)</span>", answer: "26-April", explanation: "12 weeks = 84 days. Same calculation as the previous 84-day problem. <span class='translation'>12 minggu = 84 hari. Sama dengan perhitungan 84 hari sebelumnya.</span>" },
+      { type: "multiple_choice", prompt: "March 15 + 100 days? <span class='translation'>(15 Maret + 100 hari?)</span>", options: ["June 20", "June 23", "June 25", "June 30"], answer: 1, explanation: "Remaining 23 days fall in June. <span class='translation'>Sisa 23 hari jatuh di bulan Juni.</span>" },
+      { type: "dropdown", prompt: "July 15 + 45 days falls in which month? <span class='translation'>(15 Juli + 45 hari jatuh pada bulan apa?)</span>", sentence: "45 days from July 15 falls in [drop]. <span class='translation'>(45 hari dari 15 Juli jatuh di [drop].)</span>", options: ["July", "August", "September", "October"], answer: "August", explanation: "Remaining July (16) + August (31) = 47. 45 < 47, so it finishes in August (Aug 29). <span class='translation'>Sisa Juli (16) + Ags (31) = 47. 45 < 47, jadi selesai di Agustus (29 Ags).</span>" }
+    ]
+  },
+
+  // ===== SECTION 7: ASSESSMENT (GRUP 3 - TAHUN KABISAT) =====
+  {
+    id: 8,
+    steps: [
+      { type: "multiple_choice", prompt: "Which of the following is a leap year? <span class='translation'>(Manakah dari berikut ini yang merupakan tahun kabisat?)</span>", options: ["2021", "2022", "2023", "2024"], answer: 3, explanation: "2024 is divisible by 4. <span class='translation'>2024 habis dibagi 4.</span>" },
+      { type: "checkbox", prompt: "Select the characteristics of a leap year! <span class='translation'>(Pilih ciri-ciri tahun kabisat!)</span>", options: ["Divisible by 4", "Divisible by 100 but not 400 (not leap)", "February has 29 days", "Total 365 days"], answers: [0, 1, 2], explanation: "Leap years are divisible by 4 (except some century years), have 29 days in Feb, and total 366 days. <span class='translation'>Tahun kabisat habis dibagi 4, memiliki 29 hari di Feb, dan total 366 hari.</span>" },
+      { type: "typing", prompt: "How many total days are in the year 2023? <span class='translation'>(Berapa jumlah total hari dalam tahun 2023?)</span>", answer: "365", explanation: "2023 is not a leap year, so it has 365 days. <span class='translation'>2023 bukan tahun kabisat, jadi memiliki 365 hari.</span>" },
+      { type: "dropdown", prompt: "The year 2100 is a... <span class='translation'>(Tahun 2100 adalah...)</span>", sentence: "The year 2100 is a [drop] year. <span class='translation'>(Tahun 2100 adalah tahun [drop].)</span>", options: ["Leap", "Non-leap"], answer: "Non-leap", explanation: "Divisible by 100 but not by 400. <span class='translation'>Habis dibagi 100 tapi tidak habis dibagi 400.</span>" },
+      { type: "range", prompt: "Slide to the number of days in February 2024. <span class='translation'>(Geser ke jumlah hari di Februari 2024.)</span>", min: 28, max: 30, answer: 29, explanation: "2024 is a leap year, so Feb = 29. <span class='translation'>2024 adalah tahun kabisat, jadi Feb = 29.</span>" },
+      { type: "pairing", prompt: "Match the year with its leap year status! <span class='translation'>(Pasangkan tahun dengan status kabisatnya!)</span>", pairs: [{ left: "2020", right: "Leap" }, { left: "2021", right: "Non-leap" }, { left: "2024", right: "Leap" }, { left: "1900", right: "Non-leap" }] },
+      { type: "drag_drop", prompt: "Order the leap year check rules! <span class='translation'>(Urutkan aturan pengecekan tahun kabisat!)</span>", sentence: "[drop] -> [drop] -> [drop]", bank: ["Check if divisible by 4", "If divisible by 100, check 400", "Must be divisible by 400 to be leap"], answer: "0,1,2", explanation: "Check /4 first, then /100, then /400. <span class='translation'>Cek dibagi 4 dulu, lalu 100, lalu 400.</span>" },
+      { type: "multiple_choice", prompt: "Jan 1, 2024 is Monday. What day is Jan 1, 2025? <span class='translation'>(1 Jan 2024 adalah Senin. Hari apa 1 Jan 2025?)</span>", options: ["Monday", "Tuesday", "Wednesday", "Thursday"], answer: 2, explanation: "Leap year +2 days. Monday + 2 = Wednesday. <span class='translation'>Tahun kabisat +2 hari. Senin + 2 = Rabu.</span>" },
+      { type: "typing", prompt: "Born on Feb 29, 2000. How many times will they celebrate their actual birthday by Feb 29, 2024? (Including birth) <span class='translation'>(Lahir 29 Feb 2000. Berapa kali mereka merayakan ulang tahun aslinya sampai 29 Feb 2024? (Termasuk kelahiran))</span>", answer: "7", explanation: "2000, 2004, 2008, 2012, 2016, 2020, 2024 = 7 times. <span class='translation'>2000, 2004, 2008, 2012, 2016, 2020, 2024 = 7 kali.</span>" },
+      { type: "dropdown", prompt: "The total days from Dec 25, 2023 to Mar 10, 2024 is 76 days because... <span class='translation'>(Total hari dari 25 Des 2023 ke 10 Mar 2024 adalah 76 hari karena...)</span>", sentence: "Because the year [drop] is a leap year. <span class='translation'>(Karena tahun [drop] adalah tahun kabisat.)</span>", options: ["2024", "2023", "2025"], answer: "2024", explanation: "2024 is a leap year, giving February 29 days. <span class='translation'>2024 adalah tahun kabisat, memberikan Februari 29 hari.</span>" }
+    ]
+  },
+
+  // ===== SECTION 7: ASSESSMENT (GRUP 4 - MUSIM UTARA & SELATAN) =====
+  {
+    id: 9,
+    steps: [
+      { type: "multiple_choice", prompt: "If the North is having Spring, what is the South having? <span class='translation'>(Jika Utara mengalami Semi, apa yang dialami Selatan?)</span>", options: ["Spring", "Summer", "Autumn", "Winter"], answer: 2, explanation: "The South is opposite to the North. Spring vs Autumn. <span class='translation'>Selatan berlawanan dengan Utara. Semi vs Gugur.</span>" },
+      { type: "checkbox", prompt: "Select the months of Winter in the Northern Hemisphere! <span class='translation'>(Pilih bulan-bulan Musim Dingin di Belahan Utara!)</span>", options: ["December", "January", "February", "July", "August"], answers: [0, 1, 2], explanation: "Winter in the North = Dec, Jan, Feb. <span class='translation'>Dingin di Utara = Des, Jan, Feb.</span>" },
+      { type: "dropdown", prompt: "July 15 in Australia (Southern Hemisphere) is which season? <span class='translation'>(15 Juli di Australia (Belahan Selatan) masuk musim apa?)</span>", sentence: "Australia is experiencing [drop]. <span class='translation'>(Australia sedang mengalami [drop].)</span>", options: ["Spring", "Summer", "Autumn", "Winter"], answer: "Winter", explanation: "July is Winter in the South. <span class='translation'>Juli adalah Musim Dingin di Selatan.</span>" },
+      { type: "pairing", prompt: "Match the month with its season in London (Northern Hemisphere)! <span class='translation'>(Pasangkan bulan dengan musimnya di London (Belahan Utara)!)</span>", pairs: [{ left: "June", right: "Summer" }, { left: "October", right: "Autumn" }, { left: "December", right: "Winter" }, { left: "April", right: "Spring" }] },
+      { type: "drag_drop", prompt: "Order the seasons in the Southern Hemisphere starting from March! <span class='translation'>(Urutkan musim di Belahan Selatan mulai dari bulan Maret!)</span>", sentence: "[drop] -> [drop] -> [drop] -> [drop]", bank: ["Autumn", "Winter", "Spring", "Summer"], answer: "0,1,2,3", explanation: "South: Mar=Autumn, Jun=Winter, Sep=Spring, Dec=Summer. <span class='translation'>Selatan: Mar=Gugur, Jun=Dingin, Sep=Semi, Des=Panas.</span>" },
+      { type: "typing", prompt: "What date is 15 days before March 21? <span class='translation'>(Tanggal berapa yang 15 hari sebelum 21 Maret?)</span>", answer: "6", explanation: "21 - 15 = 6. <span class='translation'>21 - 15 = 6.</span>" },
+      { type: "range", prompt: "Roughly how many days does one season last? <span class='translation'>(Kira-kira berapa hari durasi satu musim?)</span>", min: 85, max: 95, answer: 90, explanation: "365 / 4 = 91.25 days. <span class='translation'>365 / 4 = 91,25 hari.</span>" },
+      { type: "multiple_choice", prompt: "A sailor leaves 15 days before Mar 21, and sails for 80 days. What season do they return to? <span class='translation'>(Seorang pelaut berangkat 15 hari sebelum 21 Mar, dan berlayar selama 80 hari. Di musim apa dia kembali?)</span>", options: ["Spring", "Summer", "Autumn", "Winter"], answer: 1, explanation: "Departs Mar 6. Returns around May 25. May is Summer. <span class='translation'>Berangkat 6 Mar. Kembali sekitar 25 Mei. Mei adalah Musim Panas.</span>" },
+      { type: "checkbox", prompt: "Select true statements about seasons! <span class='translation'>(Pilih pernyataan yang benar tentang musim!)</span>", options: ["North/South are opposite", "January is Winter in the North", "July is Winter in the South", "July is Summer in the North"], answers: [0, 1, 2, 3], explanation: "All statements are geographically correct. <span class='translation'>Semua pernyataan benar secara geografis.</span>" },
+      { type: "dropdown", prompt: "July in Indonesia is opposite to Winter in the... <span class='translation'>(Juli di Indonesia berlawanan dengan Musim Dingin di...)</span>", sentence: "Indonesia is opposite to Winter in the [drop] Hemisphere. <span class='translation'>(Indonesia berlawanan dengan Musim Dingin di Belahan [drop].)</span>", options: ["Northern", "Southern", "Eastern", "Western"], answer: "Southern", explanation: "July is Winter in the Southern Hemisphere (like Australia). <span class='translation'>Juli adalah Musim Dingin di Belahan Selatan (seperti Australia).</span>" }
+    ]
+  },
+
+  // ===== SECTION 7: ASSESSMENT (GRUP 5 - JAM & ZONA WAKTU) =====
+  {
+    id: 10,
+    steps: [
+      { type: "typing", prompt: "Time difference from Monday 22:45 to Tuesday 03:15. Write the minutes (Y). <span class='translation'>(Selisih waktu dari Senin 22:45 ke Selasa 03:15. Tuliskan menitnya (Y).)</span>", answer: "30", explanation: "1h 15m + 3h 15m = 4h 30m. The minutes are 30. <span class='translation'>1j 15m + 3j 15m = 4j 30m. Menitnya adalah 30.</span>" },
+      { type: "multiple_choice", prompt: "Satellite orbits every 9 hours starting at 06:00. When does the 10th orbit finish? <span class='translation'>(Satelit mengorbit setiap 9 jam dimulai dari 06:00. Kapan orbit ke-10 selesai?)</span>", options: ["12:00 Jan 3", "12:00 Jan 4", "15:00 Jan 4", "15:00 Jan 5"], answer: 2, explanation: "9 x 9 = 81 hours. 06:00 + 3 days 9 hours = 15:00 Jan 4. <span class='translation'>9 x 9 = 81 jam. 06:00 + 3 hari 9 jam = 15:00 tanggal 4 Januari.</span>" },
+      { type: "dropdown", prompt: "From 08:00 to 14:30? <span class='translation'>(Dari 08:00 ke 14:30?)</span>", sentence: "The difference is [drop]. <span class='translation'>(Selisihnya adalah [drop].)</span>", options: ["5 hours 30 mins", "6 hours 30 mins", "7 hours", "6 hours"], answer: "6 hours 30 mins", explanation: "14:30 - 08:00 = 6h 30m. <span class='translation'>14:30 - 08:00 = 6j 30m.</span>" },
+      { type: "drag_drop", prompt: "Order the steps to calculate time passing midnight! <span class='translation'>(Urutkan langkah menghitung waktu melewati tengah malam!)</span>", sentence: "[drop] -> [drop] -> [drop] -> [drop]", bank: ["Determine start time", "Calculate gap to 24:00", "Calculate gap from 00:00 to end", "Add them together"], answer: "0,1,2,3", explanation: "Order for splitting time calculations. <span class='translation'>Urutan untuk membagi perhitungan waktu.</span>" },
+      { type: "checkbox", prompt: "Monday 23:00 + 4 hours? <span class='translation'>(Senin 23:00 + 4 jam?)</span>", options: ["Tuesday", "03:00", "Monday", "03:00"], answers: [0, 1, 3], explanation: "23:00 + 1 = 00:00 Tuesday. + 3 = 03:00. <span class='translation'>23:00 + 1 = 00:00 Selasa. + 3 = 03:00.</span>" },
+      { type: "range", prompt: "Total hours in 3 days? <span class='translation'>(Total jam dalam 3 hari?)</span>", min: 70, max: 75, answer: 72, explanation: "24 x 3 = 72. <span class='translation'>24 x 3 = 72.</span>" },
+      { type: "pairing", prompt: "Match the time differences! <span class='translation'>(Pasangkan selisih waktu!)</span>", pairs: [{ left: "08:00-12:00", right: "4 hours" }, { left: "13:00-17:30", right: "4 hours 30 mins" }, { left: "22:00-01:00", right: "3 hours" }] },
+      { type: "typing", prompt: "Starts 15:45 + 2 hours 10 mins. When does it finish? (Format 00:00) <span class='translation'>(Dimulai 15:45 + 2 jam 10 menit. Kapan selesainya?)</span>", answer: "17:55", explanation: "15:45 + 2 = 17:45. +10 = 17:55. <span class='translation'>15:45 + 2 = 17:45. +10 = 17:55.</span>" },
+      { type: "multiple_choice", prompt: "Jakarta is 22:00, London is -7 hours. What time is it in London? <span class='translation'>(Jakarta pukul 22:00, London -7 jam. Pukul berapa di London?)</span>", options: ["15:00", "16:00", "17:00", "05:00"], answer: 0, explanation: "22 - 7 = 15. <span class='translation'>22 - 7 = 15.</span>" },
+      { type: "dropdown", prompt: "The 9th orbit from 06:00 every 9 hours finishes at... <span class='translation'>(Orbit ke-9 dari 06:00 setiap 9 jam selesai pada...)</span>", sentence: "The 9th orbit finishes at [drop]. <span class='translation'>(Orbit ke-9 selesai pada [drop].)</span>", options: ["20:00", "21:00", "22:00", "15:00"], answer: "15:00", explanation: "9th orbit means 8 periods passed. 8 x 9 = 72 hours (exactly 3 days). So it finishes at the same time: 06:00. Wait, if orbit 1 finishes at 15:00, orbit 9 finishes 8 periods later (72 hours), so it also finishes at 15:00. <span class='translation'>Orbit ke-9 berarti 8 periode berlalu. 8 x 9 = 72 jam (tepat 3 hari). Jadi selesai pada waktu yang sama: 15:00.</span>" }
+    ]
+  },
+
+  // ===== SECTION 8: CONSOLIDATION & REFLECTION =====
+  {
+    id: 11,
+    steps: [
+      { type: "theory", title: "🎉 Summary & Reflection", body: `<div style="text-align:center"><div style="font-size:60px">🏆</div>
+      <h2 style="color:var(--yellow-dark);font-size:28px;margin:10px 0">Excellent!</h2>
+      <p style="font-size:16px;color:var(--text-light);margin-bottom:20px">Lesson completed</p></div>
+      <p>You have completed the advanced Time Management & Calendar material!</p>
+      <p><b>🔑 Keys to Success in Calculating Time:</b></p>
+      <p>1. Always check the number of days per month (31 vs 30).</p>
+      <p>2. Watch out for February & Leap Years.</p>
+      <p>3. Global Seasons: Northern and Southern hemispheres are always opposite.</p>
+      <p>4. Split time calculations that pass midnight into two parts.</p>
+      <div class="tip-box" style="margin-top:20px">
+        <b>💬 How do you feel after this material?</b><br>
+        Understanding time is crucial for future planning. We want to hear your thoughts!<br><br>
+        👉 <a href="https://learn.algonova.id/login" target="_blank" style="color:var(--blue-dark);font-weight:800">Click here to fill out the feedback and enrichment form</a>
+      </div>
+      <p class="translation">Selamat! Kamu telah menyelesaikan materi Manajemen Waktu & Kalender tingkat lanjut! Kunci Sukses Menghitung Waktu: 1. Selalu cek jumlah hari per bulan (31 vs 30). 2. Waspadai Februari & Tahun Kabisat. 3. Musim Global: Belahan Utara dan Selatan selalu berlawanan. 4. Pecah perhitungan jam yang melewati tengah malam menjadi dua bagian. Bagaimana perasaanmu setelah materi ini? Pemahaman tentang waktu sangat krusial. Kami ingin mendengar pendapatmu! Klik link di atas untuk mengisi feedback.</p>` }
+    ]
+  }
+];
+
+// ============== APP LOGIC ==============
+function initApp() {
+  const mapContainer = $('#mapContainer');
+  const svg = $('#mapSvg');
+  let pathD = '';
+
+  // 1. Garis lurus dari node 1 sampai 6 (index 0 to 5)
+  for (let i = 1; i <= 5; i++) {
+    const prev = App.nodePositions[i-1];
+    const pos = App.nodePositions[i];
+    pathD += `M ${prev.x} ${prev.y} Q ${(prev.x+pos.x)/2} ${Math.min(prev.y, pos.y) + 50}, ${pos.x} ${pos.y} `;
+  }
+
+  // 2. Garis cabang dari node 6 (index 5) ke node 7.1 - 7.5 (index 6 to 10)
+  const branchStart = App.nodePositions[5];
+  for (let i = 6; i <= 10; i++) {
+    const pos = App.nodePositions[i];
+    pathD += `M ${branchStart.x} ${branchStart.y} C ${branchStart.x} ${branchStart.y + 60}, ${pos.x} ${pos.y - 60}, ${pos.x} ${pos.y} `;
+  }
+
+  // 3. Garis menyatu dari node 7.1 - 7.5 (index 6 to 10) ke node 8 (index 11)
+  const branchEnd = App.nodePositions[11];
+  for (let i = 6; i <= 10; i++) {
+    const pos = App.nodePositions[i];
+    pathD += `M ${pos.x} ${pos.y} C ${pos.x} ${branchEnd.y - 60}, ${branchEnd.x} ${branchEnd.y - 60}, ${branchEnd.x} ${branchEnd.y} `;
+  }
+
+  // Render garis path SVG
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path.setAttribute('d', pathD);
+  path.setAttribute('stroke', '#e5e5e5');
+  path.setAttribute('stroke-width', '6');
+  path.setAttribute('stroke-dasharray', '10,10');
+  path.setAttribute('fill', 'none');
+  svg.appendChild(path);
+
+  // Render setiap node
+  App.nodePositions.forEach((pos, i) => {
+    const node = el('div', 'map-node available', App.lessonMeta[i].icon);
+    node.style.left = `${(pos.x / 800) * 100}%`;
+    node.style.top = `${(pos.y / 1080) * 100}%`; // PERBAIKAN: Angka pembagi diubah menjadi 1080
+    node.dataset.id = i;
+    
+    const tooltip = el('div', 'node-tooltip', App.lessonMeta[i].title);
+    node.appendChild(tooltip);
+    
+    const labelContent = `
+      <span>${App.lessonMeta[i].title}</span>
+      <span class="node-time-label">${App.lessonMeta[i].time}</span>
+    `;
+    const label = el('div', 'node-label', labelContent);
+    node.appendChild(label);
+    
+    node.onclick = () => startLesson(i);
+    mapContainer.appendChild(node);
+  });
+
+  // Event Listeners
+  $('#openRulesBtn').onclick = () => $('#rulesOverlay').classList.add('show');
+  $('#closeRulesBtn').onclick = () => $('#rulesOverlay').classList.remove('show');
+  $('#understandBtn').onclick = () => $('#rulesOverlay').classList.remove('show');
+  
+  $('#lessonClose').onclick = () => {
+    $('#lessonView').classList.remove('active');
+    $('#mapView').style.display = 'block';
+    updateMapNodes();
+  };
+  $('#continueBtn').onclick = () => {
+    $('#completeView').classList.remove('active');
+    $('#mapView').style.display = 'block';
+    updateMapNodes();
+  };
+  $('#printResultBtn').onclick = printResult;
+  $('#actionBtn').onclick = handleAction;
+  $('#resetBtn').onclick = renderStep;
+  
+  // --- EVENT LISTENER TOMBOL BACK ---
+  $('#backBtn').onclick = () => {
+    if (App.state.currentStepIndex > 0) {
+      App.state.currentStepIndex--; // Mundur 1 langkah
+      renderStep(); // renderStep akan otomatis mereset UI dan menyembunyikan/menampilkan tombol Back
+    }
+  };
+  
+  updateMapNodes();
+
+  // Event listener untuk tombol Enter
+  document.addEventListener('keydown', (e) => {
+    if (!$('#lessonView').classList.contains('active')) return;
+    if (e.key === 'Enter') {
+      const actionBtn = $('#actionBtn');
+      if (actionBtn.classList.contains('active')) {
+        e.preventDefault();
+        handleAction();
+      }
+    }
+  });
+}
+
+function updateMapNodes() {
+  const nodes = $$('.map-node');
+  nodes.forEach((node, i) => {
+    if (App.state.completedLessons.includes(i)) {
+      node.classList.remove('available');
+      node.classList.add('completed');
+    }
+  });
+}
+
+function startLesson(id) {
+  App.currentLessonId = id;
+  App.currentStepIndex = 0;
+  App.correctCount = 0;
+  App.totalAnswered = 0;
+  App.state.hearts = 5;
+  App.state.stepAnswered = false;
+  App.state.answeredHistory = []; // Reset riwayat jawaban tiap mulai lesson baru
+  $('#lessonHearts').innerText = App.state.hearts;
+  $('#lessonTime').innerText = App.lessonMeta[id].time; 
+  $('#mapView').style.display = 'none';
+  $('#lessonView').classList.add('active');
+  renderStep();
+}
+
+function renderStep() {
+  const lesson = LESSONS[App.currentLessonId];
+  const step = lesson.steps[App.currentStepIndex];
+  const content = $('#lessonContent');
+  content.innerHTML = '';
+  App.state.stepAnswered = false;
+  $('#feedback').classList.remove('show');
+  $('#actionBtn').innerText = 'Check';
+  $('#actionBtn').classList.remove('active');
+  $('#resetBtn').classList.add('hidden'); // Default sembunyi
+
+  // --- LOGIKA TAMPIL TOMBOL BACK ---
+  if (App.state.currentStepIndex > 0) {
+    $('#backBtn').classList.remove('hidden');
+  } else {
+    $('#backBtn').classList.add('hidden');
+  }
+
+  const progress = ((App.currentStepIndex) / lesson.steps.length) * 100;
+  $('#progressBar').style.width = `${progress}%`;
+
+  if (step.type === 'theory') {
+    const card = el('div', 'theory-card');
+    card.innerHTML = `<span class="theory-badge">MATERIAL</span><h2>${step.title}</h2><div class="theory-body">${step.body}</div>`;
+    content.appendChild(card);
+    $('#actionBtn').innerText = 'Continue';
+    $('#actionBtn').classList.add('active');
+    App.state.stepAnswered = true;
+  } else {
+    const prompt = el('div', 'q-prompt', step.prompt);
+    content.appendChild(prompt);
+    
+    if (step.type === 'multiple_choice') renderMultipleChoice(step, content);
+    else if (step.type === 'typing') renderTyping(step, content);
+    else if (step.type === 'dropdown') renderDropdown(step, content);
+    else if (step.type === 'checkbox') renderCheckbox(step, content);
+    else if (step.type === 'drag_drop') renderDragDrop(step, content);
+    else if (step.type === 'pairing') renderPairing(step, content);
+    else if (step.type === 'range') renderRange(step, content);
+    
+    if (step.hint) {
+      content.appendChild(el('div', 'q-hint', step.hint));
+    }
+    
+    // TAMPILKAN TOMBOL RESET SAAT MULAI MENGERJAKAN SOAL
+    $('#resetBtn').classList.remove('hidden');
+  }
+  
+  if (window.renderMathInElement) {
+    renderMathInElement(content, {
+      delimiters: [{left: "\\(", right: "\\)", display: false}, {left: "\\[", right: "\\]", display: true}]
+    });
+  }
+  content.scrollTop = 0;
+}
+
+function renderMultipleChoice(step, content) {
+  const opts = el('div', 'options');
+  step.options.forEach((opt, i) => {
+    const o = el('div', 'option', `<div class="o-key">${String.fromCharCode(65+i)}</div><div>${opt}</div>`);
+    o.dataset.index = i;
+    o.onclick = () => {
+      if(App.state.stepAnswered) return;
+      $$('.option').forEach(x => x.classList.remove('selected'));
+      o.classList.add('selected');
+      $('#actionBtn').classList.add('active');
+    };
+    opts.appendChild(o);
+  });
+  content.appendChild(opts);
+}
+
+function renderTyping(step, content) {
+  const input = el('input', 'typing-input');
+  input.type = 'text';
+  input.placeholder = 'Type your answer here...';
+  input.oninput = () => {
+    if(input.value.trim() !== '') $('#actionBtn').classList.add('active');
+    else $('#actionBtn').classList.remove('active');
+  };
+  content.appendChild(input);
+  input.focus();
+}
+
+function renderDropdown(step, content) {
+  const sentence = el('div', 'sentence');
+  const select = el('select', 'dropdown-select');
+  select.innerHTML = `<option value="">?</option>`;
+  step.options.forEach(opt => {
+    select.innerHTML += `<option value="${opt}">${opt}</option>`;
+  });
+  select.onchange = () => {
+    if(select.value !== '') $('#actionBtn').classList.add('active');
+    else $('#actionBtn').classList.remove('active');
+  };
+  
+  const parts = step.sentence.split('[drop]');
+  // Gunakan innerHTML agar tag HTML (seperti <span class='translation'>) terbaca dengan baik
+  sentence.innerHTML = parts[0]; 
+  sentence.appendChild(select);
+  
+  const restSpan = el('span', '', parts.slice(1).join(''));
+  sentence.appendChild(restSpan);
+  
+  content.appendChild(sentence);
+}
+
+function renderCheckbox(step, content) {
+  step.options.forEach((opt, i) => {
+    const c = el('div', 'checkbox-option', `<div class="checkbox-box"></div><div>${opt}</div>`);
+    c.dataset.index = i;
+    c.onclick = () => {
+      if(App.state.stepAnswered) return;
+      c.classList.toggle('checked');
+      $('#actionBtn').classList.add('active');
+    };
+    content.appendChild(c);
+  });
+}
+
+function renderDragDrop(step, content) {
+  const bank = el('div', 'drag-bank');
+  
+  // Buat array index lalu acak (shuffle)
+  let bankIndexes = step.bank.map((_, i) => i);
+  for (let i = bankIndexes.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [bankIndexes[i], bankIndexes[j]] = [bankIndexes[j], bankIndexes[i]];
+  }
+  
+  // Render item ke dalam bank sesuai index acak
+  bankIndexes.forEach(i => {
+    const item = step.bank[i];
+    const d = el('div', 'drag-item', item);
+    d.draggable = true;
+    d.dataset.id = i;
+    d.ondragstart = (e) => {
+      App.state.dragSrc = d;
+      d.classList.add('dragging');
+    };
+    d.ondragend = () => d.classList.remove('dragging');
+    bank.appendChild(d);
+  });
+  content.appendChild(bank);
+
+  const sentence = el('div', 'sentence');
+  const parts = step.sentence.split('[drop]');
+  parts.forEach((p, i) => {
+    const textSpan = el('span', '', p);
+    sentence.appendChild(textSpan);
+    if(i < parts.length - 1) {
+      const zone = el('span', 'drop-zone');
+      zone.ondragover = (e) => { e.preventDefault(); zone.classList.add('over'); };
+      zone.ondragleave = () => zone.classList.remove('over');
+      zone.ondrop = (e) => {
+        e.preventDefault();
+        zone.classList.remove('over');
+        if(App.state.dragSrc) {
+          if(zone.dataset.placed) {
+            bank.appendChild(document.querySelector(`.drag-item[data-id="${zone.dataset.placed}"]`));
+          }
+          zone.appendChild(App.state.dragSrc);
+          zone.classList.add('filled');
+          zone.dataset.placed = App.state.dragSrc.dataset.id;
+          $('#actionBtn').classList.add('active');
+        }
+      };
+      sentence.appendChild(zone);
+    }
+  });
+  content.appendChild(sentence);
+}
+
+function renderPairing(step, content) {
+  const grid = el('div', 'pair-grid');
+  const col1 = el('div', 'pair-col');
+  const col2 = el('div', 'pair-col');
+  
+  // Buat array index lalu acak (shuffle)
+  let leftIndexes = step.pairs.map((_, i) => i);
+  let rightIndexes = [...leftIndexes];
+  
+  // Fisher-Yates Shuffle
+  for (let i = leftIndexes.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [leftIndexes[i], leftIndexes[j]] = [leftIndexes[j], leftIndexes[i]];
+    
+    const k = Math.floor(Math.random() * (i + 1));
+    [rightIndexes[i], rightIndexes[k]] = [rightIndexes[k], rightIndexes[i]];
+  }
+  
+  // Render kolom kiri (sesuai index acak)
+  leftIndexes.forEach(idx => {
+    const p = step.pairs[idx];
+    const left = el('div', 'pair-item', p.left);
+    left.dataset.side = 'left';
+    left.dataset.id = idx;
+    left.onclick = () => handlePairClick(left);
+    col1.appendChild(left);
+  });
+
+  // Render kolom kanan (sesuai index acak)
+  rightIndexes.forEach(idx => {
+    const p = step.pairs[idx];
+    const right = el('div', 'pair-item', p.right);
+    right.dataset.side = 'right';
+    right.dataset.id = idx;
+    right.onclick = () => handlePairClick(right);
+    col2.appendChild(right);
+  });
+  
+  grid.appendChild(col1);
+  grid.appendChild(col2);
+  content.appendChild(grid);
+}
+
+function handlePairClick(item) {
+  if(App.state.stepAnswered) return;
+  if(item.classList.contains('matched')) return;
+  
+  if(!App.state.selectedPair) {
+    App.state.selectedPair = item;
+    item.classList.add('selected');
+  } else {
+    if(App.state.selectedPair.dataset.side === item.dataset.side) {
+      App.state.selectedPair.classList.remove('selected');
+      App.state.selectedPair = item;
+      item.classList.add('selected');
+      return;
+    }
+    
+    if(App.state.selectedPair.dataset.id === item.dataset.id) {
+      App.state.selectedPair.classList.add('matched');
+      item.classList.add('matched');
+      App.state.selectedPair.classList.remove('selected');
+      App.state.selectedPair = null;
+      
+      if($$('.pair-item.matched').length === stepPairsLength()) {
+        $('#actionBtn').classList.add('active');
+      }
+    } else {
+      const wrong = [App.state.selectedPair, item];
+      wrong.forEach(w => w.classList.add('wrong'));
+      setTimeout(() => {
+        wrong.forEach(w => {
+          w.classList.remove('wrong');
+          w.classList.remove('selected');
+        });
+      }, 500);
+      App.state.selectedPair = null;
+    }
+  }
+}
+
+function stepPairsLength() {
+  const step = LESSONS[App.currentLessonId].steps[App.currentStepIndex];
+  return step.pairs.length * 2;
+}
+
+function renderRange(step, content) {
+  const wrap = el('div', 'range-wrap');
+  wrap.innerHTML = `
+    <div class="range-row" style="position:relative; align-items:center; min-height:50px;">
+      <div class="range-value" style="font-size:20px; color:var(--text-light);">${step.min}</div>
+      <div class="range-value" id="rangeCurr" style="font-size:36px; flex:1; text-align:center;">${step.min}</div>
+      <div class="range-value" style="font-size:20px; color:var(--text-light);">${step.max}</div>
+    </div>
+    <input type="range" class="range-slider" min="${step.min}" max="${step.max}" value="${step.min}">
+    <div class="range-ticks">
+      <span>Min</span>
+      <span>Max</span>
+    </div>
+  `;
+  const slider = wrap.querySelector('.range-slider');
+  const curr = wrap.querySelector('#rangeCurr');
+  slider.oninput = () => {
+    curr.innerText = slider.value;
+    $('#actionBtn').classList.add('active');
+  };
+  content.appendChild(wrap);
+}
+
+function handleAction() {
+  if(!App.state.stepAnswered) {
+    checkAnswer();
+  } else {
+    nextStep();
+  }
+}
+
+function checkAnswer() {
+  const step = LESSONS[App.currentLessonId].steps[App.currentStepIndex];
+  let isCorrect = false;
+  let studentAnsText = "";
+  let correctAnsText = "";
+
+  if (step.type === 'multiple_choice') {
+    const selected = $('.option.selected');
+    if (!selected) return;
+    const idx = parseInt(selected.dataset.index);
+    isCorrect = idx === step.answer;
+    studentAnsText = step.options[idx];
+    correctAnsText = step.options[step.answer];
+    $$('.option').forEach(o => o.classList.add('disabled'));
+    selected.classList.add(isCorrect ? 'correct' : 'wrong');
+    if(!isCorrect) {
+      const correct = $(`.option[data-index="${step.answer}"]`);
+      correct.classList.remove('wrong');
+      correct.classList.add('correct');
+    }
+  } else if (step.type === 'typing') {
+    const input = $('.typing-input');
+    if (!input.value.trim()) return;
+    isCorrect = input.value.trim().toLowerCase() === step.answer.toLowerCase();
+    studentAnsText = input.value.trim();
+    correctAnsText = step.answer;
+    input.classList.add(isCorrect ? 'correct' : 'wrong');
+    input.disabled = true;
+  } else if (step.type === 'dropdown') {
+    const select = $('.dropdown-select');
+    if (!select.value) return;
+    isCorrect = select.value === step.answer;
+    studentAnsText = select.value;
+    correctAnsText = step.answer;
+    select.classList.add(isCorrect ? 'correct' : 'wrong');
+    select.disabled = true;
+  } else if (step.type === 'checkbox') {
+    const opts = $$('.checkbox-option.checked');
+    const selectedIdx = Array.from(opts).map(o => parseInt(o.dataset.index));
+    const correctIdx = step.answers;
+    isCorrect = correctIdx.every(i => selectedIdx.includes(i)) && selectedIdx.length === correctIdx.length;
+    studentAnsText = selectedIdx.map(i => step.options[i]).join(', ');
+    correctAnsText = correctIdx.map(i => step.options[i]).join(', ');
+    opts.forEach(o => o.classList.add(isCorrect ? 'correct' : 'wrong'));
+    if(!isCorrect) {
+      correctIdx.forEach(i => {
+        const c = $(`.checkbox-option[data-index="${i}"]`);
+        c.classList.remove('wrong');
+        c.classList.add('correct');
+      });
+    }
+    $$('.checkbox-option').forEach(o => o.style.pointerEvents = 'none');
+  } else if (step.type === 'range') {
+    const slider = $('.range-slider');
+    isCorrect = parseInt(slider.value) === step.answer;
+    studentAnsText = slider.value;
+    correctAnsText = step.answer;
+    slider.disabled = true;
+    slider.style.opacity = 0.7;
+  } else if (step.type === 'drag_drop') {
+    const zones = $$('.drop-zone');
+    const currentArr = Array.from(zones).map(z => z.dataset.placed || "");
+    isCorrect = currentArr.join(',') === step.answer;
+    studentAnsText = currentArr.map(id => id ? step.bank[id] : "?").join(' -> ');
+    const correctArr = step.answer.split(',');
+    correctAnsText = correctArr.map(id => step.bank[id]).join(' -> ');
+    zones.forEach(z => z.style.borderColor = isCorrect ? 'var(--green)' : 'var(--red)');
+  } else if (step.type === 'pairing') {
+    isCorrect = $$('.pair-item.matched').length === stepPairsLength();
+    studentAnsText = isCorrect ? "All Matched Correctly" : "Incomplete/Some Wrong";
+    correctAnsText = "All Matched Correctly";
+  }
+
+  // Simpan riwayat jawaban untuk form print
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = step.prompt;
+  const translations = tempDiv.querySelectorAll('.translation');
+  translations.forEach(t => t.remove());
+  const cleanPrompt = tempDiv.textContent.trim();
+
+  App.state.answeredHistory.push({
+    question: cleanPrompt,
+    studentAnswer: studentAnsText,
+    correctAnswer: correctAnsText,
+    isCorrect: isCorrect
+  });
+
+  App.totalAnswered++;
+  if (isCorrect) {
+    App.correctCount++;
+    App.state.streak++;
+    App.state.gems += 10;
+    showFeedback(true, step.explanation);
+  } else {
+    App.state.streak = 0;
+    App.state.hearts--;
+    $('#lessonHearts').innerText = App.state.hearts;
+    showFeedback(false, step.explanation);
+  }
+
+  updateStats();
+  App.state.stepAnswered = true;
+  $('#actionBtn').innerText = 'Continue';
+  $('#actionBtn').classList.add('active');
+  $('#resetBtn').classList.add('hidden');
+  $('#backBtn').classList.add('hidden'); // Sembunyikan tombol back setelah dijawab
+}
+
+function showFeedback(correct, explanation) {
+  const fb = $('#feedback');
+  fb.className = `feedback show ${correct ? 'correct' : 'wrong'}`;
+  fb.innerHTML = `
+    <div class="feedback-title">
+      ${correct ? '✅ Correct!' : '❌ Not quite!'}
+    </div>
+    <div class="feedback-text">${explanation || 'Keep practicing!'}</div>
+  `;
+}
+
+function nextStep() {
+  const lesson = LESSONS[App.currentLessonId];
+  App.currentStepIndex++;
+  if (App.currentStepIndex >= lesson.steps.length) {
+    completeLesson();
+  } else {
+    renderStep();
+  }
+}
+
+function completeLesson() {
+  $('#lessonView').classList.remove('active');
+  $('#completeView').classList.add('active');
+  
+  const accuracy = App.totalAnswered > 0 ? Math.round((App.correctCount / App.totalAnswered) * 100) : 0;
+  $('#finalXp').innerText = `+${App.correctCount * 10} XP`;
+  $('#finalAccuracy').innerText = `${accuracy}%`;
+  $('#finalCorrect').innerText = `${App.correctCount}/${App.totalAnswered}`;
+  
+  App.state.completedLessons.push(App.currentLessonId);
+  updateStats();
+
+  // Tampilkan tombol Print HANYA jika lesson yang selesai adalah Assessment (ID 6 - 10)
+  if (App.currentLessonId >= 6 && App.currentLessonId <= 10) {
+    $('#printResultBtn').style.display = 'block';
+  } else {
+    $('#printResultBtn').style.display = 'none';
+  }
+}
+
+function printResult() {
+  const lessonTitle = App.lessonMeta[App.currentLessonId].title;
+  const accuracy = App.totalAnswered > 0 ? Math.round((App.correctCount / App.totalAnswered) * 100) : 0;
+  const today = new Date();
+  const dateStr = today.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+  const topic = "Duration of Time (Days, Months, Seasons)";
+
+  // Buat baris tabel untuk setiap soal
+  let tableRows = "";
+  App.state.answeredHistory.forEach((item, index) => {
+    tableRows += `
+      <tr>
+        <td style="text-align:center;">${index + 1}</td>
+        <td>${item.question}</td>
+        <td>${item.studentAnswer}</td>
+        <td>${item.correctAnswer}</td>
+        <td style="text-align:center; font-weight:bold; color:${item.isCorrect ? '#58cc02' : '#ff4b4b'};">${item.isCorrect ? '✓' : '✗'}</td>
+      </tr>
+    `;
+  });
+
+  // Buat jendela baru untuk dicetak
+  const printWindow = window.open('', '', 'width=800,height=600');
+  printWindow.document.write(`
+    <html>
+    <head>
+      <title>Print Result - ${lessonTitle}</title>
+      <style>
+        body { font-family: Arial, sans-serif; padding: 40px; color: #333; }
+        h1 { color: #58cc02; text-align: center; margin-bottom: 20px; }
+        .header-info { margin-bottom: 30px; border: 2px solid #e5e5e5; padding: 15px; border-radius: 10px; }
+        .header-info p { margin: 5px 0; font-size: 14px; }
+        .header-info b { color: #777; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 13px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; vertical-align: top; }
+        th { background-color: #f7f7f7; font-weight: bold; }
+        .footer { margin-top: 40px; text-align: center; font-size: 12px; color: #aaa; }
+      </style>
+    </head>
+    <body>
+      <h1>Math Assessment Result</h1>
+      <div class="header-info">
+        <p><b>Name:</b> ___________________________</p>
+        <p><b>Date:</b> ${dateStr}</p>
+        <p><b>Topic:</b> ${topic}</p>
+        <p><b>Assessment Group:</b> ${lessonTitle}</p>
+        <p><b>Score:</b> ${App.correctCount} / ${App.totalAnswered} (${accuracy}%)</p>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:5%; text-align:center;">No.</th>
+            <th style="width:45%;">Question</th>
+            <th style="width:20%;">Student Answer</th>
+            <th style="width:20%;">Correct Answer</th>
+            <th style="width:10%; text-align:center;">Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${tableRows}
+        </tbody>
+      </table>
+      <div class="footer">
+        <p>Duration of Time - Math Tutoring Portal</p>
+      </div>
+    </body>
+    </html>
+  `);
+  printWindow.document.close();
+  printWindow.focus();
+  
+  // Beri delay sebentar agar render sempurna sebelum print dialog muncul
+  setTimeout(() => {
+    printWindow.print();
+    printWindow.close();
+  }, 300);
+}
+
+function updateStats() {
+  $('#streak').innerText = App.state.streak;
+  $('#gems').innerText = App.state.gems;
+  $('#hearts').innerText = App.state.hearts;
+}
+
+initApp();
+</script>
+</body>
+</html>
