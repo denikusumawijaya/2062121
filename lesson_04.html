@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math Tutoring — Basics of Measurement (Length, Mass, Time)</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+<style>
+/* ============== DESIGN TOKENS ============== */
+:root{
+  --green:#58cc02; --green-dark:#58a700; --green-light:#d7ffb8;
+  --blue:#1cb0f6; --blue-light:#ddf4ff; --blue-dark:#0a87d6;
+  --red:#ff4b4b; --red-light:#ffdfe0;
+  --yellow:#ffc800; --yellow-dark:#e6a700;
+  --purple:#ce82ff; --orange:#ff9600;
+  --bg:#fff; --text:#3c3c3c; --text-light:#777;
+  --border:#e5e5e5; --border-hover:#bfbfbf;
+  --bg-gray:#f7f7f7; --shadow:0 4px 0 rgba(0,0,0,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Nunito',sans-serif}
+body{background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+.app{max-width:820px;margin:0 auto;min-height:100vh;position:relative;background:#fff;
+     box-shadow:0 0 30px rgba(0,0,0,.05)}
+
+/* ============== TOPBAR (MAP) ============== */
+.topbar{display:flex;align-items:center;padding:14px 20px;background:#fff;
+        border-bottom:2px solid var(--border);position:sticky;top:0;z-index:10}
+.rules-btn{margin-left:auto;margin-right:20px;background:var(--blue-light);color:var(--blue-dark);
+           border:2px solid var(--blue);padding:8px 14px;border-radius:12px;font-weight:800;
+           font-size:13px;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
+.rules-btn:hover{background:#a4dcff}
+.rules-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;
+               display:none;align-items:center;justify-content:center;padding:20px}
+.rules-overlay.show{display:flex;animation:fadeUp .3s}
+.rules-modal{background:#fff;border-radius:20px;padding:30px 24px;max-width:380px;width:100%;
+             position:relative;box-shadow:0 10px 30px rgba(0,0,0,.2);text-align:center}
+.rules-close{position:absolute;top:12px;right:16px;background:none;border:none;font-size:20px;
+             color:var(--text-light);cursor:pointer}
+.rules-title{font-size:24px;font-weight:900;color:var(--text);margin-bottom:6px}
+.rules-sub{font-size:14px;color:var(--text-light);margin-bottom:24px}
+.rule-item{display:flex;align-items:flex-start;gap:14px;text-align:left;
+           background:var(--bg-gray);padding:16px;border-radius:14px;margin-bottom:12px}
+.rule-icon{font-size:28px;background:#fff;width:50px;height:50px;border-radius:50%;
+           display:flex;align-items:center;justify-content:center;flex-shrink:0;
+           border:2px solid var(--border)}
+.rule-text b{font-size:16px;color:var(--text);display:block;margin-bottom:4px}
+.rule-text p{font-size:14px;color:var(--text-light);line-height:1.4}
+.topbar .logo{display:flex;flex-direction:column;line-height:1.1;cursor:pointer}
+.topbar .logo .logo-main{font-weight:900;font-size:18px;color:var(--green);letter-spacing:-.5px}
+.topbar .logo .logo-sub{font-weight:700;font-size:11px;color:var(--blue);letter-spacing:1.5px;margin-top:2px}
+.topbar .stats{display:flex;gap:18px;margin-left:auto;align-items:center}
+.stat{display:flex;align-items:center;gap:6px;font-weight:800;font-size:15px}
+.stat .ic{font-size:18px}
+
+/* ============== MAP VIEW ============== */
+.map-view{padding:24px 20px 120px}
+.map-header{text-align:center;margin-bottom:28px}
+.map-header h1{font-size:26px;font-weight:900;margin-bottom:6px}
+.map-header p{color:var(--text-light);font-size:14px}
+.map-container{position:relative;padding:30px 10px;min-height:1080px}
+.map-svg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.map-node{position:absolute;width:72px;height:72px;border-radius:50%;
+          display:flex;align-items:center;justify-content:center;
+          font-size:28px;font-weight:900;cursor:pointer;z-index:2;
+          transition:transform .2s;user-select:none;
+          transform:translate(-50%,-50%)}
+.map-node.locked{background:#e5e5e5;color:#afafaf;cursor:not-allowed;box-shadow:0 4px 0 #cfcfcf}
+.map-node.available{background:var(--green);color:#fff;box-shadow:0 6px 0 var(--green-dark);
+                     animation:bounce 2s infinite}
+.map-node.completed{background:var(--yellow);color:#fff;box-shadow:0 6px 0 var(--yellow-dark)}
+.map-node.current{background:var(--blue);color:#fff;box-shadow:0 6px 0 var(--blue-dark)}
+.map-node.available:hover,.map-node.completed:hover,.map-node.current:hover{transform:translate(-50%,calc(-50% - 3px))}
+@keyframes bounce{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,calc(-50% - 5px))}}
+.node-label{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:8px;
+            font-size:11px;font-weight:800;color:var(--text);white-space:nowrap;
+            background:#fff;padding:3px 10px;border-radius:8px;border:2px solid var(--border)}
+.node-progress{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:6px;
+               width:48px;height:6px;background:var(--border);border-radius:999px;overflow:hidden}
+.node-progress span{display:block;height:100%;background:var(--green);transition:width .4s}
+.node-tooltip{position:absolute;top:-46px;left:50%;transform:translateX(-50%);
+              background:#333;color:#fff;padding:6px 12px;border-radius:8px;
+              font-size:12px;font-weight:700;white-space:nowrap;opacity:0;pointer-events:none;
+              transition:opacity .2s;z-index:5}
+.node-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
+                     border:5px solid transparent;border-top-color:#333}
+.map-node:hover .node-tooltip{opacity:1}
+
+/* ============== LESSON VIEW ============== */
+.lesson-view{display:none;position:fixed;inset:0;background:#fff;z-index:100;
+             flex-direction:column;max-width:820px;margin:0 auto}
+.lesson-view.active{display:flex}
+.lesson-topbar{display:flex;align-items:center;padding:14px 20px;gap:16px;
+               border-bottom:1px solid var(--border)}
+.lesson-close{background:none;border:none;font-size:24px;cursor:pointer;
+              color:var(--text-light);padding:4px;line-height:1}
+.lesson-progress{flex:1;height:14px;background:var(--border);border-radius:999px;overflow:hidden}
+.lesson-progress-bar{height:100%;background:var(--green);border-radius:999px;
+                     transition:width .4s ease;width:0%;position:relative}
+.lesson-progress-bar::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+                            background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);
+                            animation:shimmer 2s infinite}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.lesson-hearts{display:flex;align-items:center;gap:4px;font-weight:900;color:var(--red);font-size:18px}
+.lesson-time{font-size:13px;font-weight:800;color:var(--blue-dark);background:var(--blue-light);padding:5px 10px;border-radius:8px;border:1px solid var(--blue);white-space:nowrap}
+.node-time-label{font-size:10px;color:var(--text-light);font-weight:700;display:block;text-align:center;margin-top:2px}
+.lesson-content{flex:1;padding:24px 20px;overflow-y:auto}
+
+/* ============== THEORY CARD ============== */
+.theory-card{background:linear-gradient(135deg,#fffce8,#fff);
+             border:2px solid var(--yellow);border-radius:18px;padding:24px;
+             box-shadow:0 4px 0 var(--yellow-dark)}
+.theory-badge{display:inline-block;background:var(--yellow);color:#fff;
+              padding:4px 12px;border-radius:999px;font-size:12px;font-weight:800;
+              margin-bottom:12px;letter-spacing:.5px}
+.theory-card h2{font-size:24px;margin-bottom:14px;color:var(--text);font-weight:900}
+.theory-card .theory-body{font-size:16px;line-height:1.7;color:var(--text)}
+.theory-card .theory-body p{margin-bottom:12px}
+.formula-box{background:#fff;border-left:5px solid var(--green);padding:14px 18px;
+             margin:14px 0;font-family:'Courier New',monospace;font-size:20px;
+             font-weight:700;border-radius:6px;color:var(--green-dark)}
+.example-box{background:#fff;padding:14px 18px;margin:14px 0;border-radius:10px;
+             border:2px solid var(--border);font-size:15px}
+.example-box b{color:var(--blue-dark)}
+.tip-box{background:var(--blue-light);border:2px solid var(--blue);padding:12px 16px;
+         border-radius:10px;margin-top:14px;font-size:14px;color:var(--blue-dark)}
+.tip-box b{color:var(--blue-dark)}
+
+/* ============== QUESTION ============== */
+.q-prompt{font-size:22px;font-weight:900;margin-bottom:8px;line-height:1.3}
+.q-sub{font-size:14px;color:var(--text-light);margin-bottom:18px}
+.q-image{font-size:64px;text-align:center;margin:12px 0}
+.q-hint{font-size:13px;color:var(--text-light);font-style:italic;margin-top:8px}
+
+/* Bilingual Translation Class */
+.translation { font-size: 13px; color: var(--text-light); font-style: italic; display: block; margin-top: 4px; line-height: 1.4; }
+.option .translation, .checkbox-option .translation, .pair-item .translation { display: block; font-size: 12px; margin-top: 2px; }
+
+/* Multiple choice */
+.options{display:grid;gap:10px}
+.option{padding:14px 16px;border:2px solid var(--border);border-radius:14px;
+        cursor:pointer;font-size:16px;font-weight:700;transition:all .15s;
+        background:#fff;user-select:none;text-align:left;display:flex;
+        align-items:center;gap:12px}
+.option:hover{border-color:var(--border-hover)}
+.option .o-key{width:30px;height:30px;border-radius:8px;border:2px solid var(--border);
+               display:flex;align-items:center;justify-content:center;font-size:13px;
+               flex-shrink:0;font-weight:900;color:var(--text-light)}
+.option.selected{border-color:var(--blue);background:var(--blue-light);color:var(--blue-dark)}
+.option.selected .o-key{border-color:var(--blue);background:var(--blue);color:#fff}
+.option.correct{border-color:var(--green);background:var(--green-light);color:var(--green-dark)}
+.option.correct .o-key{border-color:var(--green);background:var(--green);color:#fff}
+.option.wrong{border-color:var(--red);background:var(--red-light);color:var(--red)}
+.option.wrong .o-key{border-color:var(--red);background:var(--red);color:#fff}
+.option.disabled{cursor:default;pointer-events:none}
+
+/* Typing */
+.typing-input{width:100%;padding:14px 16px;border:2px solid var(--border);
+              border-radius:14px;font-size:18px;font-weight:700;outline:none;
+              font-family:inherit;background:#fff;transition:all .15s}
+.typing-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-light)}
+.typing-input.correct{border-color:var(--green);background:var(--green-light)}
+.typing-input.wrong{border-color:var(--red);background:var(--red-light)}
+
+/* Dropdown */
+.sentence{font-size:20px;line-height:2.4;font-weight:700}
+.dropdown-select{display:inline-block;padding:6px 14px;border:2px solid var(--border);
+                 border-radius:12px;background:#fff;font-size:16px;font-weight:800;
+                 cursor:pointer;font-family:inherit;margin:0 4px;outline:none;
+                 color:var(--blue-dark);transition:all .15s}
+.dropdown-select:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-light)}
+.dropdown-select.correct{border-color:var(--green);background:var(--green-light);color:var(--green-dark)}
+.dropdown-select.wrong{border-color:var(--red);background:var(--red-light);color:var(--red)}
+
+/* Drag and drop */
+.drag-bank{display:flex;flex-wrap:wrap;gap:8px;min-height:54px;padding:14px;
+           background:var(--bg-gray);border-radius:14px;border:2px dashed var(--border);margin-bottom:16px}
+.drag-item{padding:8px 16px;background:#fff;border:2px solid var(--border);
+           border-radius:12px;cursor:grab;font-weight:800;font-size:15px;
+           user-select:none;transition:all .15s;box-shadow:var(--shadow)}
+.drag-item:hover{transform:translateY(-2px);border-color:var(--border-hover)}
+.drag-item.dragging{opacity:.4;cursor:grabbing}
+.drag-item.placed{background:var(--blue);color:#fff;border-color:var(--blue);
+                  box-shadow:0 4px 0 var(--blue-dark)}
+.drop-zone{display:inline-flex;align-items:center;justify-content:center;
+           min-width:80px;min-height:40px;padding:4px 10px;
+           border:2px dashed var(--blue);border-radius:10px;vertical-align:middle;
+           margin:0 4px;background:var(--blue-light);transition:all .15s}
+.drop-zone.over{background:#a4dcff;border-style:solid}
+.drop-zone.filled{border-style:solid;background:#fff}
+.drop-zone.filled .drag-item{margin:0}
+
+/* Pairing */
+.pair-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pair-col{display:grid;gap:10px}
+.pair-item{padding:14px;border:2px solid var(--border);border-radius:12px;
+           background:#fff;cursor:pointer;font-weight:800;text-align:center;
+           transition:all .15s;font-size:15px}
+.pair-item:hover{border-color:var(--border-hover)}
+.pair-item.selected{border-color:var(--blue);background:var(--blue-light);color:var(--blue-dark)}
+.pair-item.matched{background:var(--green-light);border-color:var(--green);
+                   color:var(--green-dark);opacity:.5;pointer-events:none}
+.pair-item.wrong{border-color:var(--red);background:var(--red-light);
+                 animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* Checkbox */
+.checkbox-option{display:flex;align-items:center;gap:14px;padding:14px 16px;
+                 border:2px solid var(--border);border-radius:12px;cursor:pointer;
+                 user-select:none;transition:all .15s;background:#fff}
+.checkbox-option:hover{border-color:var(--border-hover)}
+.checkbox-option.checked{border-color:var(--blue);background:var(--blue-light)}
+.checkbox-box{width:26px;height:26px;border:2px solid var(--border);border-radius:8px;
+              display:flex;align-items:center;justify-content:center;flex-shrink:0;
+              font-weight:900;color:#fff;transition:all .15s}
+.checkbox-option.checked .checkbox-box{background:var(--blue);border-color:var(--blue)}
+.checkbox-option.correct{border-color:var(--green);background:var(--green-light)}
+.checkbox-option.correct .checkbox-box{background:var(--green);border-color:var(--green)}
+.checkbox-option.wrong{border-color:var(--red);background:var(--red-light)}
+.checkbox-option.wrong .checkbox-box{background:var(--red);border-color:var(--red)}
+
+/* Range */
+.range-wrap{padding:20px 0}
+.range-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.range-value{font-size:36px;font-weight:900;color:var(--green)}
+.range-unit{font-size:16px;color:var(--text-light);font-weight:700}
+.range-slider{width:100%;-webkit-appearance:none;height:14px;background:var(--border);
+              border-radius:999px;outline:none;margin:8px 0}
+.range-slider::-webkit-slider-thumb{-webkit-appearance:none;width:32px;height:32px;
+              background:var(--green);border-radius:50%;cursor:pointer;border:5px solid #fff;
+              box-shadow:0 0 0 2px var(--green),0 2px 8px rgba(0,0,0,.2)}
+.range-slider::-moz-range-thumb{width:32px;height:32px;background:var(--green);
+              border-radius:50%;cursor:pointer;border:5px solid #fff;
+              box-shadow:0 0 0 2px var(--green),0 2px 8px rgba(0,0,0,.2)}
+.range-ticks{display:flex;justify-content:space-between;margin-top:8px;font-size:12px;
+             color:var(--text-light);font-weight:700}
+
+/* ============== FOOTER ============== */
+.lesson-footer{padding:16px 20px;border-top:2px solid var(--border);background:#fff}
+.feedback{padding:16px;border-radius:14px;margin-bottom:12px;display:none}
+.feedback.show{display:block;animation:fadeUp .3s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.feedback.correct{background:var(--green-light)}
+.feedback.wrong{background:var(--red-light)}
+.feedback-title{font-weight:900;font-size:17px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.feedback.correct .feedback-title{color:var(--green-dark)}
+.feedback.wrong .feedback-title{color:var(--red)}
+.feedback-text{font-size:14px;color:var(--text)}
+.action-btn{width:100%;padding:16px;border:none;border-radius:14px;font-size:16px;
+            font-weight:900;cursor:pointer;font-family:inherit;
+            background:var(--border);color:var(--text-light);transition:all .15s}
+.action-btn.active{background:var(--green);color:#fff;box-shadow:0 4px 0 var(--green-dark)}
+.action-btn.active:hover{filter:brightness(1.05)}
+.action-btn.active:active{transform:translateY(2px);box-shadow:0 2px 0 var(--green-dark)}
+.action-btn.skip{background:transparent;color:var(--text-light);box-shadow:none;
+                 border:2px solid var(--border);margin-top:8px}
+.action-btn.skip:hover{border-color:var(--border-hover)}
+
+/* ============== COMPLETE ============== */
+.complete-screen{display:none;text-align:center;padding:40px 20px;flex-direction:column;
+                 align-items:center;justify-content:center;flex:1}
+.complete-screen.show{display:flex}
+.complete-icon{font-size:90px;margin-bottom:16px;animation:pop .5s}
+@keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.2)}100%{transform:scale(1)}}
+.complete-screen h1{font-size:34px;color:var(--yellow);margin-bottom:8px;font-weight:900;
+                    text-shadow:2px 2px 0 var(--yellow-dark)}
+.complete-screen .cs-sub{font-size:16px;color:var(--text-light);margin-bottom:24px}
+.complete-stats{display:flex;gap:14px;margin-bottom:28px;flex-wrap:wrap;justify-content:center}
+.complete-stat{background:#fff;padding:18px 28px;border-radius:16px;
+               border:2px solid var(--border);box-shadow:var(--shadow);min-width:110px}
+.complete-stat .stat-v{font-size:26px;font-weight:900;color:var(--green)}
+.complete-stat .stat-l{font-size:12px;color:var(--text-light);font-weight:700;
+                        text-transform:uppercase;letter-spacing:.5px}
+
+/* ============== RESPONSIVE ============== */
+@media (max-width:600px){
+  .pair-grid{grid-template-columns:1fr}
+  .map-node{width:60px;height:60px;font-size:22px}
+  .q-prompt{font-size:20px}
+  .topbar .stats{gap:12px;font-size:13px}
+  .lesson-content{padding:18px 16px}
+}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="logo">
+      <span class="logo-main">🧮 Math Tutoring</span>
+      <span class="logo-sub">by Deni</span>
+    </div>
+    <button class="rules-btn" id="openRulesBtn" title="Class Rules">📋 Class Rules</button>
+    <div class="stats">
+      <div class="stat"><span class="ic">🔥</span><span id="streak">0</span></div>
+      <div class="stat"><span class="ic">💎</span><span id="gems">0</span></div>
+      <div class="stat"><span class="ic">❤️</span><span id="hearts">5</span></div>
+    </div>
+  </header>
+
+  <main class="map-view" id="mapView">
+	<div class="map-header">
+	  <h1>Basics of Measurement (Length, Mass, Time)</h1>
+	  <p>Dasar-Dasar Pengukuran (Panjang, Massa, Waktu)</p>
+	</div>
+    <div class="map-container" id="mapContainer">
+      <svg class="map-svg" id="mapSvg" viewBox="0 0 800 1080" preserveAspectRatio="none"></svg>
+    </div>
+  </main>
+
+  <div class="lesson-view" id="lessonView">
+    <header class="lesson-topbar">
+      <button class="lesson-close" id="lessonClose" title="Exit">✕</button>
+      <div class="lesson-progress"><div class="lesson-progress-bar" id="progressBar"></div></div>
+      <div class="lesson-time" id="lessonTime">00:00</div>
+      <div class="lesson-hearts">❤️ <span id="lessonHearts">5</span></div>
+    </header>
+    <div class="lesson-content" id="lessonContent"></div>
+    <footer class="lesson-footer">
+      <div class="feedback" id="feedback"></div>
+      <button class="action-btn" id="actionBtn">Check</button>
+      <div style="display:flex; gap:10px; margin-top:8px;">
+        <button class="action-btn skip hidden" id="backBtn" style="flex:1; margin-top:0;">⬅️ Back</button>
+        <button class="action-btn skip hidden" id="resetBtn" style="flex:1; margin-top:0;">🔄 Reset Answer</button>
+      </div>
+    </footer>
+  </div>
+
+  <div class="lesson-view" id="completeView" style="background:linear-gradient(135deg,#fffce8,#d7ffb8)">
+    <div class="complete-screen show" id="completeScreen">
+      <div class="complete-icon">🏆</div>
+      <h1 id="completeTitle">Excellent!</h1>
+      <p class="cs-sub" id="completeSub">Lesson completed</p>
+      <div class="complete-stats">
+        <div class="complete-stat"><div class="stat-v" id="finalXp">+10 XP</div><div class="stat-l">XP Earned</div></div>
+        <div class="complete-stat"><div class="stat-v" id="finalAccuracy">100%</div><div class="stat-l">Accuracy</div></div>
+        <div class="complete-stat"><div class="stat-v" id="finalCorrect">0/0</div><div class="stat-l">Correct</div></div>
+      </div>
+      <button class="action-btn active" id="continueBtn" style="max-width:320px">Continue</button>
+      <button class="action-btn" id="printResultBtn" style="max-width:320px; margin-top:10px; display:none; background:var(--blue); color:#fff; box-shadow:0 4px 0 var(--blue-dark);">🖨️ Print Result</button>
+    </div>
+  </div>
+
+  <div class="rules-overlay" id="rulesOverlay">
+    <div class="rules-modal">
+      <button class="rules-close" id="closeRulesBtn">✕</button>
+      <h2 class="rules-title">📋 Class Rules</h2>
+      <p class="rules-sub">Let's create a comfortable and conducive learning environment!</p>
+      <div class="rule-item">
+        <div class="rule-icon">🗣️</div>
+        <div class="rule-text">
+          <b>Take Turns Speaking</b>
+          <p>Respect the person speaking and wait for our turn.</p>
+        </div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-icon">🚪</div>
+        <div class="rule-text">
+          <b>Ask for Permission</b>
+          <p>Always ask the teacher for permission if you need to leave the class.</p>
+        </div>
+      </div>
+      <button class="action-btn active" id="understandBtn" style="margin-top:20px">I Understand!</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+<script>
+const App = {
+  state: {
+    hearts: 5, gems: 0, streak: 0,
+    completedLessons: [], currentLessonId: null,
+    currentStepIndex: 0, stepAnswered: false,
+    correctCount: 0, totalAnswered: 0,
+    selectedPair: null, dragSrc: null,
+    answeredHistory: [] // TAMBAHKAN INI untuk menyimpan riwayat jawaban
+  },
+  nodePositions: [
+    { x: 400, y: 60 },   // 1. Spiral Review
+    { x: 560, y: 160 },  // 2. Intro
+    { x: 240, y: 260 },  // 3. Prior Knowledge
+    { x: 560, y: 360 },  // 4. Problem Intro
+    { x: 240, y: 460 },  // 5. Guided Practice
+    { x: 400, y: 560 },  // 6. Independent
+    { x: 100, y: 720 },  // 7.1 Assessment A
+    { x: 250, y: 760 },  // 7.2 Assessment B
+    { x: 400, y: 780 },  // 7.3 Assessment C
+    { x: 550, y: 760 },  // 7.4 Assessment D
+    { x: 700, y: 720 },  // 7.5 Assessment E
+    { x: 400, y: 1000 }  // 8. Feedback Portal
+  ],
+  lessonMeta: [
+    { id: 0, icon: "1", title: "Spiral Review", desc: "Geometri & Sudut", time: "00:00-00:10" },
+    { id: 1, icon: "2", title: "Real-World", desc: "Manajer Proyek Global", time: "00:10-00:15" },
+    { id: 2, icon: "3", title: "Prior Knowledge", desc: "Hari, Bulan, Terminologi", time: "00:15-00:25" },
+    { id: 3, icon: "4", title: "Problem Intro", desc: "Kasus 100 Hari Proyek", time: "00:25-00:35" },
+    { id: 4, icon: "5", title: "Guided Practice", desc: "Ekspedisi London", time: "00:35-00:50" },
+    { id: 5, icon: "6", title: "Independent", desc: "Global Roadmap", time: "00:50-01:05" },
+    { id: 6, icon: "7.1", title: "Assessment A", desc: "Dasar Hari & Bulan", time: "No Timer" },
+    { id: 7, icon: "7.2", title: "Assessment B", desc: "Durasi Antar Peristiwa", time: "No Timer" },
+    { id: 8, icon: "7.3", title: "Assessment C", desc: "Tahun Kabisat", time: "No Timer" },
+    { id: 9, icon: "7.4", title: "Assessment D", desc: "Musim Utara & Selatan", time: "No Timer" },
+    { id: 10, icon: "7.5", title: "Assessment E", desc: "Jam & Zona Waktu", time: "No Timer" },
+    { id: 11, icon: "8", title: "Feedback Portal", desc: "Learn.algonova.id", time: "01:05-01:10" }
+  ],
+};
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => document.querySelectorAll(sel);
+const el = (tag, cls, html) => {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (html != null) e.innerHTML = html;
+  return e;
+};
+
+const LESSONS = [
+  // ===== SECTION 1: SPIRAL REVIEW WARM-UP =====
+  {
+    id: 0,
+    steps: [
+      // Slide 1: Theory 1 - Garis dan Sudut Dasar
+      { 
+        type: "theory", 
+        title: "Garis dan Sudut Dasar / Basic Lines and Angles", 
+        body: `<p><b>🇬🇧 English:</b> Welcome! Before we measure the world, let's review geometry. A line segment has two endpoints. A ray has one endpoint and extends infinitely in one direction. An obtuse angle is between 90° and 180°.</p>
+        <p><b>🇮🇩 Indonesian:</b> Selamat datang! Sebelum mengukur dunia, mari review geometri. Ruas garis memiliki dua titik ujung. Sinar garis memiliki satu titik ujung dan memanjang tak terhingga. Sudut tumpul besarnya antara 90° dan 180°.</p>
+        <svg width="100" height="50" style="display:block;margin:10px auto">
+          <line x1="10" y1="25" x2="90" y2="25" stroke="black" stroke-width="2"/>
+          <circle cx="10" cy="25" r="3" fill="black"/>
+          <circle cx="90" cy="25" r="3" fill="black"/>
+        </svg>` 
+      },
+      
+      // Slide 2: Exercise 1 - Typing
+      { 
+        type: "typing", 
+        prompt: "If Angle A and Angle B are supplementary (form a straight line), and Angle A is 65°, what is Angle B in degrees? <span class='translation'>(Jika Sudut A dan B berpelurus, dan A=65°, berapa B?)</span>", 
+        answer: "115", 
+        explanation: "Supplementary angles add up to 180°. 180° - 65° = 115°." 
+      },
+
+      // Slide 3: Exercise 2 - Multiple Choice
+      { 
+        type: "multiple_choice", 
+        prompt: "What do we call an angle that is exactly between 90° and 180°? <span class='translation'>(Sudut apa yang besarnya tepat antara 90° dan 180°?)</span>", 
+        options: ["Acute / Lancip", "Right / Siku-siku", "Obtuse / Tumpul", "Reflex / Refleks"], 
+        answer: 2, 
+        explanation: "An obtuse angle is strictly between 90° and 180°." 
+      },
+
+      // Slide 4: Exercise 3 - Dropdown
+      { 
+        type: "dropdown", 
+        prompt: "A ________ has one endpoint and extends infinitely in one direction. <span class='translation'>(________ memiliki satu titik ujung dan memanjang tak terhingga.)</span>", 
+        sentence: "A [drop] has one endpoint. <span class='translation'>([drop] memiliki satu titik ujung.)</span>", 
+        options: ["Line Segment / Ruas Garis", "Ray / Sinar", "Point / Titik", "Plane / Bidang"], 
+        answer: "Ray / Sinar", 
+        explanation: "A ray starts at one point and extends forever in one direction." 
+      },
+
+      // Slide 5: Theory 2 - Hubungan Sudut Garis Sejajar
+      { 
+        type: "theory", 
+        title: "Hubungan Sudut Garis Sejajar / Parallel Lines Angle Relationships", 
+        body: `<p><b>🇬🇧 English:</b> When a transversal cuts two parallel lines, alternate interior angles (sudut dalam berseberangan) are equal. Corresponding angles (sudut sehadap) are also equal. If an exterior angle is 120°, the alternate interior angle is also 120°.</p>
+        <p><b>🇮🇩 Indonesian:</b> Ketika garis transversal memotong dua garis sejajar, sudut dalam berseberangan besarnya sama. Sudut sehadap juga sama besar. Jika sudut luarnya 120°, sudut dalam berseberangannya juga 120°.</p>` 
+      },
+
+      // Slide 6: Exercise 4 - Typing
+      { 
+        type: "typing", 
+        prompt: "Two parallel lines are cut by a transversal. If the co-interior angle is 110°, what is the other co-interior angle? <span class='translation'>(Jika sudut sepihak 110°, berapa sudut sepihak yang lain?)</span>", 
+        answer: "70", 
+        explanation: "Co-interior angles add up to 180°. 180° - 110° = 70°." 
+      },
+
+      // Slide 7: Exercise 5 - Drag & Drop (Pairing format for matching)
+      { 
+        type: "pairing", 
+        prompt: "Match the angle pair to its relationship! <span class='translation'>(Pasangkan pasangan sudut dengan hubungannya!)</span>", 
+        pairs: [
+          { left: "Alternate Interior", right: "Equal and on opposite sides" }, 
+          { left: "Corresponding", right: "Equal and in the same position" }, 
+          { left: "Supplementary", right: "Add up to 180°" }
+        ] 
+      },
+
+      // Slide 8: Exercise 6 - Checkbox
+      { 
+        type: "checkbox", 
+        prompt: "Which of the following angles are classified as acute (less than 90°)? <span class='translation'>(Sudut mana yang termasuk lancip (kurang dari 90°)?)</span>", 
+        options: ["45°", "90°", "89°", "120°"], 
+        answers: [0, 2], 
+        explanation: "Acute angles are strictly less than 90°." 
+      },
+
+      // Slide 9: Theory 3 - Estimasi vs Pengukuran Presisi
+      { 
+        type: "theory", 
+        title: "Estimasi vs Pengukuran Presisi / Estimation vs Precise Measurement", 
+        body: `<p><b>🇬🇧 English:</b> Estimation gives a rough idea, but precise measurement is crucial in engineering. A drone's motor measured in grams and centimeters requires exact numbers to fly!</p>
+        <p><b>🇮🇩 Indonesian:</b> Estimasi memberi gambaran kasar, tetapi pengukuran presisi sangat penting dalam teknik. Motor drone yang diukur dalam gram dan centimeter membutuhkan angka pasti agar bisa terbang!</p>` 
+      },
+
+      // Slide 10: Exercise 7 - Range
+      { 
+        type: "range", 
+        prompt: "If an average adult's hand span (jengkal) is about 20 cm, how many hand spans would approximately fit in a 1-meter ruler? Drag the slider to your answer. <span class='translation'>(Jika rentang tangan orang dewasa rata-rata sekitar 20 cm, berapa rentang tangan yang kira-kira muat dalam penggaris 1 meter? Geser slider ke jawabanmu.)</span>", 
+        min: 2, 
+        max: 8, 
+        answer: 5, 
+        explanation: "A 1-meter ruler is 100 cm long. 100 cm ÷ 20 cm = 5 hand spans. <span class='translation'>(Penggaris 1 meter panjangnya 100 cm. 100 cm ÷ 20 cm = 5 rentang tangan.)</span>" 
+      },
+
+      // Slide 11: Exercise 8 - Multiple Choice
+      { 
+        type: "multiple_choice", 
+        prompt: "Why is precise measurement important in building technology like drones? <span class='translation'>(Kenapa pengukuran presisi penting dalam teknologi seperti drone?)</span>", 
+        options: [
+          "It makes the drone look cooler.", 
+          "Miscalculations in mass and length can prevent it from flying. / Kesalahan hitung massa dan panjang bisa membuatnya tidak terbang.", 
+          "It costs less money.", 
+          "Drones don't need measurements."
+        ], 
+        answer: 1, 
+        explanation: "Incorrect measurements can make the drone unbalanced or unable to lift off." 
+      },
+
+      // Slide 12: Exercise 9 - Dropdown
+      { 
+        type: "dropdown", 
+        prompt: "If a line has no endpoints, it is called a ________. <span class='translation'>(Jika garis tidak punya titik ujung, disebut ________.)</span>", 
+        sentence: "It is called a [drop]. <span class='translation'>(Disebut [drop].)</span>", 
+        options: ["Line / Garis", "Ray / Sinar", "Segment / Ruas"], 
+        answer: "Line / Garis", 
+        explanation: "A line extends infinitely in both directions, having no endpoints." 
+      },
+
+      // Slide 13: Exercise 10 - Pairing
+      { 
+        type: "pairing", 
+        prompt: "Match the angle type to its degree range! <span class='translation'>(Pasangkan jenis sudut dengan rentang derajatnya!)</span>", 
+        pairs: [
+          { left: "Acute", right: "0° to 90°" }, 
+          { left: "Right", right: "90°" }, 
+          { left: "Obtuse", right: "90° to 180°" }, 
+          { left: "Straight", right: "180°" }
+        ] 
+      }
+    ]
+  },
+
+  // ===== SECTION 2: INTRODUCTION & REAL-WORLD CONNECTION =====
+  {
+    id: 1,
+    steps: [
+      // Slide 1: Theory 1
+      { type: "theory", title: "🌍 Technology and Accuracy", body: `<p>Imagine designing a drone. Motor weight in grams, propeller length in centimeters, battery in ounces. If calculations are off, it won't fly! We must convert units as fast and accurately as an aerospace engineer.</p>
+      <p class="translation">Bayangkan merancang drone. Berat motor dalam gram, panjang baling-baling dalam cm, baterai dalam ons. Jika melesat, drone tidak akan terbang! Kita harus mengonversi satuan secepat dan seakurat engineer dirgantara.</p>` },
+
+      // Slide 2-4: Exercise 1-3
+      { type: "multiple_choice", prompt: "If a drone's battery is measured in ounces, but the motors are in grams, what must you do to calculate total mass? <span class='translation'>(Jika baterai diukur dalam ons, tapi motor dalam gram, apa yang harus dilakukan untuk menghitung total massa?)</span>", options: ["Guess the total weight", "Convert all measurements to the same unit", "Build the drone and see what happens", "Only use the gram measurements"], answer: 1, explanation: "You must convert everything to a single base unit before adding them. <span class='translation'>Harus mengonversi semuanya ke satu satuan dasar sebelum dijumlahkan.</span>" },
+      { type: "typing", prompt: "Who relies heavily on precise unit conversions in aerospace engineering? (Hint: mentioned in material) <span class='translation'>(Siapa yang sangat bergantung pada konversi satuan presisi di teknik dirgantara?)</span>", answer: "NASA", explanation: "NASA engineers must be perfectly precise. <span class='translation'>Engineer NASA harus sangat presisi.</span>" },
+      { type: "dropdown", prompt: "Time zones differ between countries because of... <span class='translation'>(Zona waktu berbeda antar negara karena...)</span>", sentence: "Time zone differences are caused by the Earth's [drop]. <span class='translation'>(Perbedaan zona waktu disebabkan oleh [drop] Bumi.)</span>", options: ["Rotation", "Revolution", "Gravity", "Size"], answer: "Rotation", explanation: "Earth's rotation on its axis causes day and night. <span class='translation'>Rotasi Bumi menyebabkan siang dan malam.</span>" },
+
+      // Slide 5: Theory 2
+      { type: "theory", title: "⏱️ Why is Precision Crucial?", body: `<p>In global project management, you face:</p>
+      <p>• <b>Time Zone Coordination:</b> Dev team in Asia, marketing in Europe.</p>
+      <p>• <b>Duration Calculation:</b> If an update takes 45 days, you must know the exact launch date.</p>
+      <p>• <b>Season Estimation:</b> A winter sports app launch must be right before the snow falls!</p>
+      <p class="translation">Dalam manajemen proyek global, kamu menghadapi: Koordinasi Zona Waktu, Perhitungan Durasi, dan Estimasi Musim.</p>` },
+
+      // Slide 6-8: Exercise 4-6
+      { type: "checkbox", prompt: "Which of these fields require highly precise measurements? <span class='translation'>(Mana bidang yang membutuhkan pengukuran sangat presisi?)</span>", options: ["Aerospace Engineering", "Cooking (rough estimates)", "Microchip Manufacturing", "Singing a song"], answers: [0, 2], explanation: "Aerospace and microchips require extreme precision. <span class='translation'>Dirgantara dan mikrochip butuh presisi ekstrem.</span>" },
+      { type: "range", prompt: "If a project lasts 45 days, roughly how many months does it take? <span class='translation'>(Jika sebuah proyek berlangsung 45 hari, kira-kira berapa bulan?)</span>", min: 0, max: 3, answer: 2, explanation: "45 days ranges between 1 to 2 months. <span class='translation'>45 hari berkisar 1-2 bulan.</span>" },
+      { type: "pairing", prompt: "Match the physical quantity to its base SI unit! <span class='translation'>(Pasangkan kuantitas fisik ke satuan SI dasarnya!)</span>", pairs: [{ left: "Length", right: "Meter" }, { left: "Mass", right: "Kilogram" }, { left: "Time", right: "Second" }] },
+
+      // Slide 9: Theory 3
+      { type: "theory", title: "🗓️ Measurement Error Analysis", body: `<p><b>Accuracy</b> is how close you are to the true value. <b>Precision</b> is how consistent your measurements are. In engineering, choosing the right unit (e.g., mm vs. km) determines the success of a project.</p>
+      <p class="translation">Akurasi adalah seberapa dekat ke nilai sebenarnya. Presisi adalah seberapa konsisten. Memilih satuan yang tepat menentukan keberhasilan proyek.</p>` },
+
+      // Slide 10-13: Exercise 7-10
+      { type: "drag_drop", prompt: "Order the steps for app launch preparation! <span class='translation'>(Urutkan langkah persiapan peluncuran aplikasi!)</span>", sentence: "[drop] -> [drop] -> [drop]", bank: ["Research target country seasons", "Calculate coding duration", "Set launch date"], answer: "0,1,2", explanation: "Research first, then calculate work time, then set the D-day. <span class='translation'>Riset dahulu, lalu hitung waktu, baru tentukan hari H.</span>" },
+      { type: "typing", prompt: "If you measure the thickness of a phone screen, should you use kilometers or millimeters? <span class='translation'>(Jika mengukur ketebalan layar HP, pakai km atau mm?)</span>", answer: "Millimeters", explanation: "Small objects need small units. <span class='translation'>Benda kecil butuh satuan kecil.</span>" },
+      { type: "multiple_choice", prompt: "What happens if a winter app launch is delayed by 1 month? <span class='translation'>(Apa yang terjadi jika peluncuran aplikasi musim dingin ditunda 1 bulan?)</span>", options: ["Still succeeds", "Misses the season, target users decrease", "App will crash", "No effect"], answer: 1, explanation: "If the season is missed, features and promos won't be relevant anymore. <span class='translation'>Jika musimnya terlewat, fitur tidak akan relevan.</span>" },
+      { type: "dropdown", prompt: "The base unit for measuring mass in the SI system is the... <span class='translation'>(Satuan dasar untuk massa dalam SI adalah...)</span>", sentence: "The base unit for mass is the [drop]. <span class='translation'>(Satuan dasar massa adalah [drop].)</span>", options: ["Gram", "Kilogram", "Ton", "Second"], answer: "Kilogram", explanation: "Kilogram (kg) is the base SI unit for mass. <span class='translation'>Kilogram adalah satuan dasar SI untuk massa.</span>" }
+    ]
+  },
+
+  // ===== SECTION 3: REVIEW OF PRIOR KNOWLEDGE =====
+  {
+    id: 2,
+    steps: [
+      // Slide 1: Theory 1
+      { type: "theory", title: "🕒 Length Conversion Ladder", body: `<p>Remember the ladder! Kilo - Hecto - Deca - Base - Deci - Centi - Milli. Moving down the stairs means multiplying by 10 (or adding zeros). Moving up means dividing by 10.</p>
+      <div class="formula-box">1 km = 1000 m<br>1 m = 100 cm<br>1 cm = 10 mm</div>
+      <p class="translation">Ingat tangga! Kilo - Hekto - Deka - Satuan - Desi - Centi - Milli. Turun tangga berarti dikali 10. Naik tangga berarti dibagi 10.</p>` },
+
+      // Slide 2-4: Exercise 1-3
+      { type: "typing", prompt: "How many meters are in 0.05 kilometers? <span class='translation'>(Berapa meter dalam 0,05 kilometer?)</span>", answer: "50", explanation: "0.05 x 1000 = 50. <span class='translation'>0,05 x 1000 = 50.</span>" },
+      { type: "dropdown", prompt: "To convert from centimeters to meters, you must ________ by 100. <span class='translation'>(Untuk konversi cm ke m, kamu harus ________ 100.)</span>", sentence: "You must [drop] by 100. <span class='translation'>(Kamu harus [drop] 100.)</span>", options: ["multiply", "divide", "add", "subtract"], answer: "divide", explanation: "Moving up the ladder means dividing. <span class='translation'>Naik tangga berarti membagi.</span>" },
+      { type: "multiple_choice", prompt: "Which is larger, 500 mm or 50 cm? <span class='translation'>(Mana yang lebih besar, 500 mm atau 50 cm?)</span>", options: ["500 mm", "50 cm", "They are equal", "Cannot be determined"], answer: 2, explanation: "500 mm = 50 cm. They are the same length. <span class='translation'>500 mm = 50 cm. Panjangnya sama.</span>" },
+
+      // Slide 5: Theory 2
+      { type: "theory", title: "✊ Mass Conversion Ladder", body: `<p>Mass uses the same ladder! Ton (1000 kg), Quintal (100 kg), Kg, Gram, Milligram. 1 kg = 1,000 grams. 1 gram = 1,000 milligrams.</p>
+      <p class="translation">Massa pakai tangga yang sama! Ton (1000 kg), Kwintal (100 kg), Kg, Gram, Miligram.</p>` },
+
+      // Slide 6-8: Exercise 4-6
+      { type: "checkbox", prompt: "Which of the following are larger than 1 kilogram? <span class='translation'>(Mana yang lebih besar dari 1 kilogram?)</span>", options: ["1 Ton", "500 g", "1 Quintal", "2000 mg"], answers: [0, 2], explanation: "1 Ton and 1 Quintal are much larger than 1 kg. <span class='translation'>1 Ton dan 1 Kwintal jauh lebih besar dari 1 kg.</span>" },
+      { type: "range", prompt: "Slide to the number of days in April. <span class='translation'>(Geser ke jumlah hari pada bulan April.)</span>", min: 28, max: 31, answer: 30, explanation: "April is in a groove, meaning it has 30 days. <span class='translation'>April berada di lekukan, artinya memiliki 30 hari.</span>" },
+      { type: "pairing", prompt: "Match the mass unit to its equivalent! <span class='translation'>(Pasangkan satuan massa dengan ekuivalennya!)</span>", pairs: [{ left: "1 Ton", right: "1,000,000 Gram" }, { left: "1 Quintal", right: "100,000 Gram" }, { left: "1 Kilogram", right: "1,000 Gram" }] },
+
+      // Slide 9: Theory 3
+      { type: "theory", title: "🔄 Basic Time Conversion", body: `<p>Time doesn't use the base-10 ladder! 1 minute = 60 seconds. 1 hour = 60 minutes (3600 seconds). 1 day = 24 hours (86,400 seconds).</p>
+      <div class="tip-box"><b>Tip:</b> Always keep a calendar handy when planning duration!</div>
+      <p class="translation">Waktu tidak pakai tangga basis-10! 1 menit = 60 detik. 1 jam = 60 menit (3600 detik). 1 hari = 24 jam (86.400 detik).</p>` },
+
+      // Slide 10-13: Exercise 7-10
+      { type: "drag_drop", prompt: "Order the time units from shortest to longest! <span class='translation'>(Urutkan satuan waktu dari terpendek ke terpanjang!)</span>", sentence: "[drop] -> [drop] -> [drop] -> [drop]", bank: ["1 second", "1 minute", "1 hour", "1 day"], answer: "0,1,2,3", explanation: "Standard time progression. <span class='translation'>Progresi waktu standar.</span>" },
+      { type: "typing", prompt: "A film lasts 145 minutes. How many hours and minutes is that? (Format: X hours Y minutes) <span class='translation'>(Film berdurasi 145 menit. Berapa jam dan menit?)</span>", answer: "2 hours 25 minutes", explanation: "145 / 60 = 2 remainder 25. <span class='translation'>145 / 60 = 2 sisa 25.</span>" },
+      { type: "multiple_choice", prompt: "How many seconds are in exactly 1 hour? <span class='translation'>(Berapa detik dalam 1 jam?)</span>", options: ["60", "600", "3600", "86400"], answer: 2, explanation: "60 mins x 60 secs = 3600. <span class='translation'>60 menit x 60 detik = 3600.</span>" },
+      { type: "dropdown", prompt: "To measure a 100m sprint, use... <span class='translation'>(Untuk mengukur lari 100m, gunakan...)</span>", sentence: "Use [drop] to measure a sprint. <span class='translation'>(Gunakan [drop] untuk mengukut lari.)</span>", options: ["hours", "minutes", "seconds", "days"], answer: "seconds", explanation: "Sprints are short, measured in seconds. <span class='translation'>Lari cepat diukur dalam detik.</span>" }
+    ]
+  },
+
+  // ===== SECTION 4: PROBLEM INTRODUCTION =====
+  {
+    id: 3,
+    steps: [
+      // Slide 1: Theory 1
+      { type: "theory", title: "🚀 Scientific Notation", body: `<p>When numbers get too big or too small, we use Scientific Notation: $a \times 10^n$.</p>
+      <p>E.g., 5,200,000 mm is $5.2 \times 10^6$ mm. 0.00045 kg is $4.5 \times 10^{-4}$ kg.</p>
+      <p class="translation">Saat angka terlalu besar/kecil, gunakan Notasi Ilmiah: $a \times 10^n$. Cth: 5.200.000 mm adalah $5.2 \times 10^6$ mm. 0,00045 kg adalah $4.5 \times 10^{-4}$ kg.</p>` },
+
+      // Slide 2-4: Exercise 1-3
+      { type: "typing", prompt: "Express 0.00045 kg in scientific notation. (Format: a x 10^n) <span class='translation'>(Tulis 0,00045 kg dalam notasi ilmiah.)</span>", answer: "4.5 x 10^-4", explanation: "Move decimal 4 places to the right. <span class='translation'>Pindah koma 4 tempat ke kanan.</span>" },
+      { type: "multiple_choice", prompt: "How do you write $1.2 \times 10^6$ in standard form? <span class='translation'>(Bagaimana menulis $1.2 \times 10^6$ dalam bentuk standar?)</span>", options: ["1,200,000", "120,000", "12,000,000", "1,200,000,000"], answer: 0, explanation: "Move the decimal 6 places to the right. <span class='translation'>Pindah koma 6 tempat ke kanan.</span>" },
+      { type: "dropdown", prompt: "To convert a very large number like 12,500,000 mg into scientific notation, the exponent for 10 will be... <span class='translation'>(Untuk angka besar 12.500.000, pangkat 10 akan...)</span>", sentence: "The exponent will be [drop]. <span class='translation'>(Pangkatnya akan [drop].)</span>", options: ["positive", "negative", "zero", "fractional"], answer: "positive", explanation: "Large numbers have positive exponents. <span class='translation'>Angka besar memiliki pangkat positif.</span>" },
+
+      // Slide 5: Theory 2
+      { type: "theory", title: "🍂 Breaking Down Complex Problems", body: `<p>A server runs for 2 days, 4 hours, 15 minutes. Convert to seconds.</p>
+      <p>Step 1: Days to seconds (2 * 86,400). Step 2: Hours to seconds (4 * 3600). Step 3: Minutes to seconds (15 * 60). Step 4: Add them all!</p>
+      <p class="translation">Server bekerja 2 hari, 4 jam, 15 menit. Konversi ke detik. Langkah 1: Hari ke detik. Langkah 2: Jam ke detik. Langkah 3: Menit ke detik. Langkah 4: Jumlahkan!</p>` },
+
+      // Slide 6-8: Exercise 4-6
+      { type: "checkbox", prompt: "Which operations are needed to find the total seconds in 1 day, 2 hours, and 3 minutes? <span class='translation'>(Operasi apa yang dibutuhkan untuk mencari total detik?)</span>", options: ["Multiplication", "Addition", "Division", "Subtraction"], answers: [0, 1], explanation: "You multiply to convert units, then add them together. <span class='translation'>Kali untuk konversi, lalu tambah.</span>" },
+      { type: "range", prompt: "Slide to the number of days in February during a leap year. <span class='translation'>(Geser ke jumlah hari Februari tahun kabisat.)</span>", min: 28, max: 30, answer: 29, explanation: "Leap year February = 29 days. <span class='translation'>Februari kabisat = 29 hari.</span>" },
+      { type: "pairing", prompt: "Match the mass value to its equivalent! <span class='translation'>(Pasangkan nilai massa dengan ekuivalennya!)</span>", pairs: [{ left: "1 Ton", right: "1,000,000 Gram" }, { left: "1 Quintal", right: "100,000 Gram" }, { left: "1 Kilogram", right: "1,000 Gram" }] },
+
+      // Slide 9: Theory 3
+      { type: "theory", title: "🧮 Large Scale Mass Conversion", body: `<p>A server has a mass of 12.5 kg. To find milligrams: 12.5 kg -> 12,500 grams -> 12,500,000 mg. That's $1.25 \times 10^7$ mg!</p>
+      <p class="translation">Massa server 12,5 kg. Cari miligram: 12,5 kg -> 12.500 gram -> 12.500.000 mg. Itu sama dengan $1.25 \times 10^7$ mg!</p>` },
+
+      // Slide 10-13: Exercise 7-10
+      { type: "drag_drop", prompt: "Put the steps for converting 2 days to seconds in order! <span class='translation'>(Urutkan langkah konversi 2 hari ke detik!)</span>", sentence: "[drop] -> [drop] -> [drop]", bank: ["Convert days to hours", "Convert hours to minutes", "Convert minutes to seconds"], answer: "0,1,2", explanation: "Logical step-down conversion. <span class='translation'>Urutan konversi menurun.</span>" },
+      { type: "typing", prompt: "Convert 0.75 quintals (kwintal) to grams. (Type the number) <span class='translation'>(Konversi 0,75 kwintal ke gram.)</span>", answer: "75000", explanation: "0.75 * 100 kg = 75 kg. 75 * 1000 = 75,000 g. <span class='translation'>0,75 * 100 kg = 75 kg. 75 * 1000 = 75.000 g.</span>" },
+      { type: "multiple_choice", prompt: "What is 12.5 kg in milligrams? <span class='translation'>(Berapa 12,5 kg dalam miligram?)</span>", options: ["125,000 mg", "1,250,000 mg", "12,500,000 mg", "125,000,000 mg"], answer: 2, explanation: "12.5 kg -> 12,500 g -> 12,500,000 mg. <span class='translation'>12,5 kg -> 12.500 g -> 12.500.000 mg.</span>" },
+      { type: "dropdown", prompt: "Calculating remaining days in March... <span class='translation'>(Menghitung sisa hari di Maret...)</span>", sentence: "If a project starts March 15, remaining days in March are [drop]. <span class='translation'>(Jika mulai 15 Maret, sisa hari di Maret adalah [drop].)</span>", options: ["15", "16", "17", "18"], answer: "16", explanation: "March has 31 days. 31 - 15 = 16. <span class='translation'>Maret 31 hari. 31 - 15 = 16.</span>" }
+    ]
+  },
+
+  // ===== SECTION 5: GUIDED PRACTICE =====
+  {
+    id: 4,
+    steps: [
+      // Slide 1: Theory 1
+      { type: "theory", title: "⛵ Mixed Operations: Length & Mass", body: `<p>To solve 3.5 tons + 450 kg in grams: Step 1: Convert 3.5 tons to kg (3.5 * 1000 = 3500 kg). Step 2: Add 450 kg (3500 + 450 = 3950 kg). Step 3: Convert to grams (3950 * 1000 = 3,950,000 g).</p>
+      <p class="translation">Selesaikan 3,5 ton + 450 kg dalam gram: Langkah 1: 3,5 ton ke kg (3500 kg). Langkah 2: Tambah 450 kg (3950 kg). Langkah 3: Konversi ke gram (3.950.000 g).</p>` },
+
+      // Slide 2-4: Exercise 1-3
+      { type: "typing", prompt: "Calculate: (2.5 tons - 150 kg) + 45,000 grams = ... kg. (Type only the number) <span class='translation'>(Hitung: (2,5 ton - 150 kg) + 45.000 gram = ... kg.)</span>", answer: "2395", explanation: "2500 - 150 + 45 = 2395 kg. <span class='translation'>2500 - 150 + 45 = 2395 kg.</span>" },
+      { type: "dropdown", prompt: "First step to solve '1.2 km - 450 m in cm'? <span class='translation'>(Langkah pertama '1,2 km - 450 m dalam cm'?)</span>", sentence: "First, you must [drop]. <span class='translation'>(Pertama, kamu harus [drop].)</span>", options: ["Convert 1.2 km to meters", "Convert 450 m to cm", "Subtract 450 from 1.2", "Convert everything to cm immediately"], answer: "Convert 1.2 km to meters", explanation: "Always convert to the same base unit first. <span class='translation'>Selalu samakan satuan dasar dulu.</span>" },
+      { type: "multiple_choice", prompt: "Calculate: 1.5 km + 250 m in decimeters (dm). <span class='translation'>(Hitung: 1,5 km + 250 m dalam desimeter.)</span>", options: ["1750 dm", "17500 dm", "175000 dm", "175 dm"], answer: 1, explanation: "1500m + 250m = 1750m. 1750 * 10 = 17500 dm. <span class='translation'>1500m + 250m = 1750m. 1750 * 10 = 17500 dm.</span>" },
+
+      // Slide 5: Theory 2
+      { type: "theory", title: "📅 Mixed Operations: Time", body: `<p>Subtracting time requires borrowing. 3 hours - 1 hour 45 minutes. Borrow 1 hour (60 mins). 2 hours 60 mins - 1 hour 45 mins = 1 hour 15 minutes.</p>
+      <p class="translation">Pengurangan waktu butuh pinjam. 3 jam - 1 jam 45 menit. Pinjam 1 jam (60 menit). 2 jam 60 menit - 1 jam 45 menit = 1 jam 15 menit.</p>` },
+
+      // Slide 6-8: Exercise 4-6
+      { type: "checkbox", prompt: "If a machine runs for 2 days, 10 hours, and 30 minutes, which calculations give the total minutes? <span class='translation'>(Mesin berjalan 2 hari, 10 jam, 30 menit. Mana yang menghasilkan total menit?)</span>", options: ["(2 * 24 * 60) + (10 * 60) + 30", "(2 * 60) + 10 + 30", "(48 * 60) + 600 + 30", "2 + 10 + 30"], answers: [0, 2], explanation: "Both correctly convert and sum the minutes. <span class='translation'>Keduanya benar dalam konversi dan penjumlahan menit.</span>" },
+      { type: "range", prompt: "From 22:45 to 24:00, how many minutes pass? <span class='translation'>(Dari 22:45 ke 24:00, berapa menit?)</span>", min: 10, max: 20, answer: 15, explanation: "22:45 to 23:00 = 15 minutes. <span class='translation'>22:45 ke 23:00 = 15 menit.</span>" },
+      { type: "pairing", prompt: "Match the event with its date! <span class='translation'>(Pasangkan kejadian dengan tanggalnya!)</span>", pairs: [{ left: "End of autumn", right: "Nov 30" }, { left: "Departure day", right: "Nov 20" }, { left: "Return day", right: "Jan 4" }] },
+
+      // Slide 9: Theory 3
+      { type: "theory", title: "❄️ Kinesthetic Estimation", body: `<p>Estimate using your body! Your hand span is roughly 20 cm. Your foot step is roughly 70 cm. Estimate the desk width, then measure with a tool to find the difference (error).</p>
+      <p class="translation">Estimasi pakai tubuh! Rentang tangan kira-kira 20 cm. Langkah kaki kira-kira 70 cm. Estimasi lebar meja, lalu ukur dengan alat untuk mencari selisih (error).</p>` },
+
+      // Slide 10-13: Exercise 7-10
+      { type: "drag_drop", prompt: "Order the operations to solve: 'Total mass of 0.00045 kg particle multiplied by 1000 in decigrams'. <span class='translation'>(Urutkan operasi mencari total massa partikel.)</span>", sentence: "[drop] -> [drop] -> [drop]", bank: ["Multiply mass by 1000", "Convert kg to grams", "Convert grams to decigrams"], answer: "0,1,2", explanation: "Find total mass first, then convert down the ladder. <span class='translation'>Cari total massa dulu, lalu konversi turun.</span>" },
+      { type: "typing", prompt: "Subtract 0.005 km by 450 cm, then add 1200 mm. Give the final answer in meters. <span class='translation'>(Kurangi 0,005 km dengan 450 cm, lalu tambah 1200 mm. Berikan jawaban dalam meter.)</span>", answer: "1.7", explanation: "5m - 4.5m + 1.2m = 1.7m. <span class='translation'>5m - 4,5m + 1,2m = 1,7m.</span>" },
+      { type: "multiple_choice", prompt: "You estimate a book is 25 cm long. Precise measurement is 23.5 cm. What is the error in mm? <span class='translation'>(Estimasi buku 25 cm. Ukur pasti 23,5 cm. Berapa errornya dalam mm?)</span>", options: ["15 mm", "1.5 mm", "150 mm", "15 cm"], answer: 0, explanation: "25 - 23.5 = 1.5 cm. 1.5 cm * 10 = 15 mm. <span class='translation'>25 - 23,5 = 1,5 cm. 1,5 cm * 10 = 15 mm.</span>" },
+      { type: "dropdown", prompt: "Why do we use kinesthetic estimation? <span class='translation'>(Kenapa pakai estimasi kinestetik?)</span>", sentence: "To get a [drop] when tools aren't available. <span class='translation'>(Untuk mendapatkan [drop] saat alat tidak ada.)</span>", options: ["rough idea", "exact science", "100% accuracy", "zero error"], answer: "rough idea", explanation: "It gives a rough idea when tools aren't available. <span class='translation'>Memberi gambaran kasar saat alat tak ada.</span>" }
+    ]
+  },
+
+  // ===== SECTION 6: INDEPENDENT PRACTICE =====
+  {
+    id: 5,
+    steps: [
+      // Slide 1: Theory 1
+      { type: "theory", title: "✈️ Micro Mission: Particles", body: `<p>Mass of a particle is 0.00045 kg. If there are 1,000 particles, what is the total mass in decigrams (dg)? Solution: 0.00045 kg * 1000 = 0.45 kg. 0.45 kg = 450 grams. 450 grams = 4500 dg!</p>
+      <p class="translation">Massa partikel 0,00045 kg. Jika ada 1.000 partikel, berapa total massa dalam desigram (dg)? Solusi: 0,00045 kg * 1000 = 0,45 kg. 0,45 kg = 450 gram. 450 gram = 4500 dg!</p>` },
+
+      // Slide 2-4: Exercise 1-3
+      { type: "typing", prompt: "Mass of a microchip is 0.002 kg. What is its mass in milligrams? <span class='translation'>(Massa mikrochip 0,002 kg. Berapa massanya dalam miligram?)</span>", answer: "2000", explanation: "0.002 kg -> 2 g -> 2000 mg. <span class='translation'>0,002 kg -> 2 g -> 2000 mg.</span>" },
+      { type: "dropdown", prompt: "If 1 particle is 4.5 x 10^-4 kg, 10,000 particles would be... <span class='translation'>(Jika 1 partikel 4.5 x 10^-4 kg, 10.000 partikel akan...)</span>", sentence: "10,000 particles would be [drop] kg. <span class='translation'>(10.000 partikel akan menjadi [drop] kg.)</span>", options: ["4.5", "45", "450", "0.045"], answer: "4.5", explanation: "4.5 x 10^-4 * 10^4 = 4.5 kg. <span class='translation'>4.5 x 10^-4 * 10^4 = 4.5 kg.</span>" },
+      { type: "multiple_choice", prompt: "0.00045 kg * 1,000 converted to decigrams is? <span class='translation'>(0,00045 kg * 1.000 dikonversi ke desigram?)</span>", options: ["4.5 dg", "45 dg", "450 dg", "4500 dg"], answer: 3, explanation: "Total mass = 450 g. 450 g * 10 = 4500 dg. <span class='translation'>Total massa = 450 g. 450 g * 10 = 4500 dg.</span>" },
+
+      // Slide 5: Theory 2
+      { type: "theory", title: "🛰️ Orbital Mission: Satellites", body: `<p>A satellite orbits for 5.2 km on day 1, and 4,850 meters on day 2. Total distance in mm? Convert to meters first: 5200 m + 4850 m = 10,050 m. Convert to mm: 10,050 * 1000 = 10,050,000 mm = $1.005 \times 10^7$ mm.</p>
+      <p class="translation">Satelit orbit 5,2 km hari 1, dan 4.850 meter hari 2. Total jarak dalam mm? Konversi ke meter: 5200 m + 4850 m = 10.050 m. Konversi ke mm: 10.050.000 mm = $1.005 \times 10^7$ mm.</p>` },
+
+      // Slide 6-8: Exercise 4-6
+      { type: "checkbox", prompt: "Which distances are equal to 5.2 km? <span class='translation'>(Jarak mana yang sama dengan 5,2 km?)</span>", options: ["5200 m", "52000 dm", "5200000 mm", "520 cm"], answers: [0, 2], explanation: "5200 m and 5,200,000 mm both equal 5.2 km. <span class='translation'>5200 m dan 5.200.000 mm sama dengan 5,2 km.</span>" },
+      { type: "range", prompt: "A satellite travels 15,000,000 mm in a day. This is between how many kilometers? <span class='translation'>(Satelit menempuh 15.000.000 mm. Ini di antara berapa km?)</span>", min: 10, max: 20, answer: 15, explanation: "15,000,000 mm = 15,000 m = 15 km. <span class='translation'>15.000.000 mm = 15.000 m = 15 km.</span>" },
+      { type: "pairing", prompt: "Match the durations with their equivalents! <span class='translation'>(Pasangkan durasi dengan ekuivalennya!)</span>", pairs: [{ left: "1 week", right: "7 days" }, { left: "12 weeks", right: "84 days" }, { left: "81 hours", right: "3 days 9 hours" }] },
+
+      // Slide 9: Theory 3
+      { type: "theory", title: "📊 Construction Mission: Building Materials", body: `<p>A construction project takes 1.2 million seconds. Is it less than 2 weeks? 1 week = 604,800 seconds. 2 weeks = 1,209,600 seconds. Yes, 1,200,000 < 1,209,600. It finishes just in time!</p>
+      <p class="translation">Proyek konstruksi butuh 1,2 juta detik. Apakah kurang dari 2 minggu? 2 minggu = 1.209.600 detik. Ya, 1.200.000 < 1.209.600. Selesai tepat waktu!</p>` },
+
+      // Slide 10-13: Exercise 7-10
+      { type: "drag_drop", prompt: "Order the steps to solve the construction problem! <span class='translation'>(Urutkan langkah menyelesaikan masalah konstruksi!)</span>", sentence: "[drop] -> [drop] -> [drop] -> [drop]", bank: ["Find seconds in a day", "Find seconds in a week", "Multiply by 2", "Compare to 1.2 million"], answer: "0,1,2,3", explanation: "Find day -> week -> 2 weeks -> compare. <span class='translation'>Cari hari -> minggu -> 2 minggu -> bandingkan.</span>" },
+      { type: "typing", prompt: "An athlete runs 5.2 km and 4850 m. Total distance in mm using scientific notation. (Format: a x 10^n) <span class='translation'>(Atlet lari 5,2 km dan 4850 m. Total dalam mm notasi ilmiah.)</span>", answer: "1.005 x 10^7", explanation: "10,050,000 mm = $1.005 \times 10^7$. <span class='translation'>10.050.000 mm = $1.005 \times 10^7$.</span>" },
+      { type: "multiple_choice", prompt: "If a project takes 1,300,000 seconds, is it finished within 2 weeks? <span class='translation'>(Jika proyek butuh 1.300.000 detik, apakah selesai dalam 2 minggu?)</span>", options: ["Yes, it is less than 1,209,600", "No, it is more than 1,209,600", "It is exactly 2 weeks", "Cannot be determined"], answer: 1, explanation: "1,300,000 > 1,209,600. It is late. <span class='translation'>1.300.000 > 1.209.600. Terlambat.</span>" },
+      { type: "dropdown", prompt: "January is in which season in the Southern Hemisphere? <span class='translation'>(Januari musim apa di Belahan Selatan?)</span>", sentence: "January in the Southern Hemisphere is [drop]. <span class='translation'>(Januari di Selatan adalah [drop].)</span>", options: ["Winter", "Spring", "Summer", "Autumn"], answer: "Summer", explanation: "The South is opposite to the North. January in the South is Summer. <span class='translation'>Selatan berlawanan. Januari di Selatan adalah Panas.</span>" }
+    ]
+  },
+
+  // ===== SECTION 7.1: ASSESSMENT A (PANJANG / LENGTH) =====
+  {
+    id: 6,
+    steps: [
+      { type: "typing", prompt: "Convert 4,250,000 mm to km. <span class='translation'>(Konversi 4.250.000 mm ke km.)</span>", answer: "4.25", explanation: "Divide by 1,000,000. <span class='translation'>Dibagi 1.000.000.</span>" },
+      { type: "multiple_choice", prompt: "1.5 km + 250 m = ... dm. <span class='translation'>(1.5 km + 250 m = ... dm.)</span>", options: ["1750", "17500", "175000", "175"], answer: 1, explanation: "1750 m * 10 = 17500 dm. <span class='translation'>1750 m * 10 = 17500 dm.</span>" },
+      { type: "dropdown", prompt: "To convert meters to centimeters... <span class='translation'>(Untuk konversi meter ke cm...)</span>", sentence: "You must [drop] by 100. <span class='translation'>(Kamu harus [drop] 100.)</span>", options: ["multiply", "divide", "add", "subtract"], answer: "multiply", explanation: "Moving down the ladder. <span class='translation'>Turun tangga.</span>" },
+      { type: "checkbox", prompt: "Which are equal to 1.2 km? <span class='translation'>(Mana yang sama dengan 1,2 km?)</span>", options: ["1200 m", "12000 cm", "1,200,000 mm", "120 dm"], answers: [0, 2], explanation: "Only 1200 m and 1,200,000 mm equal 1.2 km. <span class='translation'>Hanya 1200 m dan 1.200.000 mm.</span>" },
+      { type: "pairing", prompt: "Match the conversions! <span class='translation'>(Pasangkan konversi!)</span>", pairs: [{ left: "1 km", right: "1000 m" }, { left: "1 m", right: "100 cm" }, { left: "1 cm", right: "10 mm" }] },
+      { type: "range", prompt: "Estimate the height of a door in centimeters. <span class='translation'>(Estimasi tinggi pintu dalam cm.)</span>", min: 150, max: 250, answer: 200, explanation: "Standard doors are about 200 cm. <span class='translation'>Pintu standar sekitar 200 cm.</span>" },
+      { type: "drag_drop", prompt: "Sort largest to smallest: <span class='translation'>(Urutkan terbesar ke terkecil:)</span>", sentence: "[drop] -> [drop] -> [drop] -> [drop]", bank: ["1 km", "1000 dm", "10000 cm", "100000 mm"], answer: "0,1,2,3", explanation: "They are all equal, but mathematically represented this way. <span class='translation'>Semuanya sama.</span>" },
+      { type: "typing", prompt: "0.005 km - 450 cm + 1200 mm = ... meters. <span class='translation'>(0,005 km - 450 cm + 1200 mm = ... meter.)</span>", answer: "1.7", explanation: "5m - 4.5m + 1.2m = 1.7m. <span class='translation'>5m - 4,5m + 1,2m = 1,7m.</span>" },
+      { type: "multiple_choice", prompt: "5.2 km + 4850 m in mm? <span class='translation'>(5.2 km + 4850 m dalam mm?)</span>", options: ["1.005x10^6", "1.005x10^7", "10050", "1.005x10^8"], answer: 1, explanation: "10,050,000 mm. <span class='translation'>10.050.000 mm.</span>" },
+      { type: "dropdown", prompt: "Best unit to measure distance between cities? <span class='translation'>(Satuan terbaik ukur jarak antar kota?)</span>", sentence: "Use [drop]. <span class='translation'>(Gunakan [drop].)</span>", options: ["mm", "m", "km", "cm"], answer: "km", explanation: "Km is for large distances. <span class='translation'>Km untuk jarak besar.</span>" }
+    ]
+  },
+
+  // ===== SECTION 7.2: ASSESSMENT B (MASSA / MASS) =====
+  {
+    id: 7,
+    steps: [
+      { type: "typing", prompt: "4.25 kg = ... mg. <span class='translation'>(4.25 kg = ... mg.)</span>", answer: "4250000", explanation: "4.25 * 1,000,000. <span class='translation'>4.25 * 1.000.000.</span>" },
+      { type: "multiple_choice", prompt: "0.75 quintal = ... grams. <span class='translation'>(0.75 kwintal = ... gram.)</span>", options: ["750", "7500", "75000", "750000"], answer: 2, explanation: "75 kg * 1000. <span class='translation'>75 kg * 1000.</span>" },
+      { type: "dropdown", prompt: "1 ton is equal to... <span class='translation'>(1 ton sama dengan...)</span>", sentence: "1 ton = [drop] kg. <span class='translation'>(1 ton = [drop] kg.)</span>", options: ["10", "100", "1000", "10000"], answer: "1000", explanation: "1 Ton = 1000 kg. <span class='translation'>1 Ton = 1000 kg.</span>" },
+      { type: "checkbox", prompt: "Which are larger than 1 kg? <span class='translation'>(Mana yang lebih besar dari 1 kg?)</span>", options: ["1 Ton", "500 g", "1 Quintal", "2000 mg"], answers: [0, 2], explanation: "Ton and Quintal > kg. <span class='translation'>Ton dan Kwintal > kg.</span>" },
+      { type: "pairing", prompt: "Match the mass units! <span class='translation'>(Pasangkan satuan massa!)</span>", pairs: [{ left: "1 Ton", right: "1,000,000 g" }, { left: "1 kg", right: "1000 g" }, { left: "1 g", right: "1000 mg" }] },
+      { type: "typing", prompt: "(2.5 ton - 150 kg) + 45000 g = ... kg. <span class='translation'>(Hitung dalam kg.)</span>", answer: "2395", explanation: "2500 - 150 + 45 = 2395. <span class='translation'>2500 - 150 + 45 = 2395.</span>" },
+      { type: "range", prompt: "Estimate the mass of a textbook in grams. <span class='translation'>(Estimasi massa buku teks dalam gram.)</span>", min: 200, max: 800, answer: 500, explanation: "Average book is ~500g. <span class='translation'>Rata-rata buku ~500g.</span>" },
+      { type: "multiple_choice", prompt: "0.00045 kg * 1000 in decigrams? <span class='translation'>(0.00045 kg * 1000 dalam dg?)</span>", options: ["4.5", "45", "450", "4500"], answer: 3, explanation: "450 g = 4500 dg. <span class='translation'>450 g = 4500 dg.</span>" },
+      { type: "drag_drop", prompt: "Sort smallest to largest: <span class='translation'>(Urutkan terkecil ke terbesar:)</span>", sentence: "[drop] -> [drop] -> [drop] -> [drop]", bank: ["1 mg", "1 g", "1 kg", "1 ton"], answer: "0,1,2,3", explanation: "Standard mass ladder. <span class='translation'>Tangga massa standar.</span>" },
+      { type: "dropdown", prompt: "To measure micro-particles, use... <span class='translation'>(Untuk partikel mikro, gunakan...)</span>", sentence: "Use [drop]. <span class='translation'>(Gunakan [drop].)</span>", options: ["kg", "ton", "mg", "g"], answer: "mg", explanation: "Milligrams for tiny masses. <span class='translation'>Miligram untuk massa kecil.</span>" }
+    ]
+  },
+
+  // ===== SECTION 7.3: ASSESSMENT C (WAKTU / TIME) =====
+  {
+    id: 8,
+    steps: [
+      { type: "typing", prompt: "145 minutes = ... hours ... minutes. (Format: X hours Y minutes) <span class='translation'>(145 menit = ... jam ... menit.)</span>", answer: "2 hours 25 minutes", explanation: "145 / 60 = 2 remainder 25. <span class='translation'>145 / 60 = 2 sisa 25.</span>" },
+      { type: "multiple_choice", prompt: "3 days 5 hours 20 mins = ... seconds. <span class='translation'>(3 hari 5 jam 20 mnt = ... detik.)</span>", options: ["27840", "278400", "2784000", "27840"], answer: 1, explanation: "3(86400)+5(3600)+20(60) = 278400. <span class='translation'>3(86400)+5(3600)+20(60) = 278400.</span>" },
+      { type: "dropdown", prompt: "1 day = ... seconds. <span class='translation'>(1 hari = ... detik.)</span>", sentence: "1 day = [drop] seconds. <span class='translation'>(1 hari = [drop] detik.)</span>", options: ["3600", "86400", "1440", "60"], answer: "86400", explanation: "24 * 60 * 60 = 86400. <span class='translation'>24 * 60 * 60 = 86400.</span>" },
+      { type: "checkbox", prompt: "Which equal 1 hour? <span class='translation'>(Mana yang sama dengan 1 jam?)</span>", options: ["3600 seconds", "60 seconds", "60 minutes", "1440 minutes"], answers: [0, 2], explanation: "3600 s and 60 m = 1 hour. <span class='translation'>3600 d dan 60 m = 1 jam.</span>" },
+      { type: "pairing", prompt: "Match the time units! <span class='translation'>(Pasangkan satuan waktu!)</span>", pairs: [{ left: "1 Minute", right: "60 s" }, { left: "1 Hour", right: "3600 s" }, { left: "1 Day", right: "86400 s" }] },
+      { type: "typing", prompt: "1.2 million seconds is how many days? (Round to 2 decimal places) <span class='translation'>(1,2 juta detik berapa hari? (2 desimal))</span>", answer: "13.89", explanation: "1,200,000 / 86400 = 13.88... <span class='translation'>1.200.000 / 86400 = 13,88...</span>" },
+      { type: "range", prompt: "Estimate the time it takes to blink in milliseconds. <span class='translation'>(Estimasi waktu kedip dalam milidetik.)</span>", min: 100, max: 400, answer: 150, explanation: "Average blink is ~150 ms. <span class='translation'>Rata-rata ~150 ms.</span>" },
+      { type: "multiple_choice", prompt: "Does 1.2 million seconds finish in less than 2 weeks? <span class='translation'>(Apakah 1,2 juta detik kurang dari 2 minggu?)</span>", options: ["Yes", "No", "Exactly 2 weeks", "Cannot tell"], answer: 0, explanation: "13.89 days < 14 days. <span class='translation'>13,89 hari < 14 hari.</span>" },
+      { type: "drag_drop", prompt: "Order from shortest to longest: <span class='translation'>(Urutkan terpendek ke terpanjang:)</span>", sentence: "[drop] -> [drop] -> [drop] -> [drop]", bank: ["1 hour", "1 minute", "1 day", "1 second"], answer: "3,1,0,2", explanation: "1s, 1m, 1h, 1d. <span class='translation'>1d, 1m, 1j, 1h.</span>" },
+      { type: "dropdown", prompt: "To measure a 100m sprint, use... <span class='translation'>(Mengukur lari 100m gunakan...)</span>", sentence: "Use [drop]. <span class='translation'>(Gunakan [drop].)</span>", options: ["hours", "minutes", "seconds", "days"], answer: "seconds", explanation: "Sprints use seconds. <span class='translation'>Lari pakai detik.</span>" }
+    ]
+  },
+
+  // ===== SECTION 7.4: ASSESSMENT D (NOTASI ILMIAH & DESIMAL) =====
+  {
+    id: 9,
+    steps: [
+      { type: "typing", prompt: "Write 5,200,000 in scientific notation. (Format: a x 10^n) <span class='translation'>(Tulis 5.200.000 dalam notasi ilmiah.)</span>", answer: "5.2 x 10^6", explanation: "Move decimal 6 places left. <span class='translation'>Pindah koma 6 kiri.</span>" },
+      { type: "multiple_choice", prompt: "0.00045 kg in scientific notation? <span class='translation'>(0,00045 kg dalam notasi ilmiah?)</span>", options: ["4.5x10^4", "4.5x10^-4", "45x10^-5", "0.45x10^-3"], answer: 1, explanation: "Move decimal 4 places right. <span class='translation'>Pindah koma 4 kanan.</span>" },
+      { type: "dropdown", prompt: "To convert 0.05 km to meters, move the decimal... <span class='translation'>(Konversi 0.05 km ke meter, pindahkan koma...)</span>", sentence: "Move [drop] places to the right. <span class='translation'>(Pindah [drop] tempat ke kanan.)</span>", options: ["1", "2", "3", "4"], answer: "3", explanation: "0.05 km -> 50 m (3 places). <span class='translation'>0,05 km -> 50 m (3 tempat).</span>" },
+      { type: "checkbox", prompt: "Which are correct scientific notation? <span class='translation'>(Mana notasi ilmiah yang benar?)</span>", options: ["1.2x10^6", "12x10^5", "4.5x10^-4", "0.45x10^-3"], answers: [0, 2], explanation: "Coefficient must be 1-9. <span class='translation'>Koefisien harus 1-9.</span>" },
+      { type: "pairing", prompt: "Match standard to scientific! <span class='translation'>(Pasangkan standar ke ilmiah!)</span>", pairs: [{ left: "1,000,000", right: "10^6" }, { left: "0.001", right: "10^-3" }, { left: "1,000", right: "10^3" }] },
+      { type: "typing", prompt: "0.005 km = ... meters. <span class='translation'>(0,005 km = ... meter.)</span>", answer: "5", explanation: "0.005 * 1000 = 5. <span class='translation'>0,005 * 1000 = 5.</span>" },
+      { type: "range", prompt: "$3 \times 10^4$ is between what range of tens of thousands? <span class='translation'>(Antara berapa puluh ribu?)</span>", min: 2, max: 4, answer: 3, explanation: "It is exactly 30,000. <span class='translation'>Tepat 30.000.</span>" },
+      { type: "multiple_choice", prompt: "10,050,000 mm in scientific notation? <span class='translation'>(10.050.000 mm dalam notasi ilmiah?)</span>", options: ["1.005x10^7", "1.005x10^6", "1.005x10^8", "10.05x10^5"], answer: 0, explanation: "Move decimal 7 places left. <span class='translation'>Pindah koma 7 kiri.</span>" },
+      { type: "drag_drop", prompt: "Order from smallest to largest: <span class='translation'>(Urutkan terkecil ke terbesar:)</span>", sentence: "[drop] -> [drop] -> [drop]", bank: ["1.2x10^6", "1.2x10^3", "1.2x10^8"], answer: "1,0,2", explanation: "10^3 < 10^6 < 10^8. <span class='translation'>10^3 < 10^6 < 10^8.</span>" },
+      { type: "dropdown", prompt: "0.00045 has how many decimal places to move for standard form? <span class='translation'>(0,00045 pindah berapa tempat?)</span>", sentence: "Move [drop] places. <span class='translation'>(Pindah [drop] tempat.)</span>", options: ["2", "3", "4", "5"], answer: "4", explanation: "Move 4 places to get 4.5. <span class='translation'>Pindah 4 tempat.</span>" }
+    ]
+  },
+
+  // ===== SECTION 7.5: ASSESSMENT E (APLIKASI DUNIA NYATA) =====
+  {
+    id: 10,
+    steps: [
+      { type: "typing", prompt: "A drone motor is 45g. What is it in kg? <span class='translation'>(Motor drone 45g. Berapa dalam kg?)</span>", answer: "0.045", explanation: "45 / 1000 = 0.045. <span class='translation'>45 / 1000 = 0,045.</span>" },
+      { type: "multiple_choice", prompt: "A server runs 2 days 4 hrs 15 mins. Total seconds? <span class='translation'>(Server berjalan 2 hari 4 jam 15 mnt. Total detik?)</span>", options: ["188100", "187200", "188000", "190000"], answer: 0, explanation: "2(86400)+4(3600)+15(60) = 188100. <span class='translation'>2(86400)+4(3600)+15(60) = 188100.</span>" },
+      { type: "dropdown", prompt: "To build a drone, you measure propellers in... <span class='translation'>(Membangun drone, baling-baling diukur dalam...)</span>", sentence: "Measure propellers in [drop]. <span class='translation'>(Diukur dalam [drop].)</span>", options: ["km", "m", "cm", "ton"], answer: "cm", explanation: "Propellers are small, use cm. <span class='translation'>Baling-baling kecil, pakai cm.</span>" },
+      { type: "checkbox", prompt: "Which require precise measurement? <span class='translation'>(Mana yang butuh presisi?)</span>", options: ["Server mass", "Drone propeller length", "Guessing game", "Singing"], answers: [0, 1], explanation: "Engineering requires precision. <span class='translation'>Teknik butuh presisi.</span>" },
+      { type: "pairing", prompt: "Match the object to its unit! <span class='translation'>(Pasangkan benda ke satuannya!)</span>", pairs: [{ left: "Drone Battery", right: "Grams" }, { left: "Soccer Field", right: "Meters" }, { left: "Movie Duration", right: "Minutes" }] },
+      { type: "typing", prompt: "A project takes 1.2 million seconds. It takes approximately ... days. (Round to 2 decimals) <span class='translation'>(Proyek 1,2 juta detik. Berapa hari?)</span>", answer: "13.89", explanation: "1,200,000 / 86400 = 13.89. <span class='translation'>1.200.000 / 86400 = 13,89.</span>" },
+      { type: "range", prompt: "Estimate the mass of a car in kilograms. <span class='translation'>(Estimasi massa mobil dalam kg.)</span>", min: 1000, max: 2500, answer: 1500, explanation: "Average car is ~1500 kg. <span class='translation'>Rata-rata mobil ~1500 kg.</span>" },
+      { type: "multiple_choice", prompt: "An athlete runs 5.2 km and 4850 m. Total in scientific notation (mm)? <span class='translation'>(Atlet lari 5.2 km dan 4850 m. Total notasi ilmiah mm?)</span>", options: ["1.005x10^7", "1.005x10^6", "1.005x10^8", "1.005x10^5"], answer: 0, explanation: "10,050,000 mm. <span class='translation'>10.050.000 mm.</span>" },
+      { type: "drag_drop", prompt: "Steps to solve a mixed unit word problem: <span class='translation'>(Langkah selesaikan soal campuran:)</span>", sentence: "[drop] -> [drop] -> [drop] -> [drop]", bank: ["Identify units", "Convert to base unit", "Perform math", "Convert to target unit"], answer: "0,1,2,3", explanation: "Identify -> Convert -> Math -> Convert back. <span class='translation'>Identifikasi -> Konversi -> Hitung -> Konversi.</span>" },
+      { type: "dropdown", prompt: "If a project needs 1.3 million seconds, and 2 weeks is 1,209,600 seconds, the project is... <span class='translation'>(Proyek 1,3 juta detik, 2 minggu 1.209.600 detik, proyek...)</span>", sentence: "The project is [drop]. <span class='translation'>(Proyek [drop].)</span>", options: ["on time", "late", "early", "canceled"], answer: "late", explanation: "1.3M > 1.2M, so it is late. <span class='translation'>1.3M > 1.2M, berarti terlambat.</span>" }
+    ]
+  },
+
+  // ===== SECTION 8: CONSOLIDATION & REFLECTION =====
+  {
+    id: 11,
+    steps: [
+      { type: "theory", title: "🎉 Summary & Reflection", body: `<div style="text-align:center"><div style="font-size:60px">🏆</div>
+      <h2 style="color:var(--yellow-dark);font-size:28px;margin:10px 0">Excellent!</h2>
+      <p style="font-size:16px;color:var(--text-light);margin-bottom:20px">Lesson completed</p></div>
+      <p>You have completed the advanced Measurement (Length, Mass, Time) material!</p>
+      <p><b>🔑 Keys to Success in Measurement:</b></p>
+      <p>1. Always check the conversion ladder (Kilo to Milli).</p>
+      <p>2. Time uses base-60 and base-24, not base-10.</p>
+      <p>3. Use scientific notation for extremely large or small numbers.</p>
+      <p>4. Always convert to the same base unit before adding or subtracting.</p>
+      <div class="tip-box" style="margin-top:20px">
+        <b>💬 How do you feel after this material?</b><br>
+        Precision is the key to becoming a top-tier engineer. We want to hear your thoughts!<br><br>
+        👉 <a href="https://learn.algonova.id/login" target="_blank" style="color:var(--blue-dark);font-weight:800">Click here to fill out the feedback and enrichment form</a>
+      </div>
+      <p class="translation">Selamat! Kamu telah menyelesaikan materi Pengukuran (Panjang, Massa, Waktu) tingkat lanjut! Kunci Sukses: 1. Cek tangga konversi. 2. Waktu pakai basis-60/24. 3. Notasi ilmiah untuk angka ekstrem. 4. Samakan satuan dasar sebelum dihitung. Bagaimana perasaanmu? Presisi adalah kunci engineer top. Kami ingin mendengar pendapatmu! Klik link di atas untuk mengisi feedback.</p>` }
+    ]
+  }
+];
+
+// ============== APP LOGIC ==============
+function initApp() {
+  const mapContainer = $('#mapContainer');
+  const svg = $('#mapSvg');
+  let pathD = '';
+
+  // 1. Garis lurus dari node 1 sampai 6 (index 0 to 5)
+  for (let i = 1; i <= 5; i++) {
+    const prev = App.nodePositions[i-1];
+    const pos = App.nodePositions[i];
+    pathD += `M ${prev.x} ${prev.y} Q ${(prev.x+pos.x)/2} ${Math.min(prev.y, pos.y) + 50}, ${pos.x} ${pos.y} `;
+  }
+
+  // 2. Garis cabang dari node 6 (index 5) ke node 7.1 - 7.5 (index 6 to 10)
+  const branchStart = App.nodePositions[5];
+  for (let i = 6; i <= 10; i++) {
+    const pos = App.nodePositions[i];
+    pathD += `M ${branchStart.x} ${branchStart.y} C ${branchStart.x} ${branchStart.y + 60}, ${pos.x} ${pos.y - 60}, ${pos.x} ${pos.y} `;
+  }
+
+  // 3. Garis menyatu dari node 7.1 - 7.5 (index 6 to 10) ke node 8 (index 11)
+  const branchEnd = App.nodePositions[11];
+  for (let i = 6; i <= 10; i++) {
+    const pos = App.nodePositions[i];
+    pathD += `M ${pos.x} ${pos.y} C ${pos.x} ${branchEnd.y - 60}, ${branchEnd.x} ${branchEnd.y - 60}, ${branchEnd.x} ${branchEnd.y} `;
+  }
+
+  // Render garis path SVG
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path.setAttribute('d', pathD);
+  path.setAttribute('stroke', '#e5e5e5');
+  path.setAttribute('stroke-width', '6');
+  path.setAttribute('stroke-dasharray', '10,10');
+  path.setAttribute('fill', 'none');
+  svg.appendChild(path);
+
+  // Render setiap node
+  App.nodePositions.forEach((pos, i) => {
+    const node = el('div', 'map-node available', App.lessonMeta[i].icon);
+    node.style.left = `${(pos.x / 800) * 100}%`;
+    node.style.top = `${(pos.y / 1080) * 100}%`; // PERBAIKAN: Angka pembagi diubah menjadi 1080
+    node.dataset.id = i;
+    
+    const tooltip = el('div', 'node-tooltip', App.lessonMeta[i].title);
+    node.appendChild(tooltip);
+    
+    const labelContent = `
+      <span>${App.lessonMeta[i].title}</span>
+      <span class="node-time-label">${App.lessonMeta[i].time}</span>
+    `;
+    const label = el('div', 'node-label', labelContent);
+    node.appendChild(label);
+    
+    node.onclick = () => startLesson(i);
+    mapContainer.appendChild(node);
+  });
+
+  // Event Listeners
+  $('#openRulesBtn').onclick = () => $('#rulesOverlay').classList.add('show');
+  $('#closeRulesBtn').onclick = () => $('#rulesOverlay').classList.remove('show');
+  $('#understandBtn').onclick = () => $('#rulesOverlay').classList.remove('show');
+  
+  $('#lessonClose').onclick = () => {
+    $('#lessonView').classList.remove('active');
+    $('#mapView').style.display = 'block';
+    updateMapNodes();
+  };
+  $('#continueBtn').onclick = () => {
+    $('#completeView').classList.remove('active');
+    $('#mapView').style.display = 'block';
+    updateMapNodes();
+  };
+  $('#printResultBtn').onclick = printResult;
+  $('#actionBtn').onclick = handleAction;
+  $('#resetBtn').onclick = renderStep;
+  
+  // --- EVENT LISTENER TOMBOL BACK ---
+  $('#backBtn').onclick = () => {
+    if (App.state.currentStepIndex > 0) {
+      App.state.currentStepIndex--; // Mundur 1 langkah
+      renderStep(); // renderStep akan otomatis mereset UI dan menyembunyikan/menampilkan tombol Back
+    }
+  };
+  
+  updateMapNodes();
+
+  // Event listener untuk tombol Enter
+  document.addEventListener('keydown', (e) => {
+    if (!$('#lessonView').classList.contains('active')) return;
+    if (e.key === 'Enter') {
+      const actionBtn = $('#actionBtn');
+      if (actionBtn.classList.contains('active')) {
+        e.preventDefault();
+        handleAction();
+      }
+    }
+  });
+}
+
+function updateMapNodes() {
+  const nodes = $$('.map-node');
+  nodes.forEach((node, i) => {
+    if (App.state.completedLessons.includes(i)) {
+      node.classList.remove('available');
+      node.classList.add('completed');
+    }
+  });
+}
+
+function startLesson(id) {
+  App.currentLessonId = id;
+  App.currentStepIndex = 0;
+  App.correctCount = 0;
+  App.totalAnswered = 0;
+  App.state.hearts = 5;
+  App.state.stepAnswered = false;
+  App.state.answeredHistory = []; // Reset riwayat jawaban tiap mulai lesson baru
+  $('#lessonHearts').innerText = App.state.hearts;
+  $('#lessonTime').innerText = App.lessonMeta[id].time; 
+  $('#mapView').style.display = 'none';
+  $('#lessonView').classList.add('active');
+  renderStep();
+}
+
+function renderStep() {
+  const lesson = LESSONS[App.currentLessonId];
+  const step = lesson.steps[App.currentStepIndex];
+  const content = $('#lessonContent');
+  content.innerHTML = '';
+  App.state.stepAnswered = false;
+  $('#feedback').classList.remove('show');
+  $('#actionBtn').innerText = 'Check';
+  $('#actionBtn').classList.remove('active');
+  $('#resetBtn').classList.add('hidden'); // Default sembunyi
+
+  // --- LOGIKA TAMPIL TOMBOL BACK ---
+  if (App.state.currentStepIndex > 0) {
+    $('#backBtn').classList.remove('hidden');
+  } else {
+    $('#backBtn').classList.add('hidden');
+  }
+
+  const progress = ((App.currentStepIndex) / lesson.steps.length) * 100;
+  $('#progressBar').style.width = `${progress}%`;
+
+  if (step.type === 'theory') {
+    const card = el('div', 'theory-card');
+    card.innerHTML = `<span class="theory-badge">MATERIAL</span><h2>${step.title}</h2><div class="theory-body">${step.body}</div>`;
+    content.appendChild(card);
+    $('#actionBtn').innerText = 'Continue';
+    $('#actionBtn').classList.add('active');
+    App.state.stepAnswered = true;
+  } else {
+    const prompt = el('div', 'q-prompt', step.prompt);
+    content.appendChild(prompt);
+    
+    if (step.type === 'multiple_choice') renderMultipleChoice(step, content);
+    else if (step.type === 'typing') renderTyping(step, content);
+    else if (step.type === 'dropdown') renderDropdown(step, content);
+    else if (step.type === 'checkbox') renderCheckbox(step, content);
+    else if (step.type === 'drag_drop') renderDragDrop(step, content);
+    else if (step.type === 'pairing') renderPairing(step, content);
+    else if (step.type === 'range') renderRange(step, content);
+    
+    if (step.hint) {
+      content.appendChild(el('div', 'q-hint', step.hint));
+    }
+    
+    // TAMPILKAN TOMBOL RESET SAAT MULAI MENGERJAKAN SOAL
+    $('#resetBtn').classList.remove('hidden');
+  }
+  
+  if (window.renderMathInElement) {
+    renderMathInElement(content, {
+      delimiters: [{left: "\\(", right: "\\)", display: false}, {left: "\\[", right: "\\]", display: true}]
+    });
+  }
+  content.scrollTop = 0;
+}
+
+function renderMultipleChoice(step, content) {
+  const opts = el('div', 'options');
+  step.options.forEach((opt, i) => {
+    const o = el('div', 'option', `<div class="o-key">${String.fromCharCode(65+i)}</div><div>${opt}</div>`);
+    o.dataset.index = i;
+    o.onclick = () => {
+      if(App.state.stepAnswered) return;
+      $$('.option').forEach(x => x.classList.remove('selected'));
+      o.classList.add('selected');
+      $('#actionBtn').classList.add('active');
+    };
+    opts.appendChild(o);
+  });
+  content.appendChild(opts);
+}
+
+function renderTyping(step, content) {
+  const input = el('input', 'typing-input');
+  input.type = 'text';
+  input.placeholder = 'Type your answer here...';
+  input.oninput = () => {
+    if(input.value.trim() !== '') $('#actionBtn').classList.add('active');
+    else $('#actionBtn').classList.remove('active');
+  };
+  content.appendChild(input);
+  input.focus();
+}
+
+function renderDropdown(step, content) {
+  const sentence = el('div', 'sentence');
+  const select = el('select', 'dropdown-select');
+  select.innerHTML = `<option value="">?</option>`;
+  step.options.forEach(opt => {
+    select.innerHTML += `<option value="${opt}">${opt}</option>`;
+  });
+  select.onchange = () => {
+    if(select.value !== '') $('#actionBtn').classList.add('active');
+    else $('#actionBtn').classList.remove('active');
+  };
+  
+  const parts = step.sentence.split('[drop]');
+  // Gunakan innerHTML agar tag HTML (seperti <span class='translation'>) terbaca dengan baik
+  sentence.innerHTML = parts[0]; 
+  sentence.appendChild(select);
+  
+  const restSpan = el('span', '', parts.slice(1).join(''));
+  sentence.appendChild(restSpan);
+  
+  content.appendChild(sentence);
+}
+
+function renderCheckbox(step, content) {
+  step.options.forEach((opt, i) => {
+    const c = el('div', 'checkbox-option', `<div class="checkbox-box"></div><div>${opt}</div>`);
+    c.dataset.index = i;
+    c.onclick = () => {
+      if(App.state.stepAnswered) return;
+      c.classList.toggle('checked');
+      $('#actionBtn').classList.add('active');
+    };
+    content.appendChild(c);
+  });
+}
+
+function renderDragDrop(step, content) {
+  const bank = el('div', 'drag-bank');
+  
+  // Buat array index lalu acak (shuffle)
+  let bankIndexes = step.bank.map((_, i) => i);
+  for (let i = bankIndexes.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [bankIndexes[i], bankIndexes[j]] = [bankIndexes[j], bankIndexes[i]];
+  }
+  
+  // Render item ke dalam bank sesuai index acak
+  bankIndexes.forEach(i => {
+    const item = step.bank[i];
+    const d = el('div', 'drag-item', item);
+    d.draggable = true;
+    d.dataset.id = i;
+    d.ondragstart = (e) => {
+      App.state.dragSrc = d;
+      d.classList.add('dragging');
+    };
+    d.ondragend = () => d.classList.remove('dragging');
+    bank.appendChild(d);
+  });
+  content.appendChild(bank);
+
+  const sentence = el('div', 'sentence');
+  const parts = step.sentence.split('[drop]');
+  parts.forEach((p, i) => {
+    const textSpan = el('span', '', p);
+    sentence.appendChild(textSpan);
+    if(i < parts.length - 1) {
+      const zone = el('span', 'drop-zone');
+      zone.ondragover = (e) => { e.preventDefault(); zone.classList.add('over'); };
+      zone.ondragleave = () => zone.classList.remove('over');
+      zone.ondrop = (e) => {
+        e.preventDefault();
+        zone.classList.remove('over');
+        if(App.state.dragSrc) {
+          if(zone.dataset.placed) {
+            bank.appendChild(document.querySelector(`.drag-item[data-id="${zone.dataset.placed}"]`));
+          }
+          zone.appendChild(App.state.dragSrc);
+          zone.classList.add('filled');
+          zone.dataset.placed = App.state.dragSrc.dataset.id;
+          $('#actionBtn').classList.add('active');
+        }
+      };
+      sentence.appendChild(zone);
+    }
+  });
+  content.appendChild(sentence);
+}
+
+function renderPairing(step, content) {
+  const grid = el('div', 'pair-grid');
+  const col1 = el('div', 'pair-col');
+  const col2 = el('div', 'pair-col');
+  
+  // Buat array index lalu acak (shuffle)
+  let leftIndexes = step.pairs.map((_, i) => i);
+  let rightIndexes = [...leftIndexes];
+  
+  // Fisher-Yates Shuffle
+  for (let i = leftIndexes.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [leftIndexes[i], leftIndexes[j]] = [leftIndexes[j], leftIndexes[i]];
+    
+    const k = Math.floor(Math.random() * (i + 1));
+    [rightIndexes[i], rightIndexes[k]] = [rightIndexes[k], rightIndexes[i]];
+  }
+  
+  // Render kolom kiri (sesuai index acak)
+  leftIndexes.forEach(idx => {
+    const p = step.pairs[idx];
+    const left = el('div', 'pair-item', p.left);
+    left.dataset.side = 'left';
+    left.dataset.id = idx;
+    left.onclick = () => handlePairClick(left);
+    col1.appendChild(left);
+  });
+
+  // Render kolom kanan (sesuai index acak)
+  rightIndexes.forEach(idx => {
+    const p = step.pairs[idx];
+    const right = el('div', 'pair-item', p.right);
+    right.dataset.side = 'right';
+    right.dataset.id = idx;
+    right.onclick = () => handlePairClick(right);
+    col2.appendChild(right);
+  });
+  
+  grid.appendChild(col1);
+  grid.appendChild(col2);
+  content.appendChild(grid);
+}
+
+function handlePairClick(item) {
+  if(App.state.stepAnswered) return;
+  if(item.classList.contains('matched')) return;
+  
+  if(!App.state.selectedPair) {
+    App.state.selectedPair = item;
+    item.classList.add('selected');
+  } else {
+    if(App.state.selectedPair.dataset.side === item.dataset.side) {
+      App.state.selectedPair.classList.remove('selected');
+      App.state.selectedPair = item;
+      item.classList.add('selected');
+      return;
+    }
+    
+    if(App.state.selectedPair.dataset.id === item.dataset.id) {
+      App.state.selectedPair.classList.add('matched');
+      item.classList.add('matched');
+      App.state.selectedPair.classList.remove('selected');
+      App.state.selectedPair = null;
+      
+      if($$('.pair-item.matched').length === stepPairsLength()) {
+        $('#actionBtn').classList.add('active');
+      }
+    } else {
+      const wrong = [App.state.selectedPair, item];
+      wrong.forEach(w => w.classList.add('wrong'));
+      setTimeout(() => {
+        wrong.forEach(w => {
+          w.classList.remove('wrong');
+          w.classList.remove('selected');
+        });
+      }, 500);
+      App.state.selectedPair = null;
+    }
+  }
+}
+
+function stepPairsLength() {
+  const step = LESSONS[App.currentLessonId].steps[App.currentStepIndex];
+  return step.pairs.length * 2;
+}
+
+function renderRange(step, content) {
+  const wrap = el('div', 'range-wrap');
+  wrap.innerHTML = `
+    <div class="range-row" style="position:relative; align-items:center; min-height:50px;">
+      <div class="range-value" style="font-size:20px; color:var(--text-light);">${step.min}</div>
+      <div class="range-value" id="rangeCurr" style="font-size:36px; flex:1; text-align:center;">${step.min}</div>
+      <div class="range-value" style="font-size:20px; color:var(--text-light);">${step.max}</div>
+    </div>
+    <input type="range" class="range-slider" min="${step.min}" max="${step.max}" value="${step.min}">
+    <div class="range-ticks">
+      <span>Min</span>
+      <span>Max</span>
+    </div>
+  `;
+  const slider = wrap.querySelector('.range-slider');
+  const curr = wrap.querySelector('#rangeCurr');
+  slider.oninput = () => {
+    curr.innerText = slider.value;
+    $('#actionBtn').classList.add('active');
+  };
+  content.appendChild(wrap);
+}
+
+function handleAction() {
+  if(!App.state.stepAnswered) {
+    checkAnswer();
+  } else {
+    nextStep();
+  }
+}
+
+function checkAnswer() {
+  const step = LESSONS[App.currentLessonId].steps[App.currentStepIndex];
+  let isCorrect = false;
+  let studentAnsText = "";
+  let correctAnsText = "";
+
+  if (step.type === 'multiple_choice') {
+    const selected = $('.option.selected');
+    if (!selected) return;
+    const idx = parseInt(selected.dataset.index);
+    isCorrect = idx === step.answer;
+    studentAnsText = step.options[idx];
+    correctAnsText = step.options[step.answer];
+    $$('.option').forEach(o => o.classList.add('disabled'));
+    selected.classList.add(isCorrect ? 'correct' : 'wrong');
+    if(!isCorrect) {
+      const correct = $(`.option[data-index="${step.answer}"]`);
+      correct.classList.remove('wrong');
+      correct.classList.add('correct');
+    }
+  } else if (step.type === 'typing') {
+    const input = $('.typing-input');
+    if (!input.value.trim()) return;
+    isCorrect = input.value.trim().toLowerCase() === step.answer.toLowerCase();
+    studentAnsText = input.value.trim();
+    correctAnsText = step.answer;
+    input.classList.add(isCorrect ? 'correct' : 'wrong');
+    input.disabled = true;
+  } else if (step.type === 'dropdown') {
+    const select = $('.dropdown-select');
+    if (!select.value) return;
+    isCorrect = select.value === step.answer;
+    studentAnsText = select.value;
+    correctAnsText = step.answer;
+    select.classList.add(isCorrect ? 'correct' : 'wrong');
+    select.disabled = true;
+  } else if (step.type === 'checkbox') {
+    const opts = $$('.checkbox-option.checked');
+    const selectedIdx = Array.from(opts).map(o => parseInt(o.dataset.index));
+    const correctIdx = step.answers;
+    isCorrect = correctIdx.every(i => selectedIdx.includes(i)) && selectedIdx.length === correctIdx.length;
+    studentAnsText = selectedIdx.map(i => step.options[i]).join(', ');
+    correctAnsText = correctIdx.map(i => step.options[i]).join(', ');
+    opts.forEach(o => o.classList.add(isCorrect ? 'correct' : 'wrong'));
+    if(!isCorrect) {
+      correctIdx.forEach(i => {
+        const c = $(`.checkbox-option[data-index="${i}"]`);
+        c.classList.remove('wrong');
+        c.classList.add('correct');
+      });
+    }
+    $$('.checkbox-option').forEach(o => o.style.pointerEvents = 'none');
+  } else if (step.type === 'range') {
+    const slider = $('.range-slider');
+    isCorrect = parseInt(slider.value) === step.answer;
+    studentAnsText = slider.value;
+    correctAnsText = step.answer;
+    slider.disabled = true;
+    slider.style.opacity = 0.7;
+  } else if (step.type === 'drag_drop') {
+    const zones = $$('.drop-zone');
+    const currentArr = Array.from(zones).map(z => z.dataset.placed || "");
+    isCorrect = currentArr.join(',') === step.answer;
+    studentAnsText = currentArr.map(id => id ? step.bank[id] : "?").join(' -> ');
+    const correctArr = step.answer.split(',');
+    correctAnsText = correctArr.map(id => step.bank[id]).join(' -> ');
+    zones.forEach(z => z.style.borderColor = isCorrect ? 'var(--green)' : 'var(--red)');
+  } else if (step.type === 'pairing') {
+    isCorrect = $$('.pair-item.matched').length === stepPairsLength();
+    studentAnsText = isCorrect ? "All Matched Correctly" : "Incomplete/Some Wrong";
+    correctAnsText = "All Matched Correctly";
+  }
+
+  // Simpan riwayat jawaban untuk form print
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = step.prompt;
+  const translations = tempDiv.querySelectorAll('.translation');
+  translations.forEach(t => t.remove());
+  const cleanPrompt = tempDiv.textContent.trim();
+
+  App.state.answeredHistory.push({
+    question: cleanPrompt,
+    studentAnswer: studentAnsText,
+    correctAnswer: correctAnsText,
+    isCorrect: isCorrect
+  });
+
+  App.totalAnswered++;
+  if (isCorrect) {
+    App.correctCount++;
+    App.state.streak++;
+    App.state.gems += 10;
+    showFeedback(true, step.explanation);
+  } else {
+    App.state.streak = 0;
+    App.state.hearts--;
+    $('#lessonHearts').innerText = App.state.hearts;
+    showFeedback(false, step.explanation);
+  }
+
+  updateStats();
+  App.state.stepAnswered = true;
+  $('#actionBtn').innerText = 'Continue';
+  $('#actionBtn').classList.add('active');
+  $('#resetBtn').classList.add('hidden');
+  $('#backBtn').classList.add('hidden'); // Sembunyikan tombol back setelah dijawab
+}
+
+function showFeedback(correct, explanation) {
+  const fb = $('#feedback');
+  fb.className = `feedback show ${correct ? 'correct' : 'wrong'}`;
+  fb.innerHTML = `
+    <div class="feedback-title">
+      ${correct ? '✅ Correct!' : '❌ Not quite!'}
+    </div>
+    <div class="feedback-text">${explanation || 'Keep practicing!'}</div>
+  `;
+}
+
+function nextStep() {
+  const lesson = LESSONS[App.currentLessonId];
+  App.currentStepIndex++;
+  if (App.currentStepIndex >= lesson.steps.length) {
+    completeLesson();
+  } else {
+    renderStep();
+  }
+}
+
+function completeLesson() {
+  $('#lessonView').classList.remove('active');
+  $('#completeView').classList.add('active');
+  
+  const accuracy = App.totalAnswered > 0 ? Math.round((App.correctCount / App.totalAnswered) * 100) : 0;
+  $('#finalXp').innerText = `+${App.correctCount * 10} XP`;
+  $('#finalAccuracy').innerText = `${accuracy}%`;
+  $('#finalCorrect').innerText = `${App.correctCount}/${App.totalAnswered}`;
+  
+  App.state.completedLessons.push(App.currentLessonId);
+  updateStats();
+
+  // Tampilkan tombol Print HANYA jika lesson yang selesai adalah Assessment (ID 6 - 10)
+  if (App.currentLessonId >= 6 && App.currentLessonId <= 10) {
+    $('#printResultBtn').style.display = 'block';
+  } else {
+    $('#printResultBtn').style.display = 'none';
+  }
+}
+
+function printResult() {
+  const lessonTitle = App.lessonMeta[App.currentLessonId].title;
+  const accuracy = App.totalAnswered > 0 ? Math.round((App.correctCount / App.totalAnswered) * 100) : 0;
+  const today = new Date();
+  const dateStr = today.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+  const topic = "Duration of Time (Days, Months, Seasons)";
+
+  // Buat baris tabel untuk setiap soal
+  let tableRows = "";
+  App.state.answeredHistory.forEach((item, index) => {
+    tableRows += `
+      <tr>
+        <td style="text-align:center;">${index + 1}</td>
+        <td>${item.question}</td>
+        <td>${item.studentAnswer}</td>
+        <td>${item.correctAnswer}</td>
+        <td style="text-align:center; font-weight:bold; color:${item.isCorrect ? '#58cc02' : '#ff4b4b'};">${item.isCorrect ? '✓' : '✗'}</td>
+      </tr>
+    `;
+  });
+
+  // Buat jendela baru untuk dicetak
+  const printWindow = window.open('', '', 'width=800,height=600');
+  printWindow.document.write(`
+    <html>
+    <head>
+      <title>Print Result - ${lessonTitle}</title>
+      <style>
+        body { font-family: Arial, sans-serif; padding: 40px; color: #333; }
+        h1 { color: #58cc02; text-align: center; margin-bottom: 20px; }
+        .header-info { margin-bottom: 30px; border: 2px solid #e5e5e5; padding: 15px; border-radius: 10px; }
+        .header-info p { margin: 5px 0; font-size: 14px; }
+        .header-info b { color: #777; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 13px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; vertical-align: top; }
+        th { background-color: #f7f7f7; font-weight: bold; }
+        .footer { margin-top: 40px; text-align: center; font-size: 12px; color: #aaa; }
+      </style>
+    </head>
+    <body>
+      <h1>Math Assessment Result</h1>
+      <div class="header-info">
+        <p><b>Name:</b> ___________________________</p>
+        <p><b>Date:</b> ${dateStr}</p>
+        <p><b>Topic:</b> ${topic}</p>
+        <p><b>Assessment Group:</b> ${lessonTitle}</p>
+        <p><b>Score:</b> ${App.correctCount} / ${App.totalAnswered} (${accuracy}%)</p>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:5%; text-align:center;">No.</th>
+            <th style="width:45%;">Question</th>
+            <th style="width:20%;">Student Answer</th>
+            <th style="width:20%;">Correct Answer</th>
+            <th style="width:10%; text-align:center;">Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${tableRows}
+        </tbody>
+      </table>
+      <div class="footer">
+        <p>Duration of Time - Math Tutoring Portal</p>
+      </div>
+    </body>
+    </html>
+  `);
+  printWindow.document.close();
+  printWindow.focus();
+  
+  // Beri delay sebentar agar render sempurna sebelum print dialog muncul
+  setTimeout(() => {
+    printWindow.print();
+    printWindow.close();
+  }, 300);
+}
+
+function updateStats() {
+  $('#streak').innerText = App.state.streak;
+  $('#gems').innerText = App.state.gems;
+  $('#hearts').innerText = App.state.hearts;
+}
+
+initApp();
+</script>
+</body>
+</html>
