@@ -1,0 +1,1245 @@
+%PDF-1.3
+%ºß¬à
+3 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 4 0 R
+>>
+endobj
+4 0 obj
+<<
+/Length 4323
+>>
+stream
+0.5670000000000001 w
+0 G
+BT
+/F2 20 Tf
+23. TL
+0 g
+56.6929133858267775 785.1970866141732586 Td
+(Pengukuran Luas dan Keliling Bangun Datar Dasar - Benjamin) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+56.6929133858267775 742.6774015748030706 Td
+(Created: 6/29/2026) Tj
+ET
+56.6929133858267775 714.3309448818897636 m
+538.5826771653544256 714.3309448818897636 l
+S
+BT
+/F2 14 Tf
+16.0999999999999979 TL
+0 g
+56.6929133858267775 685.9844881889763428 Td
+(Student) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 657.6380314960629221 Td
+(Student: Benjamin) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 634.9608661417322537 Td
+(Topic: Pengukuran Luas dan Keliling Bangun Datar Dasar) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 612.2837007874015853 Td
+(Status: completed) Tj
+ET
+BT
+/F2 16 Tf
+18.3999999999999986 TL
+0 g
+56.6929133858267775 569.7640157480313974 Td
+(Lesson Plan) Tj
+ET
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 527.2443307086614368 Td
+(Learning Objectives) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 504.5671653543306547 Td
+(• Mengkalkulasi keliling dan luas bangun datar gabungan yang terdiri dari persegi, persegi panjang,) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 487.559291338582625 Td
+(dan segitiga.) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 464.8821259842518998 Td
+(• Menganalisis hubungan antara perubahan dimensi panjang sisi terhadap perubahan luas pada) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 447.8742519685038701 Td
+(bangun datar.) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 425.1970866141731449 Td
+(• Membuktikan rumus luas segitiga melalui pendekatan dekomposisi bangun persegi panjang.) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 402.5199212598424765 Td
+(• Memecahkan masalah kontekstual yang melibatkan biaya material berdasarkan perhitungan luas) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 385.5120472440944468 Td
+(permukaan bangun datar.) Tj
+ET
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 340.1577165354329964 Td
+(Lesson Information) Tj
+ET
+BT
+/F2 14 Tf
+16.0999999999999979 TL
+0 g
+56.6929133858267775 294.8033858267715459 Td
+(Lesson Sections) Tj
+ET
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 266.4569291338582389 Td
+(1. Spiral Review Warm-up \(10 minutes\)) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 243.7797637795274568 Td
+(Teacher Script:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 226.7718897637794271 Td
+(Halo Benjamin! Senang bertemu kembali. Untuk memanaskan 'otot matematika' kita, mari kita lihat) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 212.5986614173227736 Td
+(beberapa tantangan cepat dari topik desain tata kota sebelumnya. Pertama, lihat dua garis sejajar di) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 198.4254330708660063 Td
+(layar ini yang dipotong oleh garis transversal. Jika sudut A1 adalah 120 derajat, berapa besar sudut B2) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 184.2522047244093528 Td
+(yang merupakan sudut luar berseberangan? \(Tunggu jawaban\). Bagus! Kedua, jika ada dua garis) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 170.0789763779526993 Td
+(sejajar, sebutkan satu syarat agar kita bisa menarik garis yang tegak lurus dengan keduanya.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 155.9057480314959321 Td
+(Sekarang, masuk ke dasar geometri: Apa perbedaan mendasar antara 'sinar garis' dan 'ruas garis') Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 141.7325196850392786 Td
+(dalam konteks denah bangunan? Terakhir, jika kamu memiliki tiga titik yang tidak segaris, bangun apa) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 127.559291338582625 Td
+(yang pasti terbentuk jika ketiganya dihubungkan?) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 102.0474803149605805 Td
+(Activities:) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 85.0396062992125508 Td
+(• Quick-fire quiz melalui fitur chat/whiteboard.) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0 g
+56.6929133858267775 34.0159842519684616 Td
+(Generated on: 6/29/2026, 9:10:27 AM) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0 g
+523.0626771653543301 34.0159842519684616 Td
+(1 / 4) Tj
+ET
+endstream
+endobj
+5 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 6 0 R
+>>
+endobj
+6 0 obj
+<<
+/Length 5208
+>>
+stream
+0.5670000000000001 w
+0 G
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 785.1970866141732586 Td
+(• Visualisasi sudut pada garis sejajar menggunakan anotasi layar.) Tj
+ET
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 739.8427559055118081 Td
+(2. Introduction & Real-World Connection \(5 minutes\)) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 717.1655905511811397 Td
+(Teacher Script:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 700.15771653543311 Td
+(Benjamin, bayangkan kamu adalah seorang arsitek muda yang diminta mendesain taman kota) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 685.9844881889763428 Td
+(modern. Lantai taman ini akan menggunakan marmer mahal. Mengapa kita tidak bisa hanya menebak) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 671.8112598425196893 Td
+(ukurannya? Ya, karena kesalahan 1 meter saja bisa membuang biaya jutaan rupiah. Hari ini kita akan) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 657.6380314960629221 Td
+(menguasai cara menghitung luas dan keliling dengan presisi tingkat tinggi, bukan sekadar hafal rumus,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 643.4648031496062686 Td
+(tapi paham logikanya.) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 617.952992125984224 Td
+(Activities:) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 600.9451181102361943 Td
+(• Diskusi singkat tentang peran geometri dalam arsitek.) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 583.9372440944881646 Td
+(• Menampilkan gambar desain lantai geometris.) Tj
+ET
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 538.5829133858267141 Td
+(3. Review of Prior Knowledge & Visualization \(10 minutes\)) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 515.9057480314959321 Td
+(Teacher Script:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 498.8978740157479592 Td
+(Sebelum masuk ke rumus kompleks, mari kita 'bedah' sebuah persegi panjang di layar. Jika aku) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 484.7246456692913057 Td
+(membaginya secara diagonal, bangun apa yang terbentuk? Benar, dua segitiga identik. Inilah alasan) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 470.5514173228345953 Td
+(mengapa rumus luas segitiga adalah setengah dari alas kali tinggi. Coba kamu gambar di whiteboard,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 456.378188976377885 Td
+(bagaimana membagi sebuah trapesium menjadi satu persegi panjang dan dua segitiga.) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 430.8663779527558404 Td
+(Activities:) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 413.8585039370078107 Td
+(• Manipulasi digital: Memotong persegi panjang menjadi segitiga.) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 396.850629921259781 Td
+(• Visualisasi unit persegi \(grid\) untuk memahami konsep 'luas'.) Tj
+ET
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 351.4962992125983874 Td
+(4. Problem Introduction: The Architect's Challenge \(10 minutes\)) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 328.8191338582676053 Td
+(Teacher Script:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 311.8112598425195756 Td
+(Sekarang tantangan sulitnya. Kita punya lahan berbentuk L. Ini sebenarnya adalah gabungan dari dua) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 297.6380314960629221 Td
+(persegi panjang. Namun, di tengahnya ada kolam berbentuk segitiga yang tidak akan dipasangi) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 283.4648031496062686 Td
+(marmer. Bagaimana cara kita menghitung luas area yang hanya dipasangi marmer saja? Mari kita) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 269.2915748031495013 Td
+(susun strateginya bersama.) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 243.7797637795274568 Td
+(Activities:) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 226.7718897637794271 Td
+(• Breakdown masalah kompleks menjadi sub-masalah.) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 209.7640157480313974 Td
+(• Penulisan variabel yang diketahui dan ditanyakan.) Tj
+ET
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 164.4096850393699469 Td
+(5. Guided Practice \(10 minutes\)) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 141.7325196850392786 Td
+(Teacher Script:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 124.7246456692912489 Td
+(Mari kita hitung bersama. Panjang sisi luar adalah 20m dan 15m. Lahan ini berbentuk persegi panjang) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 110.5514173228345953 Td
+(namun dipotong segitiga di sudutnya dengan alas 5m dan tinggi 4m. Langkah 1: Hitung luas persegi) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 96.3781889763778281 Td
+(panjang besar. Langkah 2: Hitung luas potongan segitiga. Langkah 3: Kurangkan. Benjamin, coba) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 82.2049606299211746 Td
+(kamu hitung langkah kedua di layar.) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 56.69314960629913 Td
+(Activities:) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0 g
+56.6929133858267775 34.0159842519684616 Td
+(Generated on: 6/29/2026, 9:10:27 AM) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0 g
+523.0626771653543301 34.0159842519684616 Td
+(2 / 4) Tj
+ET
+endstream
+endobj
+7 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 8 0 R
+>>
+endobj
+8 0 obj
+<<
+/Length 5010
+>>
+stream
+0.5670000000000001 w
+0 G
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 785.1970866141732586 Td
+(• Perhitungan langkah-demi-langkah dengan bimbingan guru.) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 768.1892125984252289 Td
+(• Eksplorasi keliling lahan yang tidak beraturan.) Tj
+ET
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 722.8348818897637784 Td
+(6. Independent Practice \(10 minutes\)) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 700.15771653543311 Td
+(Teacher Script:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 683.1498425196850803 Td
+(Sekarang giliranmu sebagai kepala arsitek. Di layar ada denah atap gedung. Atap ini terdiri dari 1) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 668.9766141732283131 Td
+(persegi panjang \(10x8m\) dan 2 segitiga identik di sampingnya dengan alas 3m. Hitung total luas atap) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 654.8033858267716596 Td
+(tersebut. Berikan aku jawabannya dalam 3 menit di kolom chat.) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 629.291574803149615 Td
+(Activities:) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 612.2837007874015853 Td
+(• Penyelesaian soal mandiri tanpa bantuan visual awal.) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 595.2758267716535556 Td
+(• Verifikasi jawaban melalui penjelasan logika pupil.) Tj
+ET
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 549.9214960629921052 Td
+(7. Consolidation & Reflection \(5 minutes\)) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 527.2443307086614368 Td
+(Teacher Script:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 510.2364566929133503 Td
+(Luar biasa, Benjamin! Kamu baru saja menyelesaikan perhitungan yang biasanya dilakukan murid) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 496.0632283464566399 Td
+(kelas 9. Ingat, keliling adalah 'pagar' \(panjang garis tepi\), sedangkan luas adalah 'lantai' \(isi di dalam\).) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 481.8899999999999295 Td
+(Apa bagian tersulit hari ini? \(Tunggu refleksi\). Jangan lupa login ke https://learn.algonova.id/login untuk) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 467.716771653543276 Td
+(mengerjakan tantangan arsitek berikutnya. Sampai jumpa!) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 442.2049606299212314 Td
+(Activities:) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 425.1970866141731449 Td
+(• Ringkasan poin kunci.) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 408.1892125984251152 Td
+(• Refleksi diri.) Tj
+ET
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 362.8348818897637216 Td
+(Homework) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 334.4884251968503008 Td
+(Medium Questions:) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 317.480551181102328 Td
+(1. Hitung luas persegi panjang dengan panjang 12 cm dan lebar 7 cm.) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 294.8033858267715459 Td
+(2. Sebuah segitiga memiliki alas 15 cm dan luas 60 cm². Berapakah tinggi segitiga tersebut?) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 272.1262204724408775 Td
+(3. Hitung keliling sebuah persegi jika diketahui luasnya adalah 81 cm².) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 249.4490551181102092 Td
+(4. Taman berbentuk segitiga sama kaki memiliki alas 10 m dan sisi miring 13 m. Hitung) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 235.2758267716534419 Td
+(keliling taman tersebut.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 195.5907874015747439 Td
+(Hard Questions:) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 178.5829133858267141 Td
+(1. Sebuah lahan berbentuk persegi panjang \(20m x 15m\). Di tengah lahan terdapat kolam) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 164.4096850393699469 Td
+(berbentuk segitiga dengan alas 6m dan tinggi 8m. Hitung luas lahan di luar kolam.) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 141.7325196850392786 Td
+(2. Jika panjang sebuah persegi panjang ditambah 20% dan lebarnya tetap, berapa persen) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 127.559291338582625 Td
+(kenaikan luasnya? Buktikan dengan perhitungan.) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 104.882125984251843 Td
+(3. Sebuah bangun gabungan terdiri dari sebuah persegi dengan sisi 10 cm dan sebuah) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 90.7088976377951894 Td
+(segitiga sama sisi yang menempel pada salah satu sisinya. Hitung keliling total bangun) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 76.5356692913385359 Td
+(tersebut.) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0 g
+56.6929133858267775 34.0159842519684616 Td
+(Generated on: 6/29/2026, 9:10:27 AM) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0 g
+523.0626771653543301 34.0159842519684616 Td
+(3 / 4) Tj
+ET
+endstream
+endobj
+9 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 10 0 R
+>>
+endobj
+10 0 obj
+<<
+/Length 4520
+>>
+stream
+0.5670000000000001 w
+0 G
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 785.1970866141732586 Td
+(4. Diberikan sebuah segitiga siku-siku dengan panjang sisi 6, 8, dan 10. Jika semua sisinya) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 771.0238582677164914 Td
+(dikalikan dua, berapakah perbandingan luas segitiga baru dengan luas segitiga lama?) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 748.346692913385823 Td
+(5. Tentukan luas daerah yang diarsir jika sebuah persegi panjang berukuran 10x6 cm) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 734.1734645669291695 Td
+(dipotong oleh dua segitiga siku-siku identik di sudut yang berlawanan dengan ukuran alas 2) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 720.0002362204724022 Td
+(cm dan tinggi 3 cm.) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 697.3230708661417339 Td
+(6. Sebuah pagar akan dipasang di sekeliling taman berbentuk L \(gabungan dua persegi) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 683.1498425196850803 Td
+(panjang\). Gambarkan minimal satu kemungkinan dimensi jika luas totalnya adalah 40 m² dan) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 668.9766141732283131 Td
+(hitung keliling minimumnya.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 629.291574803149615 Td
+(Answer Key:) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 612.2837007874015853 Td
+(`1. 84 cm² \(12x7\)`) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 598.1104724409448181 Td
+(`2. 8 cm \(t = 2L/a = 120/15\)`) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 583.9372440944881646 Td
+(`3. 36 cm \(sisi=9, Keliling=4x9\)`) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 569.7640157480313974 Td
+(`4. 36 m \(10+13+13\)`) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 555.5907874015747439 Td
+(`5. 276 m² \(300 - 24\)`) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 541.4175590551180903 Td
+(`6. 20% \(Lbaru = 1.2p * l = 1.2 Luas lama\)`) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 527.2443307086614368 Td
+(`7. 40 cm \(sisi luar: 3 sisi persegi + 2 sisi segitiga = 5 x 10\)`) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 513.0711023622046696 Td
+(`8. 4:1 \(Luas berbanding lurus dengan kuadrat faktor skala\)`) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 498.8978740157479592 Td
+(`9. 54 cm² \(60 - \(2 * 3\)\)`) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 484.7246456692913057 Td
+(`10. Variatif, contoh: L1\(6x4\) + L2\(4x4\) = 40. K=28m.`) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 470.5514173228345953 Td
+(`REVIEW 1: Besar sudut B2 = 120 derajat \(Luar berseberangan dengan A1\).`) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 456.378188976377885 Td
+(`REVIEW 2: Sudut sepihak berjumlah 180 derajat.`) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 442.2049606299212314 Td
+(`REVIEW 3: Sudut berpelurus totalnya 180 derajat.`) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 428.0317322834645211 Td
+(`REVIEW 4: Sinar garis memiliki satu titik ujung, sedangkan ruas garis memiliki dua.`) Tj
+ET
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 391.1813385826770855 Td
+(Parent Reminder) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 368.5041732283464171 Td
+(Update Sesi Matematika Benjamin - Tantangan Arsitektur) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 351.4962992125983874 Td
+(Hari ini Benjamin belajar konsep Luas dan Keliling tingkat lanjut melalui simulasi desain) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 337.323070866141677 Td
+(bangunan. Ia berhasil memahami logika di balik rumus luas segitiga dan menghitung area) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 323.1498425196849666 Td
+(gabungan yang kompleks. Mohon bantu Benjamin mengakses https://learn.algonova.id/login) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 308.9766141732283131 Td
+(untuk latihan mandirinya.) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0 g
+56.6929133858267775 34.0159842519684616 Td
+(Generated on: 6/29/2026, 9:10:27 AM) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0 g
+523.0626771653543301 34.0159842519684616 Td
+(4 / 4) Tj
+ET
+endstream
+endobj
+1 0 obj
+<</Type /Pages
+/Kids [3 0 R 5 0 R 7 0 R 9 0 R ]
+/Count 4
+>>
+endobj
+11 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+12 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+13 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+14 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+15 0 obj
+<<
+/Type /Font
+/BaseFont /Courier
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+16 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+17 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+18 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+19 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Roman
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+20 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+21 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Italic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+22 0 obj
+<<
+/Type /Font
+/BaseFont /Times-BoldItalic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+23 0 obj
+<<
+/Type /Font
+/BaseFont /ZapfDingbats
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+24 0 obj
+<<
+/Type /Font
+/BaseFont /Symbol
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+2 0 obj
+<<
+/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+/Font <<
+/F1 11 0 R
+/F2 12 0 R
+/F3 13 0 R
+/F4 14 0 R
+/F5 15 0 R
+/F6 16 0 R
+/F7 17 0 R
+/F8 18 0 R
+/F9 19 0 R
+/F10 20 0 R
+/F11 21 0 R
+/F12 22 0 R
+/F13 23 0 R
+/F14 24 0 R
+>>
+/XObject <<
+>>
+>>
+endobj
+25 0 obj
+<<
+/Producer (jsPDF 3.0.2)
+/CreationDate (D:20260629091027+07'00')
+>>
+endobj
+26 0 obj
+<<
+/Type /Catalog
+/Pages 1 0 R
+/OpenAction [3 0 R /FitH null]
+/PageLayout /OneColumn
+>>
+endobj
+xref
+0 27
+0000000000 65535 f 
+0000019834 00000 n 
+0000021674 00000 n 
+0000000015 00000 n 
+0000000152 00000 n 
+0000004527 00000 n 
+0000004664 00000 n 
+0000009924 00000 n 
+0000010061 00000 n 
+0000015123 00000 n 
+0000015261 00000 n 
+0000019909 00000 n 
+0000020035 00000 n 
+0000020166 00000 n 
+0000020300 00000 n 
+0000020438 00000 n 
+0000020562 00000 n 
+0000020691 00000 n 
+0000020823 00000 n 
+0000020959 00000 n 
+0000021087 00000 n 
+0000021214 00000 n 
+0000021343 00000 n 
+0000021476 00000 n 
+0000021578 00000 n 
+0000021927 00000 n 
+0000022013 00000 n 
+trailer
+<<
+/Size 27
+/Root 26 0 R
+/Info 25 0 R
+/ID [ <5DD7B87FD3C41353BEF2001429A29631> <5DD7B87FD3C41353BEF2001429A29631> ]
+>>
+startxref
+22117
+%%EOF
