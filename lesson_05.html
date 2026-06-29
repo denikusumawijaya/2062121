@@ -1,0 +1,2217 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math Tutoring — by Deni</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root {
+  --bg: #0b1121; --bg2: #111827; --card: rgba(17,24,39,0.85);
+  --fg: #e2e8f0; --muted: #64748b; --accent: #10b981;
+  --accent2: #f59e0b; --danger: #ef4444; --border: rgba(100,116,139,0.2);
+  --glass: rgba(16,185,129,0.08);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Space Grotesk', sans-serif; background: var(--bg); color: var(--fg); min-height: 100vh; overflow-x: hidden; }
+.font-mono { font-family: 'JetBrains Mono', monospace; }
+
+/* Latar belakang animasi */
+.bg-grid {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    radial-gradient(circle at 20% 50%, rgba(16,185,129,0.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(245,158,11,0.04) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(16,185,129,0.03) 0%, transparent 50%);
+}
+.bg-grid::after {
+  content: ''; position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(16,185,129,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16,185,129,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Transisi halaman */
+.view { display: none; position: relative; z-index: 1; }
+.view.active { display: block; animation: fadeSlideIn 0.4s ease; }
+@keyframes fadeSlideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Peta node */
+.map-node {
+  width: 72px; height: 72px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 1.2rem; cursor: pointer; transition: all 0.3s ease;
+  position: relative; border: 3px solid var(--border);
+  background: var(--bg2);
+}
+.map-node.unlocked { border-color: var(--accent); box-shadow: 0 0 20px rgba(16,185,129,0.2); }
+.map-node.unlocked:hover { transform: scale(1.12); box-shadow: 0 0 30px rgba(16,185,129,0.4); }
+.map-node.completed { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.map-node.completed:hover { transform: scale(1.08); }
+.map-node.locked { opacity: 0.35; cursor: not-allowed; }
+.map-node.current { animation: pulseGlow 2s ease-in-out infinite; }
+@keyframes pulseGlow {
+  0%,100% { box-shadow: 0 0 15px rgba(16,185,129,0.3); }
+  50% { box-shadow: 0 0 35px rgba(16,185,129,0.6); }
+}
+
+/* Koneksi garis peta */
+.map-line { width: 3px; height: 40px; margin: 0 auto; background: var(--border); transition: background 0.5s; }
+.map-line.done { background: var(--accent); }
+.map-branch-line { height: 3px; width: 60px; background: var(--border); transition: background 0.5s; }
+.map-branch-line.done { background: var(--accent); }
+
+/* Lesson node di peta detail */
+.lesson-node {
+  width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem; cursor: pointer; transition: all 0.3s; border: 2px solid var(--border); background: var(--bg2);
+}
+.lesson-node.theory { border-radius: 50%; }
+.lesson-node.exercise { border-radius: 16px; }
+.lesson-node.unlocked { border-color: var(--accent); }
+.lesson-node.unlocked:hover { transform: scale(1.15); box-shadow: 0 0 20px rgba(16,185,129,0.3); }
+.lesson-node.completed { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.lesson-node.locked { opacity: 0.3; cursor: not-allowed; }
+.lesson-connector { width: 2px; height: 24px; margin: 0 auto; background: var(--border); }
+.lesson-connector.done { background: var(--accent); }
+
+/* Tombol */
+.btn-primary {
+  background: var(--accent); color: var(--bg); font-weight: 600; padding: 14px 32px; border-radius: 14px;
+  border: none; cursor: pointer; font-size: 1rem; font-family: inherit; transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-primary:hover { filter: brightness(1.15); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16,185,129,0.3); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; filter: none; }
+.btn-secondary {
+  background: transparent; color: var(--accent); font-weight: 600; padding: 12px 24px; border-radius: 14px;
+  border: 2px solid var(--accent); cursor: pointer; font-size: 0.9rem; font-family: inherit; transition: all 0.2s;
+}
+.btn-secondary:hover { background: rgba(16,185,129,0.1); }
+
+/* Opsi exercise */
+.opt-card {
+  padding: 16px 20px; border: 2px solid var(--border); border-radius: 14px; cursor: pointer;
+  transition: all 0.2s; background: var(--card); min-height: 52px; display: flex; align-items: center; gap: 12px;
+}
+.opt-card:hover { border-color: rgba(16,185,129,0.4); background: var(--glass); }
+.opt-card.selected { border-color: var(--accent); background: rgba(16,185,129,0.12); }
+.opt-card.correct { border-color: #10b981; background: rgba(16,185,129,0.15); }
+.opt-card.wrong { border-color: #ef4444; background: rgba(239,68,68,0.1); }
+.opt-card.disabled { pointer-events: none; opacity: 0.7; }
+
+/* Input exercise */
+.ex-input {
+  background: var(--bg2); border: 2px solid var(--border); border-radius: 12px; padding: 14px 18px;
+  color: var(--fg); font-size: 1rem; font-family: inherit; width: 100%; outline: none; transition: border-color 0.2s;
+}
+.ex-input:focus { border-color: var(--accent); }
+.ex-input.correct { border-color: #10b981; }
+.ex-input.wrong { border-color: #ef4444; }
+
+/* Code block */
+.code-block {
+  background: #0d1117; border: 1px solid rgba(100,116,139,0.2); border-radius: 12px;
+  padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;
+  line-height: 1.7; overflow-x: auto; white-space: pre;
+}
+
+/* Progress bar */
+.prog-bar { height: 6px; border-radius: 3px; background: rgba(100,116,139,0.2); overflow: hidden; }
+.prog-fill { height: 100%; border-radius: 3px; background: var(--accent); transition: width 0.5s ease; }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+  padding: 14px 28px; border-radius: 14px; font-weight: 600; z-index: 999;
+  transition: transform 0.4s ease; pointer-events: none;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.success { background: #10b981; color: #0b1121; }
+.toast.error { background: #ef4444; color: white; }
+.toast.info { background: #f59e0b; color: #0b1121; }
+
+/* XP popup */
+.xp-popup {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0);
+  background: var(--bg2); border: 2px solid var(--accent2); border-radius: 24px;
+  padding: 40px 60px; z-index: 100; text-align: center;
+  transition: transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+.xp-popup.show { transform: translate(-50%,-50%) scale(1); }
+
+/* Celebration particles */
+.confetti { position: fixed; top: -10px; z-index: 99; pointer-events: none; animation: confettiFall 2s ease-out forwards; }
+@keyframes confettiFall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* Match exercise */
+.match-item {
+  padding: 12px 18px; border: 2px solid var(--border); border-radius: 12px; cursor: pointer;
+  transition: all 0.2s; background: var(--card); text-align: center; user-select: none;
+}
+.match-item:hover { border-color: rgba(16,185,129,0.4); }
+.match-item.active { border-color: var(--accent); background: rgba(16,185,129,0.12); box-shadow: 0 0 15px rgba(16,185,129,0.2); }
+.match-item.matched { border-color: #10b981; background: rgba(16,185,129,0.15); opacity: 0.6; pointer-events: none; }
+.match-item.wrong-match { border-color: #ef4444; background: rgba(239,68,68,0.1); }
+
+/* Order exercise */
+.order-item {
+  padding: 14px 20px; border: 2px solid var(--border); border-radius: 12px; cursor: pointer;
+  transition: all 0.2s; background: var(--card); user-select: none;
+}
+.order-item:hover { border-color: rgba(16,185,129,0.4); }
+.order-item.ordered { border-color: var(--accent2); background: rgba(245,158,11,0.1); opacity: 0.5; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(100,116,139,0.3); border-radius: 3px; }
+
+/* Responsif */
+@media (max-width: 640px) {
+  .map-node { width: 56px; height: 56px; font-size: 1rem; }
+  .lesson-node { width: 48px; height: 48px; font-size: 0.75rem; }
+}
+
+/* Animasi masuk */
+.stagger-in > * { opacity: 0; transform: translateY(15px); animation: staggerFade 0.4s ease forwards; }
+.stagger-in > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-in > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger-in > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-in > *:nth-child(4) { animation-delay: 0.2s; }
+.stagger-in > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger-in > *:nth-child(6) { animation-delay: 0.3s; }
+.stagger-in > *:nth-child(7) { animation-delay: 0.35s; }
+.stagger-in > *:nth-child(8) { animation-delay: 0.4s; }
+.stagger-in > *:nth-child(9) { animation-delay: 0.45s; }
+.stagger-in > *:nth-child(10) { animation-delay: 0.5s; }
+@keyframes staggerFade { to { opacity: 1; transform: translateY(0); } }
+
+/* Feedback benar/salah */
+.feedback-bar {
+  padding: 18px 24px; border-radius: 14px; font-weight: 600; display: flex; align-items: center; gap: 12px;
+  animation: fadeSlideIn 0.3s ease;
+}
+.feedback-bar.correct-fb { background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3); color: #10b981; }
+.feedback-bar.wrong-fb { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #ef4444; }
+
+/* Terjemahan bahasa Indonesia di bawah teks utama */
+.id-lang { display: block; font-size: 0.75rem; color: #94a3b8; margin-top: 2px; line-height: 1.4; }
+
+/* Khusus label di node peta/lesson: tidak wrap, indo di bawah inggris */
+.node-title { text-align: center; white-space: nowrap; }
+.node-title .id-lang { display: block; white-space: nowrap; margin-top: 2px; }
+
+/* Modal Rules */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200;
+  display: none; align-items: center; justify-content: center;
+}
+.modal-overlay.active { display: flex; animation: fadeIn 0.3s ease; }
+.modal-box {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 20px;
+  padding: 30px; max-width: 450px; width: 90%; position: relative;
+  animation: scaleIn 0.3s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scaleIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<!-- Rules Modal -->
+<div id="rulesModal" class="modal-overlay">
+  <div class="modal-box">
+    <button onclick="closeRules()" class="absolute top-4 right-4 text-slate-500 hover:text-slate-300 transition">
+      <i class="fa-solid fa-xmark text-lg"></i>
+    </button>
+    <h3 class="text-xl font-bold mb-5 text-amber-400">
+      <i class="fa-solid fa-gavel mr-2"></i>Class Rules <span class="id-lang" style="display:inline; color:#f59e0b;">Aturan Kelas</span>
+    </h3>
+    <ul class="space-y-4 text-slate-300">
+      <li class="flex items-start gap-3">
+        <span class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center flex-shrink-0 mt-0.5"><i class="fa-solid fa-comments text-emerald-400"></i></span>
+        <div>
+          <strong>Take turns speaking</strong>
+          <span class="id-lang">Berbicara secara bergantian</span>
+        </div>
+      </li>
+      <li class="flex items-start gap-3">
+        <span class="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center flex-shrink-0 mt-0.5"><i class="fa-solid fa-video text-amber-400"></i></span>
+        <div>
+          <strong>Turn on camera & microphone when required</strong>
+          <span class="id-lang">Menyalakan kamera & microphone jika diperlukan</span>
+        </div>
+      </li>
+      <li class="flex items-start gap-3">
+        <span class="w-8 h-8 rounded-lg bg-violet-500/10 flex items-center justify-center flex-shrink-0 mt-0.5"><i class="fa-solid fa-hand text-violet-400"></i></span>
+        <div>
+          <strong>Ask for permission to leave the class</strong>
+          <span class="id-lang">Meminta izin jika ingin meninggalkan kelas</span>
+        </div>
+      </li>
+    </ul>
+    <div class="mt-6 text-right">
+      <button onclick="closeRules()" class="btn-primary">Got it! <span class="id-lang" style="color:rgba(11,17,33,0.7); display:inline;">Mengerti!</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast"></div>
+
+<!-- XP Popup -->
+<div id="xpPopup" class="xp-popup">
+  <div class="text-5xl font-bold text-amber-400 mb-2">+<span id="xpAmount">10</span> XP</div>
+  <div class="text-lg text-slate-400">Correct answer! <span class="id-lang">Jawaban benar!</span></div>
+</div>
+
+<!-- ========== MAP VIEW ========== -->
+<div id="mapView" class="view active">
+  <header class="sticky top-0 z-10 backdrop-blur-xl bg-[#0b1121]/80 border-b border-white/5">
+    <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
+          <i class="fa-solid fa-square-root-variable text-emerald-400"></i>
+        </div>
+        <div>
+          <div class="font-bold text-lg leading-tight">Math Tutoring</div>
+          <div class="text-xs text-slate-500">by Deni</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-5">
+        <button onclick="openRules()" class="text-xs text-slate-500 hover:text-amber-400 transition flex items-center gap-1 border border-transparent hover:border-amber-400/30 rounded-lg px-2 py-1" title="Class Rules">
+          <i class="fa-solid fa-gavel"></i> Rules
+        </button>
+        <button onclick="resetProgress()" class="text-xs text-slate-500 hover:text-red-400 transition flex items-center gap-1 border border-transparent hover:border-red-400/30 rounded-lg px-2 py-1" title="Reset Semua Progress">
+          <i class="fa-solid fa-rotate-left"></i> Reset
+        </button>
+        <div class="flex items-center gap-2 text-amber-400 font-semibold">
+          <i class="fa-solid fa-bolt"></i><span id="headerXP">0</span> XP
+        </div>
+        <div class="flex items-center gap-2 text-orange-400 font-semibold">
+          <i class="fa-solid fa-fire"></i><span id="headerStreak">0</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 pt-8 pb-20">
+    <div class="text-center mb-10">
+		<h1 class="text-2xl md:text-3xl font-extrabold mb-3 bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent leading-tight">
+		  Measurement of Area and Perimeter of Basic Flat Shapes
+		  <span class="id-lang" style="display:block; color:#94a3b8; margin-top: 4px; font-size: 1.25rem;">Pengukuran Luas dan Keliling Bangun Datar Dasar</span>
+		</h1>
+            <div class="text-slate-400 mx-auto text-center" style="max-width: 90%;">
+        <div style="white-space: nowrap;">Complete each map to unlock the next. Collect XP and build your learning streak!</div>
+        <div class="id-lang" style="white-space: nowrap;">Selesaikan setiap peta untuk membuka peta berikutnya. Kumpulkan XP dan bangun streak belajarmu!</div>
+      </div>
+    </div>
+
+    <!-- Progress keseluruhan -->
+    <div class="max-w-md mx-auto mb-10">
+      <div class="flex justify-between text-sm mb-2">
+        <span class="text-slate-400">Overall Progress <span class="id-lang" style="display:inline; color:#64748b;">Progress Keseluruhan</span></span>
+        <span class="text-emerald-400 font-semibold" id="totalProgress">0%</span>
+      </div>
+      <div class="prog-bar">
+        <div class="prog-fill" id="totalProgFill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- Peta nodes akan dirender oleh JS -->
+    <div id="mapContainer" class="flex flex-col items-center gap-0"></div>
+  </main>
+</div>
+
+<!-- ========== PETA VIEW (detail lesson) ========== -->
+<div id="petaView" class="view">
+  <header class="sticky top-0 z-10 backdrop-blur-xl bg-[#0b1121]/80 border-b border-white/5">
+    <div class="max-w-2xl mx-auto px-4 py-4 flex items-center gap-4">
+      <button onclick="showMap()" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-white/10 transition">
+        <i class="fa-solid fa-arrow-left text-slate-400"></i>
+      </button>
+      <div>
+        <div class="font-bold text-lg" id="petaTitle"></div>
+        <div class="text-xs text-slate-500" id="petaSubtitle"></div>
+      </div>
+    </div>
+  </header>
+  <main class="max-w-2xl mx-auto px-4 pt-8 pb-20">
+    <div id="lessonContainer" class="flex flex-col items-center"></div>
+  </main>
+</div>
+
+<!-- ========== LESSON VIEW ========== -->
+<div id="lessonView" class="view">
+  <header class="sticky top-0 z-10 backdrop-blur-xl bg-[#0b1121]/80 border-b border-white/5">
+    <div class="max-w-2xl mx-auto px-4 py-4 flex items-center gap-4">
+      <button onclick="closeLesson()" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-white/10 transition">
+        <i class="fa-solid fa-xmark text-slate-400"></i>
+      </button>
+      <div class="flex-1">
+        <div class="prog-bar">
+          <div class="prog-fill" id="lessonProgFill" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="text-sm text-slate-400 font-mono" id="lessonCounter">1/10</div>
+    </div>
+  </header>
+  <main class="max-w-2xl mx-auto px-4 pt-6 pb-20" id="lessonContent"></main>
+</div>
+
+<script>
+// ============================================================
+// DATA KURSUS — Seluruh konten pembelajaran
+// ============================================================
+const COURSE = {
+  title: "Pengukuran Luas dan Keliling Bangun Datar Dasar",
+  maps: [
+    // ==================== SECTION 1 ====================
+    {
+      id:1, title:"Spiral Review Warm-up <span class='id-lang'>Pemanasan</span>", icon:"fa-rotate", color:"#10b981", branch:false,
+      lessons:[
+        // T1
+        {type:"T",title:"Geometry Basics Review <span class='id-lang'>Review Dasar Geometri</span>",
+         body:`<p>Before we design complex city parks, let's review basic geometric terms. <span class='id-lang'>Sebelum mendesain taman kota yang kompleks, mari kita review istilah geometri dasar.</span></p>
+         <div class="mt-4 space-y-3">
+           <div class="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+             <div class="text-emerald-400 font-semibold mb-2"><i class="fa-solid fa-grip-lines mr-2"></i>Lines and Segments <span class='id-lang'>Garis dan Ruas Garis</span></div>
+             <p class="text-sm text-slate-300">A <strong>line</strong> extends infinitely in both directions. A <strong>line segment</strong> has two distinct endpoints. A <strong>ray</strong> has one endpoint and extends infinitely in one direction. <span class='id-lang'><strong>Garis</strong> memanjang tak terbatas dua arah. <strong>Ruas garis</strong> punya dua titik ujung. <strong>Sinar garis</strong> punya satu titik ujung.</span></p>
+           </div>
+           <div class="p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/20">
+             <div class="text-cyan-400 font-semibold mb-2"><i class="fa-solid fa-angle-right mr-2"></i>Angles & Transversals <span class='id-lang'>Sudut & Transversal</span></div>
+             <p class="text-sm text-slate-300">When a transversal cuts two parallel lines, <strong>alternate exterior angles</strong> are equal. <span class='id-lang'>Ketika transversal memotong dua garis sejajar, <strong>sudut luar berseberangan</strong> sama besar.</span></p>
+             <p class="text-xs text-slate-400 mt-1">If \\(A_1 = 120^\\circ \\), then its alternate exterior angle \\(B_2\\) is also \\(120^\\circ\\). <span class='id-lang'>Jika \\(A_1 = 120^\\circ \\), maka sudut luar berseberangannya \\(B_2\\) juga \\(120^\\circ\\).</span></p>
+           </div>
+           <div class="p-4 rounded-xl bg-violet-500/10 border border-violet-500/20">
+             <div class="text-violet-400 font-semibold mb-2"><i class="fa-solid fa-shapes mr-2"></i>Basic Shapes <span class='id-lang'>Bangun Dasar</span></div>
+             <p class="text-sm text-slate-300">If you connect three non-collinear points, you always form a <strong>triangle</strong>. <span class='id-lang'>Jika menghubungkan tiga titik yang tidak segaris, selalu terbentuk <strong>segitiga</strong>.</span></p>
+           </div>
+         </div>`},
+        // E1 mc
+        {type:"E",etype:"mc",
+         q:"If two parallel lines are cut by a transversal, and \\(A_1 = 120^\\circ\\), what is the measure of alternate exterior angle \\(B_2\\)? <span class='id-lang'>Jika dua garis sejajar dipotong transversal, dan \\(A_1 = 120^\\circ\\), berapakah sudut luar berseberangan \\(B_2\\)?</span>",
+         o:["\\(60^\\circ\\) <span class='id-lang'>\\(60^\\circ\\)</span>","\\(90^\\circ\\) <span class='id-lang'>\\(90^\\circ\\)</span>","\\(120^\\circ\\) <span class='id-lang'>\\(120^\\circ\\)</span>","\\(180^\\circ\\) <span class='id-lang'>\\(180^\\circ\\)</span>"],
+         a:2,
+         h:"Alternate exterior angles are equal. <span class='id-lang'>Sudut luar berseberangan sama besar.</span>"},
+        // E2 tf
+        {type:"E",etype:"tf",
+         q:"A ray has two endpoints, while a line segment has only one. <span class='id-lang'>Sinar garis memiliki dua titik ujung, sedangkan ruas garis hanya satu.</span>",
+         a:false,
+         h:"It's the opposite! A ray has one, a segment has two. <span class='id-lang'>Kebalikannya! Sinar garis punya satu, ruas garis punya dua.</span>"},
+        // E3 fb
+        {type:"E",etype:"fb",
+         q:"Connecting three non-collinear points will always form a ____. <span class='id-lang'>Menghubungkan tiga titik tidak segaris selalu membentuk ____.</span>",
+         a:"triangle",
+         h:"A 3-sided polygon. <span class='id-lang'>Poligon dengan 3 sisi.</span>"},
+        // T2
+        {type:"T",title:"Foundations of Flat Shapes <span class='id-lang'>Fondasi Bangun Datar</span>",
+         body:`<p>Let's differentiate between <strong>perimeter</strong> and <strong>area</strong>. <span class='id-lang'>Mari kita bedakan <strong>keliling</strong> dan <strong>luas</strong>.</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-teal-500/10 border border-teal-500/20">
+           <div class="text-teal-400 font-semibold mb-1">Perimeter (Keliling)</div>
+           <p class="text-sm text-slate-300">The total distance <strong>around</strong> the outside of a shape. Think of it as the "fence". <span class='id-lang'>Total jarak <strong>di sekeliling</strong> luar bangun. Bayangkan seperti "pagar".</span></p>
+         </div>
+         <div class="mt-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20">
+           <div class="text-amber-400 font-semibold mb-1">Area (Luas)</div>
+           <p class="text-sm text-slate-300">The amount of space <strong>inside</strong> a 2D shape. Think of it as the "floor". <span class='id-lang'>Jumlah ruang <strong>di dalam</strong> bangun 2D. Bayangkan seperti "lantai".</span></p>
+         </div>
+         <p class="mt-4">To draw a line perpendicular to two parallel lines, the line must form a \\(90^\\circ\\) angle with both. <span class='id-lang'>Untuk menggambar garis tegak lurus dua garis sejajar, garis tersebut harus membentuk sudut \\(90^\\circ\\) dengan keduanya.</span></p>`},
+        // E4 mc
+        {type:"E",etype:"mc",
+         q:"To draw a line perpendicular to two parallel lines, what angle must it form with them? <span class='id-lang'>Untuk menarik garis tegak lurus dengan dua garis sejajar, sudut apa yang harus dibentuk?</span>",
+         o:["\\(45^\\circ\\) <span class='id-lang'>\\(45^\\circ\\)</span>","\\(90^\\circ\\) <span class='id-lang'>\\(90^\\circ\\)</span>","\\(180^\\circ\\) <span class='id-lang'>\\(180^\\circ\\)</span>","\\(360^\\circ\\) <span class='id-lang'>\\(360^\\circ\\)</span>"],
+         a:1,
+         h:"Perpendicular means forming a right angle. <span class='id-lang'>Tegak lurus berarti membentuk sudut siku-siku.</span>"},
+        // E5 fb
+        {type:"E",etype:"fb",
+         q:"The total distance around the outside of a shape is called its ____. <span class='id-lang'>Total jarak di sekeliling luar bangun disebut ____.</span>",
+         a:"perimeter",
+         h:"Think of it as the 'fence'. <span class='id-lang'>Bayangkan seperti 'pagar'.</span>"},
+        // E6 tf
+        {type:"E",etype:"tf",
+         q:"Area is measured in linear units (like meters), while perimeter is measured in square units (like square meters). <span class='id-lang'>Luas diukur dalam satuan linear (seperti meter), sedangkan keliling diukur dalam satuan persegi (seperti meter persegi).</span>",
+         a:false,
+         h:"It's reversed: Perimeter is linear, Area is square. <span class='id-lang'>Terbalik: Keliling linear, Luas persegi.</span>"},
+        // T3
+        {type:"T",title:"Squares and Rectangles <span class='id-lang'>Persegi dan Persegi Panjang</span>",
+         body:`<p>These are the most basic quadrilaterals. <span class='id-lang'>Ini adalah segiempat paling dasar.</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+           <div class="text-emerald-400 font-semibold mb-2">Rectangle <span class='id-lang'>Persegi Panjang</span></div>
+           <p class="text-sm text-slate-300">Has length \\((p)\\) and width \\((l)\\). <span class='id-lang'>Panjang \\((p)\\) dan lebar \\((l)\\).</span></p>
+           <p class="text-sm text-emerald-400 mt-1">Perimeter: \\(K = 2(p + l)\\)</p>
+           <p class="text-sm text-emerald-400">Area: \\(L = p \\times l\\)</p>
+         </div>
+         <div class="mt-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20">
+           <div class="text-amber-400 font-semibold mb-2">Square <span class='id-lang'>Persegi</span></div>
+           <p class="text-sm text-slate-300">All sides are equal \\((s)\\). <span class='id-lang'>Semua sisi sama panjang \\((s)\\).</span></p>
+           <p class="text-sm text-emerald-400 mt-1">Perimeter: \\(K = 4s\\)</p>
+           <p class="text-sm text-emerald-400">Area: \\(L = s^2\\)</p>
+         </div>`},
+        // E7 mc
+        {type:"E",etype:"mc",
+         q:"What is the perimeter of a rectangle with length 10 cm and width 4 cm? <span class='id-lang'>Berapa keliling persegi panjang dengan panjang 10 cm dan lebar 4 cm?</span>",
+         o:["\\(14\\text{ cm}\\)","\\(28\\text{ cm}\\)","\\(40\\text{ cm}\\)","\\(100\\text{ cm}\\)"],
+         a:1,
+         h:"K = 2(p + l) = 2(10 + 4). <span class='id-lang'>K = 2(10 + 4).</span>"},
+        // E8 fb
+        {type:"E",etype:"fb",
+         q:"Calculate the area of a square with a side length of 7 cm. <span class='id-lang'>Hitung luas persegi dengan sisi 7 cm.</span>",
+         a:"49",
+         h:"Area = s × s = 7 × 7. <span class='id-lang'>Luas = s × s = 7 × 7.</span>"},
+        // E9 match
+        {type:"E",etype:"match",
+         q:"Match the formula with the correct shape: <span class='id-lang'>Cocokkan rumus dengan bangun yang benar:</span>",
+         left:["\\(K = 4s\\)","\\(L = p \\times l\\)","\\(K = 2(p + l)\\)","\\(L = s^2\\)"],
+         right:["Square Perimeter <span class='id-lang'>Keliling Persegi</span>","Rectangle Area <span class='id-lang'>Luas Persegi Panjang</span>","Rectangle Perimeter <span class='id-lang'>Keliling Persegi Panjang</span>","Square Area <span class='id-lang'>Luas Persegi</span>"],
+         a:[0,1,2,3],
+         h:"Identify if it's perimeter (K) or area (L), then match the shape. <span class='id-lang'>Identifikasi keliling (K) atau luas (L), lalu cocokkan bangunnya.</span>"},
+        // E10 tf
+        {type:"E",etype:"tf",
+         q:"If a square has an area of \\(81\\text{ cm}^2\\), its perimeter is \\(36\\text{ cm}\\). <span class='id-lang'>Jika persegi memiliki luas \\(81\\text{ cm}^2\\), kelilingnya \\(36\\text{ cm}\\).</span>",
+         a:true,
+         h:"Side = √81 = 9. Perimeter = 4 × 9 = 36. <span class='id-lang'>Sisi = √81 = 9. Keliling = 4 × 9 = 36.</span>"},
+      ]
+    },
+    // ==================== SECTION 2 ====================
+    {
+      id:2, title:"Real-World Connection <span class='id-lang'>Koneksi Dunia Nyata</span>", icon:"fa-lightbulb", color:"#06b6d4", branch:false,
+      lessons:[
+        // T1
+        {type:"T",title:"The Architect's Precision <span class='id-lang'>Presisi Arsitek</span>",
+         body:`<p>Imagine you are an architect designing a modern city park with expensive marble floors. <span class='id-lang'>Bayangkan kamu arsitek mendesain taman kota dengan lantai marmer mahal.</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/20">
+           <div class="text-cyan-400 font-semibold mb-2">Why Precision Matters <span class='id-lang'>Mengapa Presisi Penting</span></div>
+           <p class="text-sm text-slate-300">Guessing measurements is dangerous. An error of just 1 meter can waste millions of Rupiah in materials! <span class='id-lang'>Menebak ukuran berbahaya. Kesalahan 1 meter bisa membuang jutaan rupiah untuk material!</span></p>
+         </div>
+         <p class="mt-4">In this lesson, we won't just memorize formulas; we'll understand the logic behind them to calculate area and perimeter with high precision. <span class='id-lang'>Di pelajaran ini, kita tidak sekadar hafal rumus, tapi paham logikanya untuk menghitung luas dan keliling dengan presisi tinggi.</span></p>`},
+        // E1 mc
+        {type:"E",etype:"mc",
+         q:"Why is it important for an architect to calculate area precisely? <span class='id-lang'>Mengapa penting bagi arsitek menghitung luas dengan presisi?</span>",
+         o:["To make the building look taller <span class='id-lang'>Agar bangunan terlihat lebih tinggi</span>","To avoid wasting expensive materials <span class='id-lang'>Untuk menghindari pemborosan material mahal</span>","To use more cement <span class='id-lang'>Untuk menggunakan lebih banyak semen</span>","To guess the height <span class='id-lang'>Untuk menebak tinggi</span>"],
+         a:1,
+         h:"Precise area calculation prevents material waste and cost overruns. <span class='id-lang'>Perhitungan luas presisi mencegah pemborosan material dan biaya.</span>"},
+        // E2 tf
+        {type:"E",etype:"tf",
+         q:"In architecture, estimating the area by eye is acceptable for expensive materials like marble. <span class='id-lang'>Dalam arsitektur, memperkirakan luas dengan mata boleh untuk material mahal seperti marmer.</span>",
+         a:false,
+         h:"Expensive materials require exact calculations, not estimates. <span class='id-lang'>Material mahal butuh perhitungan pasti, bukan perkiraan.</span>"},
+        // E3 fb
+        {type:"E",etype:"fb",
+         q:"The amount of 2D space inside the boundaries of a park is called its ____. <span class='id-lang'>Jumlah ruang 2D di dalam batas-batas taman disebut ____.</span>",
+         a:"area",
+         h:"It's the space inside, covered by the floor. <span class='id-lang'>Itu ruang di dalam, ditutupi lantai.</span>"},
+        // T2
+        {type:"T",title:"Material Cost Calculation <span class='id-lang'>Perhitungan Biaya Material</span>",
+         body:`<p>If you know the area of a floor, you can calculate the total cost of materials. <span class='id-lang'>Jika tahu luas lantai, kamu bisa menghitung total biaya material.</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+           <div class="text-emerald-400 font-semibold mb-2">Formula <span class='id-lang'>Rumus</span></div>
+           <p class="text-sm text-slate-300 mt-1">\\(\\text{Total Cost} = \\text{Area} \\times \\text{Price per Unit Area}\\)</p>
+           <p class="text-xs text-slate-400 mt-1">Example: Area = \\(50\\text{ m}^2\\), Price = Rp 100,000 per \\(\\text{m}^2\\). Total Cost = \\(50 \\times 100{,}000 = \\text{Rp } 5{,}000{,}000\\). <span class='id-lang'>Contoh: Luas = 50m², Harga = Rp 100.000 per m². Total = 5 juta.</span></p>
+         </div>`},
+        // E4 mc
+        {type:"E",etype:"mc",
+         q:"A floor area is \\(20\\text{ m}^2\\). Marble costs Rp 200,000 per \\(\\text{m}^2\\). What is the total cost? <span class='id-lang'>Luas lantai 20m². Marmer Rp 200.000 per m². Berapa total biayanya?</span>",
+         o:["\\(\\text{Rp } 200{,}020\\)","\\(\\text{Rp } 400{,}000\\)","\\(\\text{Rp } 4{,}000{,}000\\)","\\(\\text{Rp } 20{,}000{,}000\\)"],
+         a:2,
+         h:"Total Cost = Area × Price = 20 × 200,000. <span class='id-lang'>Total Biaya = Luas × Harga = 20 × 200.000.</span>"},
+        // E5 fb
+        {type:"E",etype:"fb",
+         q:"If a rectangular floor is \\(5\\text{m}\\) by \\(4\\text{m}\\), its area is ____ \\(\\text{m}^2\\). <span class='id-lang'>Jika lantai persegi panjang 5m kali 4m, luasnya ____ m².</span>",
+         a:"20",
+         h:"Area = length × width = 5 × 4. <span class='id-lang'>Luas = panjang × lebar = 5 × 4.</span>"},
+        // E6 ord
+        {type:"E",etype:"ord",
+         q:"Order the steps to calculate material cost for a project: <span class='id-lang'>Urutkan langkah menghitung biaya material proyek:</span>",
+         o:["Calculate total Area <span class='id-lang'>Hitung total Luas</span>","Multiply Area by Price per Unit <span class='id-lang'>Kali Luas dengan Harga per Unit</span>","Measure dimensions of the floor <span class='id-lang'>Ukur dimensi lantai</span>","Determine price per \\(\\text{m}^2\\) <span class='id-lang'>Tentukan harga per m²</span>"],
+         a:[2,0,3,1],
+         h:"Measure -> Area -> Price -> Multiply. <span class='id-lang'>Ukur -> Luas -> Harga -> Kali.</span>"},
+        // T3
+        {type:"T",title:"Fencing vs Flooring <span class='id-lang'>Pagar vs Lantai</span>",
+         body:`<p>Different projects require different calculations. <span class='id-lang'>Proyek berbeda butuh perhitungan berbeda.</span></p>
+         <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+           <div class="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+             <div class="text-emerald-400 font-semibold">Fencing a Park <span class='id-lang'>Memagari Taman</span></div>
+             <p class="text-sm text-slate-300 mt-1">You need the <strong>Perimeter</strong> to know how much fence to buy. <span class='id-lang'>Butuh <strong>Keliling</strong> untuk tahu berapa banyak pagar.</span></p>
+           </div>
+           <div class="p-3 rounded-lg bg-orange-500/10 border border-orange-500/20">
+             <div class="text-orange-400 font-semibold">Flooring a Park <span class='id-lang'>Memasang Lantai Taman</span></div>
+             <p class="text-sm text-slate-300 mt-1">You need the <strong>Area</strong> to know how much marble to buy. <span class='id-lang'>Butuh <strong>Luas</strong> untuk tahu berapa banyak marmer.</span></p>
+           </div>
+         </div>`},
+        // E7 mc
+        {type:"E",etype:"mc",
+         q:"If you want to build a fence around a garden, what must you calculate? <span class='id-lang'>Jika ingin membangun pagar di sekitar taman, apa yang harus dihitung?</span>",
+         o:["Area <span class='id-lang'>Luas</span>","Volume <span class='id-lang'>Volume</span>","Perimeter <span class='id-lang'>Keliling</span>","Depth <span class='id-lang'>Kedalaman</span>"],
+         a:2,
+         h:"Fence goes around the outside. <span class='id-lang'>Pagar mengelilingi bagian luar.</span>"},
+        // E8 tf
+        {type:"E",etype:"tf",
+         q:"To tile a roof, you need to calculate the area of the roof. <span class='id-lang'>Untuk memasang genteng atap, kamu perlu menghitung luas atap.</span>",
+         a:true,
+         h:"Tiling covers a 2D surface, which is area. <span class='id-lang'>Memasang genteng menutupi permukaan 2D, yaitu luas.</span>"},
+        // E9 fb
+        {type:"E",etype:"fb",
+         q:"A square garden has a side of 6m. To fence it, you need ____ meters of fence. <span class='id-lang'>Taman persegi sisi 6m. Untuk memagarinya, butuh ____ meter pagar.</span>",
+         a:"24",
+         h:"Perimeter = 4 × side = 4 × 6. <span class='id-lang'>Keliling = 4 × sisi = 4 × 6.</span>"},
+        // E10 sa
+        {type:"E",etype:"sa",
+         q:"Select all scenarios that require calculating AREA: <span class='id-lang'>Pilih semua skenario yang butuh menghitung LUAS:</span>",
+         o:["Buying grass for a lawn <span class='id-lang'>Membeli rumput untuk lapangan</span>","Putting a border around a painting <span class='id-lang'>Memasang bingkai lukisan</span>","Painting a wall <span class='id-lang'>Mengecat tembok</span>","Buying wood for a fence <span class='id-lang'>Membeli kayu untuk pagar</span>","Tiling a kitchen floor <span class='id-lang'>Memasang ubin lantai dapur</span>"],
+         a:[0,2,4],
+         h:"Area is for covering a surface. Perimeter is for borders/fences. <span class='id-lang'>Luas untuk menutupi permukaan. Keliling untuk batas/pagar.</span>"},
+      ]
+    },
+    // ==================== SECTION 3 ====================
+    {
+      id:3, title:"Review Prior Knowledge <span class='id-lang'>Review Pengetahuan</span>", icon:"fa-brain", color:"#8b5cf6", branch:false,
+      lessons:[
+        // T1
+        {type:"T",title:"Decomposing Shapes <span class='id-lang'>Dekomposisi Bangun</span>",
+         body:`<p>Let's 'dissect' a rectangle on the screen. If I divide it diagonally, what shape is formed? Yes, two identical triangles! <span class='id-lang'>Mari 'bedah' persegi panjang di layar. Jika dibagi secara diagonal, bangun apa yang terbentuk? Ya, dua segitiga identik!</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-violet-500/10 border border-violet-500/20">
+           <div class="text-violet-400 font-semibold mb-2">Why Triangle Area is \\(\\frac{1}{2} \\times a \\times t\\) <span class='id-lang'>Mengapa Luas Segitiga \\(\\frac{1}{2} \\times a \\times t\\)</span></div>
+           <p class="text-sm text-slate-300">Because a triangle is exactly half of a rectangle (or parallelogram) with the same base and height. <span class='id-lang'>Karena segitiga persis setengah dari persegi panjang (atau jajar genjang) dengan alas dan tinggi yang sama.</span></p>
+           <p class="text-sm text-emerald-400 mt-1">Rectangle Area = \\(p \\times l\\). Triangle Area = \\(\\frac{1}{2} \\times a \\times t\\).</p>
+         </div>
+         <p class="mt-4">We can also break down complex shapes, like a trapezoid, into a rectangle and two triangles. <span class='id-lang'>Kita juga bisa membagi bangun kompleks, seperti trapesium, menjadi persegi panjang dan dua segitiga.</span></p>`},
+        // E1 mc
+        {type:"E",etype:"mc",
+         q:"If a rectangle has an area of \\(40\\text{ cm}^2\\), what is the area of a triangle formed by its diagonal? <span class='id-lang'>Jika persegi panjang berluas \\(40\\text{ cm}^2\\), berapa luas segitiga yang terbentuk dari diagonalnya?</span>",
+         o:["\\(20\\text{ cm}^2\\)","\\(40\\text{ cm}^2\\)","\\(80\\text{ cm}^2\\)","\\(10\\text{ cm}^2\\)"],
+         a:0,
+         h:"The diagonal cuts the rectangle exactly in half. <span class='id-lang'>Diagonal memotong persegi panjang tepat menjadi dua.</span>"},
+        // E2 tf
+        {type:"E",etype:"tf",
+         q:"The formula for the area of a triangle is base multiplied by height (\\(a \\times t\\)). <span class='id-lang'>Rumus luas segitiga adalah alas dikali tinggi (\\(a \\times t\\)).</span>",
+         a:false,
+         h:"It must be half of base times height! <span class='id-lang'>Harus setengah dari alas kali tinggi!</span>"},
+        // E3 fb
+        {type:"E",etype:"fb",
+         q:"The area of a triangle is calculated as ____ \\(\\times a \\times t\\). <span class='id-lang'>Luas segitiga dihitung sebagai ____ \\(\\times a \\times t\\).</span>",
+         a:"1/2",
+         h:"It's one-half. <span class='id-lang'>Yaitu setengah.</span>"},
+        // T2
+        {type:"T",title:"Visualizing Area with Grids <span class='id-lang'>Visualisasi Luas dengan Grid</span>",
+         body:`<p>Area is the amount of 2D space inside a shape. We can visualize this using unit squares (grids). <span class='id-lang'>Luas adalah jumlah ruang 2D di dalam bangun. Kita bisa memvisualisasikannya dengan persegi satuan (grid).</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-teal-500/10 border border-teal-500/20">
+           <div class="text-teal-400 font-semibold mb-2">Unit Squares <span class='id-lang'>Persegi Satuan</span></div>
+           <p class="text-sm text-slate-300">If a shape covers exactly 15 squares of \\(1\\text{ cm} \\times 1\\text{ cm}\\), its area is \\(15\\text{ cm}^2\\). <span class='id-lang'>Jika bangun menutupi tepat 15 kotak \\(1\\text{ cm} \\times 1\\text{ cm}\\), luasnya \\(15\\text{ cm}^2\\).</span></p>
+         </div>
+         <p class="mt-4">By drawing shapes on grid paper, we can verify if our formulas (like \\(p \\times l\\)) are correct. <span class='id-lang'>Dengan menggambar di kertas grid, kita bisa memverifikasi kebenaran rumus (seperti \\(p \\times l\\)).</span></p>`},
+        // E4 mc
+        {type:"E",etype:"mc",
+         q:"A shape covers 12 unit squares, each \\(1\\text{ m}^2\\). What is its total area? <span class='id-lang'>Sebuah bangun menutupi 12 persegi satuan, masing-masing \\(1\\text{ m}^2\\). Berapa total luasnya?</span>",
+         o:["\\(4\\text{ m}^2\\)","\\(12\\text{ m}^2\\)","\\(144\\text{ m}^2\\)","\\(12\\text{ m}\\)"],
+         a:1,
+         h:"Count the squares. Total area = number of squares × area of one square. <span class='id-lang'>Hitung kotaknya. Total luas = jumlah kotak × luas satu kotak.</span>"},
+        // E5 fb
+        {type:"E",etype:"fb",
+         q:"Area is always measured in ____ units (e.g., \\(\\text{cm}^2\\), \\(\\text{m}^2\\)). <span class='id-lang'>Luas selalu diukur dalam satuan ____ (misal, \\(\\text{cm}^2\\), \\(\\text{m}^2\\)).</span>",
+         a:"square",
+         h:"Linear is for length, ____ is for area. <span class='id-lang'>Linear untuk panjang, ____ untuk luas.</span>"},
+        // E6 ord
+        {type:"E",etype:"ord",
+         q:"Order the steps to find the area of an irregular shape on a grid: <span class='id-lang'>Urutkan langkah mencari luas bangun tidak beraturan di grid:</span>",
+         o:["Count the number of fully covered squares <span class='id-lang'>Hitung jumlah kotak penuh</span>","Estimate and add partially covered squares <span class='id-lang'>Perkirakan dan tambah kotak yang tertutup sebagian</span>","Identify the unit of each square (e.g., \\(1\\text{ cm}^2\\)) <span class='id-lang'>Identifikasi satuan tiap kotak</span>","Multiply total squares by the unit area <span class='id-lang'>Kali total kotak dengan luas satuan</span>"],
+         a:[2,0,1,3],
+         h:"Identify unit -> Count full -> Estimate partial -> Calculate total. <span class='id-lang'>Identifikasi satuan -> Hitung penuh -> Perkirakan sebagian -> Hitung total.</span>"},
+        // T3
+        {type:"T",title:"Decomposing a Trapezoid <span class='id-lang'>Dekomposisi Trapesium</span>",
+         body:`<p>How do we find the area of a trapezoid without memorizing a new formula? We decompose it! <span class='id-lang'>Bagaimana mencari luas trapesium tanpa hafal rumus baru? Kita uraikan!</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20">
+           <div class="text-amber-400 font-semibold mb-2">Strategy <span class='id-lang'>Strategi</span></div>
+           <p class="text-sm text-slate-300">Draw two lines from the top vertices perpendicular to the base. This splits the trapezoid into: <span class='id-lang'>Tarik dua garis dari titik atas tegak lurus ke alas. Ini membagi trapesium menjadi:</span></p>
+           <ul class="text-sm text-emerald-400 mt-1 list-disc list-inside">
+             <li>1 Rectangle (in the middle) <span class='id-lang'>1 Persegi Panjang (di tengah)</span></li>
+             <li>2 Triangles (on the sides) <span class='id-lang'>2 Segitiga (di samping)</span></li>
+           </ul>
+           <p class="text-sm text-slate-300 mt-2">Calculate the area of each part, then add them up! <span class='id-lang'>Hitung luas setiap bagian, lalu jumlahkan!</span></p>
+         </div>`},
+        // E7 mc
+        {type:"E",etype:"mc",
+         q:"A trapezoid is decomposed into 1 rectangle and 2 triangles. What is the next step to find its total area? <span class='id-lang'>Trapesium diuraikan menjadi 1 persegi panjang dan 2 segitiga. Apa langkah selanjutnya untuk mencari luas totalnya?</span>",
+         o:["Multiply the areas of all shapes <span class='id-lang'>Kali luas semua bangun</span>","Add the areas of all shapes together <span class='id-lang'>Jumlahkan luas semua bangun</span>","Subtract the rectangle from the triangles <span class='id-lang'>Kurangi persegi panjang dari segitiga</span>","Find the perimeter <span class='id-lang'>Cari kelilingnya</span>"],
+         a:1,
+         h:"Total area of composite shape = sum of its parts. <span class='id-lang'>Luas total bangun gabungan = jumlah bagiannya.</span>"},
+        // E8 tf
+        {type:"E",etype:"tf",
+         q:"Decomposition means breaking down a complex shape into simpler, known shapes like rectangles and triangles. <span class='id-lang'>Dekomposisi berarti membagi bangun kompleks menjadi bangun sederhana yang diketahui seperti persegi panjang dan segitiga.</span>",
+         a:true,
+         h:"Yes, 'decompose' literally means to break down. <span class='id-lang'>Ya, 'dekomposisi' harfiah berarti mengurai.</span>"},
+        // E9 match
+        {type:"E",etype:"match",
+         q:"Match the shape with its area formula: <span class='id-lang'>Cocokkan bangun dengan rumus luasnya:</span>",
+         left:["Rectangle <span class='id-lang'>Persegi Panjang</span>","Triangle <span class='id-lang'>Segitiga</span>","Square <span class='id-lang'>Persegi</span>"],
+         right:["\\(p \\times l\\)","\\(\\frac{1}{2} \\times a \\times t\\)","\\(s^2\\)"],
+         a:[0,1,2],
+         h:"Recall the formulas for basic shapes. <span class='id-lang'>Ingat rumus bangun dasar.</span>"},
+        // E10 fb
+        {type:"E",etype:"fb",
+         q:"A rectangle (\\(10 \\times 4\\)) and a triangle (base \\(10\\), height \\(4\\)) are combined. The total area is ____. <span class='id-lang'>Persegi panjang (\\(10 \\times 4\\)) dan segitiga (alas \\(10\\), tinggi \\(4\\)) digabungkan. Total luas ____.</span>",
+         a:"60",
+         h:"Rect area = 40. Triangle area = 1/2 * 10 * 4 = 20. Total = ? <span class='id-lang'>Luas rect = 40. Luas segitiga = 1/2 * 10 * 4 = 20. Total = ?</span>"},
+      ]
+    },
+    // ==================== SECTION 4 ====================
+    {
+      id:4, title:"Problem Introduction <span class='id-lang'>Pengenalan Masalah</span>", icon:"fa-circle-question", color:"#f59e0b", branch:false,
+      lessons:[
+        // T1
+        {type:"T",title:"The Architect's Challenge (L-Shape) <span class='id-lang'>Tantangan Arsitek (Bentuk-L)</span>",
+         body:`<p>Now for the hard challenge. We have an L-shaped land. This is actually a composite of two rectangles. <span class='id-lang'>Sekarang tantangan sulitnya. Kita punya lahan berbentuk L. Ini sebenarnya gabungan dua persegi panjang.</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20">
+           <div class="text-amber-400 font-semibold mb-2">The Problem <span class='id-lang'>Masalah</span></div>
+           <p class="text-sm text-slate-300">In the middle of this L-shaped land, there is a triangular pool that will NOT be covered with marble. <span class='id-lang'>Di tengah lahan berbentuk L ini, ada kolam segitiga yang TIDAK akan dipasangi marmer.</span></p>
+           <p class="text-sm text-emerald-400 mt-2">How do we calculate the area of the marble floor only? <span class='id-lang'>Bagaimana menghitung luas lantai marmer saja?</span></p>
+         </div>`},
+        // E1 mc
+        {type:"E",etype:"mc",
+         q:"What is the best strategy to find the area of an L-shaped land? <span class='id-lang'>Apa strategi terbaik mencari luas lahan berbentuk L?</span>",
+         o:["Multiply length by width <span class='id-lang'>Kali panjang dengan lebar</span>","Split it into two rectangles and add their areas <span class='id-lang'>Bagi jadi dua persegi panjang dan jumlahkan luasnya</span>","Treat it as a giant circle <span class='id-lang'>Anggap sebagai lingkaran raksasa</span>","Calculate only the perimeter <span class='id-lang'>Hitung hanya kelilingnya</span>"],
+         a:1,
+         h:"Decompose the L-shape into basic rectangles. <span class='id-lang'>Uraikan bentuk-L menjadi persegi panjang dasar.</span>"},
+        // E2 tf
+        {type:"E",etype:"tf",
+         q:"To find the area of the marble floor, we must subtract the area of the pool from the total land area. <span class='id-lang'>Untuk mencari luas lantai marmer, kita harus mengurangi luas kolam dari total luas lahan.</span>",
+         a:true,
+         h:"Subtract the 'hole' (pool) from the 'whole' (land). <span class='id-lang'>Kurangi 'lubang' (kolam) dari 'keseluruhan' (lahan).</span>"},
+        // E3 fb
+        {type:"E",etype:"fb",
+         q:"If a shape has a section cut out of it, the remaining area is Total Area ____ Cutout Area. <span class='id-lang'>Jika sebuah bangun punya bagian yang dipotong, sisa luasnya adalah Total Luas ____ Luas Potongan.</span>",
+         a:"-",
+         h:"We use subtraction for cutouts. <span class='id-lang'>Kita gunakan pengurangan untuk potongan.</span>"},
+        // T2
+        {type:"T",title:"Writing Known Variables <span class='id-lang'>Menulis Variabel Diketahui</span>",
+         body:`<p>Let's set up the problem. Writing down what we know helps us avoid getting lost. <span class='id-lang'>Mari susun masalahnya. Menulis apa yang kita ketahui membantu kita tidak tersesat.</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+           <div class="text-emerald-400 font-semibold mb-2">Known Variables <span class='id-lang'>Variabel Diketahui</span></div>
+           <ul class="text-sm text-slate-300 list-disc list-inside">
+             <li>Land outer dimensions: \\(20\\text{m} \\times 15\\text{m}\\) (Rectangle) <span class='id-lang'>Dimensi luar lahan: \\(20\\text{m} \\times 15\\text{m}\\)</span></li>
+             <li>Pool shape: Triangle with base \\(5\\text{m}\\) and height \\(4\\text{m}\\) <span class='id-lang'>Bentuk kolam: Segitiga alas \\(5\\text{m}\\) tinggi \\(4\\text{m}\\)</span></li>
+           </ul>
+         </div>
+         <p class="mt-4">Wait, is the L-shape just one \\(20 \\times 15\\) rectangle? No, the problem says it's cut by a triangle. We will calculate the big rectangle first, then subtract the triangle. <span class='id-lang'>Tunggu, apakah bentuk-L ini hanya satu persegi panjang \\(20 \\times 15\\)? Tidak, soal mengatakan dipotong segitiga. Kita hitung persegi panjang besar dulu, lalu kurangi segitiganya.</span></p>`},
+        // E4 mc
+        {type:"E",etype:"mc",
+         q:"Based on the variables: Land is \\(20\\text{m} \\times 15\\text{m}\\) and pool is a triangle (\\(a=5\\text{m}, t=4\\text{m}\\)). What is the area of the big rectangle? <span class='id-lang'>Berdasarkan variabel: Lahan \\(20\\text{m} \\times 15\\text{m}\\) dan kolam segitiga (\\(a=5\\text{m}, t=4\\text{m}\\)). Berapa luas persegi panjang besar?</span>",
+         o:["\\(20\\text{ m}^2\\)","\\(35\\text{ m}^2\\)","\\(300\\text{ m}^2\\)","\\(10\\text{ m}^2\\)"],
+         a:2,
+         h:"Area = p × l = 20 × 15. <span class='id-lang'>Luas = p × l = 20 × 15.</span>"},
+        // E5 fb
+        {type:"E",etype:"fb",
+         q:"The pool is a triangle with base \\(5\\text{m}\\) and height \\(4\\text{m}\\). Its area is ____ \\(\\text{m}^2\\). <span class='id-lang'>Kolam adalah segitiga alas \\(5\\text{m}\\) tinggi \\(4\\text{m}\\). Luasnya ____ \\(\\text{m}^2\\).</span>",
+         a:"10",
+         h:"Area = 1/2 × 5 × 4. <span class='id-lang'>Luas = 1/2 × 5 × 4.</span>"},
+        // E6 ord
+        {type:"E",etype:"ord",
+         q:"Order the steps to solve the Architect's Challenge: <span class='id-lang'>Urutkan langkah menyelesaikan Tantangan Arsitek:</span>",
+         o:["Subtract triangle area from rectangle area <span class='id-lang'>Kurangi luas segitiga dari luas persegi panjang</span>","Calculate area of the triangular pool <span class='id-lang'>Hitung luas kolam segitiga</span>","Identify dimensions of land and pool <span class='id-lang'>Identifikasi dimensi lahan dan kolam</span>","Calculate area of the rectangular land <span class='id-lang'>Hitung luas lahan persegi panjang</span>"],
+         a:[2,3,1,0],
+         h:"Identify -> Calculate big -> Calculate small -> Subtract. <span class='id-lang'>Identifikasi -> Hitung besar -> Hitung kecil -> Kurangi.</span>"},
+        // T3
+        {type:"T",title:"Calculating the Marble Area <span class='id-lang'>Menghitung Luas Marmer</span>",
+         body:`<p>Let's execute our strategy! <span class='id-lang'>Mari jalankan strategi kita!</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-violet-500/10 border border-violet-500/20">
+           <p class="text-sm text-slate-300"><strong>Step 1:</strong> Land Area = \\(20 \\times 15 = 300\\text{ m}^2\\). <span class='id-lang'>Luas Lahan = 300m².</span></p>
+           <p class="text-sm text-slate-300"><strong>Step 2:</strong> Pool Area = \\(\\frac{1}{2} \\times 5 \\times 4 = 10\\text{ m}^2\\). <span class='id-lang'>Luas Kolam = 10m².</span></p>
+           <p class="text-sm text-emerald-400 mt-2"><strong>Step 3:</strong> Marble Area = \\(300 - 10 = 290\\text{ m}^2\\). <span class='id-lang'>Luas Marmer = 290m².</span></p>
+         </div>
+         <p class="mt-4">See? By breaking the problem down, even a 9th-grade problem becomes manageable for a young architect! <span class='id-lang'>Lihat? Dengan memecah masalah, soal kelas 9 pun jadi mudah untuk arsitek muda!</span></p>`},
+        // E7 mc
+        {type:"E",etype:"mc",
+         q:"If the land area is \\(300\\text{ m}^2\\) and the pool area is \\(10\\text{ m}^2\\), what is the marble area? <span class='id-lang'>Jika luas lahan 300m² dan luas kolam 10m², berapa luas marmer?</span>",
+         o:["\\(310\\text{ m}^2\\)","\\(290\\text{ m}^2\\)","\\(3000\\text{ m}^2\\)","\\(30\\text{ m}^2\\)"],
+         a:1,
+         h:"300 - 10 = ? <span class='id-lang'>300 - 10 = ?</span>"},
+        // E8 tf
+        {type:"E",etype:"tf",
+         q:"If the pool was a rectangle instead of a triangle, we would still subtract its area from the total land area. <span class='id-lang'>Jika kolam berbentuk persegi panjang bukan segitiga, kita tetap mengurangi luasnya dari total luas lahan.</span>",
+         a:true,
+         h:"The shape of the cutout doesn't matter; we always subtract its area. <span class='id-lang'>Bentuk potongan tidak masalah; kita selalu kurangi luasnya.</span>"},
+        // E9 fb
+        {type:"E",etype:"fb",
+         q:"The final step to find the area of the marble floor is to subtract the pool area from the ____ area. <span class='id-lang'>Langkah terakhir mencari luas lantai marmer adalah mengurangi luas kolam dari luas ____.</span>",
+         a:"land",
+         h:"We subtract the small part from the 'whole' part. <span class='id-lang'>Kita kurangi bagian kecil dari bagian 'keseluruhan'.</span>"},
+        // E10 sa
+        {type:"E",etype:"sa",
+         q:"Select all formulas/concepts used in solving the Architect's Challenge: <span class='id-lang'>Pilih semua rumus/konsep yang digunakan menyelesaikan Tantangan Arsitek:</span>",
+         o:["Area of Rectangle (\\(p \\times l\\)) <span class='id-lang'>Luas Persegi Panjang</span>","Area of Triangle (\\(\\frac{1}{2} a t\\)) <span class='id-lang'>Luas Segitiga</span>","Subtraction of areas <span class='id-lang'>Pengurangan luas</span>","Volume of a sphere <span class='id-lang'>Volume bola</span>","Addition of areas <span class='id-lang'>Penjumlahan luas</span>"],
+         a:[0,1,2],
+         h:"We used rectangle, triangle, and subtraction. <span class='id-lang'>Kita pakai persegi panjang, segitiga, dan pengurangan.</span>"},
+      ]
+    },
+    // ==================== SECTION 5 ====================
+    {
+      id:5, title:"Guided Practice <span class='id-lang'>Latihan Terbimbing</span>", icon:"fa-chalkboard-user", color:"#ec4899", branch:false,
+      lessons:[
+        // T1
+        {type:"T",title:"Step-by-Step Calculation <span class='id-lang'>Perhitungan Langkah-demi-Langkah</span>",
+         body:`<p>Let's calculate together. The land is \\(20\\text{m} \\times 15\\text{m}\\), but a corner is cut by a triangle (base \\(5\\text{m}\\), height \\(4\\text{m}\\)). <span class='id-lang'>Mari kita hitung bersama. Lahan \\(20\\text{m} \\times 15\\text{m}\\), tapi sudutnya dipotong segitiga (alas \\(5\\text{m}\\), tinggi \\(4\\text{m}\\)).</span></p>
+         <div class="mt-4 space-y-2">
+           <div class="p-3 rounded bg-white/5">
+             <p class="text-sm text-emerald-400"><strong>Step 1:</strong> Calculate area of the big rectangle. <span class='id-lang'>Hitung luas persegi panjang besar.</span></p>
+             <p class="text-sm text-slate-300">\\(L = p \\times l = 20 \\times 15 = 300\\text{ m}^2\\)</p>
+           </div>
+           <div class="p-3 rounded bg-white/5">
+             <p class="text-sm text-emerald-400"><strong>Step 2:</strong> Calculate area of the triangle cutout. <span class='id-lang'>Hitung luas potongan segitiga.</span></p>
+             <p class="text-sm text-slate-300">\\(L = \\frac{1}{2} \\times a \\times t = \\frac{1}{2} \\times 5 \\times 4 = 10\\text{ m}^2\\)</p>
+           </div>
+           <div class="p-3 rounded bg-white/5">
+             <p class="text-sm text-emerald-400"><strong>Step 3:</strong> Subtract the cutout from the big rectangle. <span class='id-lang'>Kurangi potongan dari persegi panjang besar.</span></p>
+             <p class="text-sm text-slate-300">\\(L_{\\text{marble}} = 300 - 10 = 290\\text{ m}^2\\)</p>
+           </div>
+         </div>`},
+        // E1 mc
+        {type:"E",etype:"mc",
+         q:"What is the area of the big rectangular land? <span class='id-lang'>Berapa luas lahan persegi panjang besar?</span>",
+         o:["\\(35\\text{ m}^2\\)","\\(300\\text{ m}^2\\)","\\(290\\text{ m}^2\\)","\\(20\\text{ m}^2\\)"],
+         a:1,
+         h:"L = p × l = 20 × 15. <span class='id-lang'>L = p × l = 20 × 15.</span>"},
+        // E2 fb
+        {type:"E",etype:"fb",
+         q:"Calculate the area of the triangular cutout: ____ \\(\\text{m}^2\\). <span class='id-lang'>Hitung luas potongan segitiga: ____ m².</span>",
+         a:"10",
+         h:"L = 1/2 × 5 × 4. <span class='id-lang'>L = 1/2 × 5 × 4.</span>"},
+        // E3 tf
+        {type:"E",etype:"tf",
+         q:"To find the final marble area, you add the triangle area to the rectangle area. <span class='id-lang'>Untuk mencari luas marmer akhir, kamu menambahkan luas segitiga ke luas persegi panjang.</span>",
+         a:false,
+         h:"You must subtract the cutout! <span class='id-lang'>Kamu harus mengurangi potongannya!</span>"},
+        // T2
+        {type:"T",title:"Exploring Perimeter of Irregular Land <span class='id-lang'>Eksplorasi Keliling Lahan Tidak Beraturan</span>",
+         body:`<p>What if we want to build a fence around this irregular land? We need the perimeter. <span class='id-lang'>Bagaimana jika kita ingin memagar lahan tidak beraturan ini? Kita butuh keliling.</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-pink-500/10 border border-pink-500/20">
+           <div class="text-pink-400 font-semibold mb-2">How to find it <span class='id-lang'>Cara mencarinya</span></div>
+           <p class="text-sm text-slate-300">You cannot just use \\(2(p + l)\\) because a corner is missing. You must add all the outer sides manually. <span class='id-lang'>Tidak bisa pakai \\(2(p + l)\\) karena ada sudut yang hilang. Harus menjumlahkan semua sisi luar secara manual.</span></p>
+           <p class="text-sm text-emerald-400 mt-2">Original sides: 20, 15, 20, 15. <span class='id-lang'>Sisi asli: 20, 15, 20, 15.</span></p>
+           <p class="text-sm text-slate-300">If a 5m and 4m corner is cut, those sides are reduced, but the hypotenuse of the triangle becomes the new fence! <span class='id-lang'>Jika sudut 5m dan 4m dipotong, sisi itu berkurang, tapi sisi miring segitiga jadi pagar baru!</span></p>
+         </div>`},
+        // E4 mc
+        {type:"E",etype:"mc",
+         q:"If a rectangular land has a triangular corner cut out, how do you find its new perimeter? <span class='id-lang'>Jika lahan persegi panjang memiliki sudut segitiga yang dipotong, bagaimana mencari keliling barunya?</span>",
+         o:["Use \\(2(p + l)\\) <span class='id-lang'>Pakai \\(2(p + l)\\)</span>","Add all the new outer sides together <span class='id-lang'>Jumlahkan semua sisi luar yang baru</span>","Calculate the area and multiply by 4 <span class='id-lang'>Hitung luas lalu kali 4</span>","It's impossible to find <span class='id-lang'>Tidak mungkin dicari</span>"],
+         a:1,
+         h:"Perimeter is the sum of all outer edges. <span class='id-lang'>Keliling adalah jumlah semua sisi terluar.</span>"},
+        // E5 fb
+        {type:"E",etype:"fb",
+         q:"Perimeter is the total distance ____ a shape. <span class='id-lang'>Keliling adalah total jarak ____ sebuah bangun.</span>",
+         a:"around",
+         h:"Think of walking around the edge. <span class='id-lang'>Bayangkan berjalan mengelilingi tepi.</span>"},
+        // E6 ord
+        {type:"E",etype:"ord",
+         q:"Order the steps to find the perimeter of a land with a cutout: <span class='id-lang'>Urutkan langkah mencari keliling lahan dengan potongan:</span>",
+         o:["Add all remaining outer sides <span class='id-lang'>Jumlahkan semua sisi luar yang tersisa</span>","Identify the lengths of all outer sides <span class='id-lang'>Identifikasi panjang semua sisi luar</span>","Identify the lengths of the new cutout sides <span class='id-lang'>Identifikasi panjang sisi potongan baru</span>","Ensure no inner sides are counted <span class='id-lang'>Pastikan tidak ada sisi dalam dihitung</span>"],
+         a:[1,2,0,3],
+         h:"Identify outer -> Identify cutout -> Add them -> Verify no inner edges. <span class='id-lang'>Identifikasi luar -> Identifikasi potong -> Jumlah -> Verifikasi.</span>"},
+        // T3
+        {type:"T",title:"Verification & Cost <span class='id-lang'>Verifikasi & Biaya</span>",
+         body:`<p>Let's verify our marble area: \\(290\\text{ m}^2\\). <span class='id-lang'>Mari verifikasi luas marmer kita: 290m².</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+           <div class="text-emerald-400 font-semibold mb-2">Cost Calculation <span class='id-lang'>Perhitungan Biaya</span></div>
+           <p class="text-sm text-slate-300">If marble costs Rp 100,000 per \\(\\text{m}^2\\): <span class='id-lang'>Jika marmer Rp 100.000 per m²:</span></p>
+           <p class="text-sm text-emerald-400 mt-1">Total Cost = \\(290 \\times 100{,}000 = \\text{Rp } 29{,}000{,}000\\).</p>
+         </div>
+         <p class="mt-4">By doing this step-by-step, an architect avoids wasting millions of Rupiah! <span class='id-lang'>Dengan langkah ini, arsitek menghindari pemborosan jutaan rupiah!</span></p>`},
+        // E7 mc
+        {type:"E",etype:"mc",
+         q:"If the marble area is \\(290\\text{ m}^2\\) and costs Rp 100,000 per \\(\\text{m}^2\\), what is the total cost? <span class='id-lang'>Jika luas marmer 290m² dan harga Rp 100.000 per m², berapa total biayanya?</span>",
+         o:["\\(\\text{Rp } 290{,}000\\)","\\(\\text{Rp } 2{,}900{,}000\\)","\\(\\text{Rp } 29{,}000{,}000\\)","\\(\\text{Rp } 290{,}000{,}000\\)"],
+         a:2,
+         h:"Multiply area by price per unit. <span class='id-lang'>Kali luas dengan harga per unit.</span>"},
+        // E8 tf
+        {type:"E",etype:"tf",
+         q:"Cutting a corner out of a rectangle always decreases its perimeter. <span class='id-lang'>Memotong sudut persegi panjang selalu mengurangi kelilingnya.</span>",
+         a:false,
+         h:"Depending on the shape, the new sides might be longer, increasing perimeter! <span class='id-lang'>Tergantung bentuknya, sisi baru bisa lebih panjang, menambah keliling!</span>"},
+        // E9 fb
+        {type:"E",etype:"fb",
+         q:"A rectangular land (\\(10 \\times 10\\)) has a \\(3 \\times 4\\) right triangle cut from a corner. The area remaining is ____. <span class='id-lang'>Lahan persegi panjang (\\(10 \\times 10\\)) memiliki segitiga siku-siku \\(3 \\times 4\\) dipotong dari sudutnya. Sisa luasnya ____.</span>",
+         a:"94",
+         h:"Big area = 100. Triangle area = 1/2 * 3 * 4 = 6. 100 - 6 = ? <span class='id-lang'>Luas besar = 100. Luas segitiga = 6. 100 - 6 = ?</span>"},
+        // E10 sa
+        {type:"E",etype:"sa",
+         q:"Select all things that DECREASE when a triangle is cut from a rectangular land: <span class='id-lang'>Pilih semua yang BERKURANG saat segitiga dipotong dari lahan persegi panjang:</span>",
+         o:["Total Area <span class='id-lang'>Total Luas</span>","Amount of marble needed <span class='id-lang'>Jumlah marmer dibutuhkan</span>","Total Cost of marble <span class='id-lang'>Total Biaya marmer</span>","Number of corners (vertices) <span class='id-lang'>Jumlah sudut</span>","Perimeter <span class='id-lang'>Keliling</span>"],
+         a:[0,1,2],
+         h:"Area, marble, and cost decrease. Corners increase (from 4 to 5). Perimeter might change. <span class='id-lang'>Luas, marmer, biaya berkurang. Sudut bertambah. Keliling mungkin berubah.</span>"},
+      ]
+    },
+    // ==================== SECTION 6 ====================
+    {
+      id:6, title:"Independent Practice <span class='id-lang'>Latihan Mandiri</span>", icon:"fa-user-graduate", color:"#14b8a6", branch:false,
+      lessons:[
+        // T1
+        {type:"T",title:"The Roof Plan Challenge <span class='id-lang'>Tantangan Denah Atap</span>",
+         body:`<p>Now it's your turn to be the head architect! Look at the roof plan on the screen. <span class='id-lang'>Sekarang giliranmu jadi kepala arsitek! Lihat denah atap di layar.</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-teal-500/10 border border-teal-500/20">
+           <div class="text-teal-400 font-bold mb-2">The Problem <span class='id-lang'>Masalah</span></div>
+           <p class="text-sm text-slate-300">The roof consists of 1 rectangle (\\(10\\text{m} \\times 8\\text{m}\\)) and 2 identical triangles attached to its sides. The triangles have a base of \\(3\\text{m}\\) and a height of \\(8\\text{m}\\). <span class='id-lang'>Atap terdiri dari 1 persegi panjang (\\(10 \\times 8\\)) dan 2 segitiga identik menempel di sisinya. Segitiga memiliki alas \\(3\\text{m}\\) dan tinggi \\(8\\text{m}\\).</span></p>
+           <p class="text-sm text-emerald-400 mt-2">Calculate the total area of the roof. <span class='id-lang'>Hitung total luas atap.</span></p>
+         </div>`},
+        // E1 mc
+        {type:"E",etype:"mc",
+         q:"What is the area of the rectangular part of the roof? <span class='id-lang'>Berapa luas bagian persegi panjang dari atap?</span>",
+         o:["\\(18\\text{ m}^2\\)","\\(80\\text{ m}^2\\)","\\(100\\text{ m}^2\\)","\\(24\\text{ m}^2\\)"],
+         a:1,
+         h:"Area = 10 × 8. <span class='id-lang'>Luas = 10 × 8.</span>"},
+        // E2 fb
+        {type:"E",etype:"fb",
+         q:"Calculate the area of ONE triangular part: ____ \\(\\text{m}^2\\). <span class='id-lang'>Hitung luas SATU bagian segitiga: ____ m².</span>",
+         a:"12",
+         h:"Area = 1/2 × 3 × 8. <span class='id-lang'>Luas = 1/2 × 3 × 8.</span>"},
+        // E3 mc
+        {type:"E",etype:"mc",
+         q:"What is the total area of the entire roof? <span class='id-lang'>Berapa total luas seluruh atap?</span>",
+         o:["\\(92\\text{ m}^2\\)","\\(104\\text{ m}^2\\)","\\(80\\text{ m}^2\\)","\\(24\\text{ m}^2\\)"],
+         a:1,
+         h:"Total = Rectangle + Triangle + Triangle = 80 + 12 + 12. <span class='id-lang'>Total = Persegi Panjang + Segitiga + Segitiga = 80 + 12 + 12.</span>"},
+        // T2
+        {type:"T",title:"Adding Waste Margin <span class='id-lang'>Menambahkan Margin Pemborosan</span>",
+         body:`<p>Architects know that cutting materials creates waste. It's standard practice to buy 10% extra material. <span class='id-lang'>Arsitek tahu memotong material membuat pemborosan. Standarnya beli 10% material ekstra.</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20">
+           <div class="text-amber-400 font-semibold mb-2">Calculation <span class='id-lang'>Perhitungan</span></div>
+           <p class="text-sm text-slate-300">Total Roof Area = \\(104\\text{ m}^2\\). <span class='id-lang'>Total Luas Atap = 104m².</span></p>
+           <p class="text-sm text-slate-300">Waste Extra = \\(10\\% \\times 104 = 10.4\\text{ m}^2\\). <span class='id-lang'>Ekstra Pemborosan = 10.4m².</span></p>
+           <p class="text-sm text-emerald-400 mt-1">Material to Buy = \\(104 + 10.4 = 114.4\\text{ m}^2\\). <span class='id-lang'>Material Dibeli = 114.4m².</span></p>
+         </div>`},
+        // E4 mc
+        {type:"E",etype:"mc",
+         q:"If the total roof area is \\(104\\text{ m}^2\\), how much extra material is 10%? <span class='id-lang'>Jika total luas atap 104m², berapa material ekstra 10%?</span>",
+         o:["\\(1.04\\text{ m}^2\\)","\\(10.4\\text{ m}^2\\)","\\(104\\text{ m}^2\\)","\\(1040\\text{ m}^2\\)"],
+         a:1,
+         h:"10% of 104 = 0.1 × 104. <span class='id-lang'>10% dari 104 = 0.1 × 104.</span>"},
+        // E5 fb
+        {type:"E",etype:"fb",
+         q:"Total material to buy = 104 + 10.4 = ____ \\(\\text{m}^2\\). <span class='id-lang'>Total material dibeli = 104 + 10.4 = ____ m².</span>",
+         a:"114.4",
+         h:"Add the base area and the waste. <span class='id-lang'>Tambahkan luas dasar dan pemborosan.</span>"},
+        // E6 tf
+        {type:"E",etype:"tf",
+         q:"You should buy exactly \\(104\\text{ m}^2\\) of roof material, with no extra for waste. <span class='id-lang'>Kamu harus membeli tepat 104m² material atap, tanpa ekstra untuk pemborosan.</span>",
+         a:false,
+         h:"Always add a waste margin (like 10%) for cutting errors! <span class='id-lang'>Selalu tambahkan margin (seperti 10%) untuk kesalahan potong!</span>"},
+        // T3
+        {type:"T",title:"Composite Shapes Summary <span class='id-lang'>Ringkasan Bangun Gabungan</span>",
+         body:`<p>Let's summarize what we've learned about composite shapes. <span class='id-lang'>Mari rangkum apa yang kita pelajari tentang bangun gabungan.</span></p>
+         <div class="mt-4 space-y-3">
+           <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+             <p class="text-sm"><strong class="text-emerald-400">Addition (Attachments):</strong> When shapes are joined together (like triangles on a roof), ADD their areas. <span class='id-lang'><strong>Penambahan:</strong> Saat bangun disatukan, JUMLAHKAN luasnya.</span></p>
+           </div>
+           <div class="p-3 rounded-xl bg-red-500/10 border border-red-500/20">
+             <p class="text-sm"><strong class="text-red-400">Subtraction (Cutouts):</strong> When a shape is removed (like a pool in a park), SUBTRACT its area. <span class='id-lang'><strong>Pengurangan:</strong> Saat bangun dihilangkan, KURANGI luasnya.</span></p>
+           </div>
+         </div>`},
+        // E7 mc
+        {type:"E",etype:"mc",
+         q:"When two shapes are joined together to form a larger composite shape, how do you find the total area? <span class='id-lang'>Saat dua bangun disatukan menjadi bangun gabungan lebih besar, bagaimana mencari total luasnya?</span>",
+         o:["Subtract the smaller from the larger <span class='id-lang'>Kurangi kecil dari besar</span>","Multiply their areas <span class='id-lang'>Kali luasnya</span>","Add their areas together <span class='id-lang'>Jumlahkan luasnya</span>","Find the perimeter <span class='id-lang'>Cari kelilingnya</span>"],
+         a:2,
+         h:"Joining = Adding. <span class='id-lang'>Menyatu = Menjumlah.</span>"},
+        // E8 tf
+        {type:"E",etype:"tf",
+         q:"If a square (s=10) has a square hole (s=2) inside it, the remaining area is \\(96\\text{ units}^2\\). <span class='id-lang'>Jika persegi (s=10) memiliki lubang persegi (s=2) di dalamnya, sisa luasnya 96 unit².</span>",
+         a:true,
+         h:"Big area = 100. Hole = 4. 100 - 4 = 96. <span class='id-lang'>Luas besar = 100. Lubang = 4. 100 - 4 = 96.</span>"},
+        // E9 fb
+        {type:"E",etype:"fb",
+         q:"A shape is made of 2 rectangles. One is \\(10\\text{ m}^2\\) and the other is \\(15\\text{ m}^2\\). Total area is ____ \\(\\text{m}^2\\). <span class='id-lang'>Bangun terdiri dari 2 persegi panjang. Satu 10m² dan lainnya 15m². Total luas ____ m².</span>",
+         a:"25",
+         h:"10 + 15 = ? <span class='id-lang'>10 + 15 = ?</span>"},
+        // E10 sa
+        {type:"E",etype:"sa",
+         q:"Select all correct statements about composite shapes: <span class='id-lang'>Pilih pernyataan benar tentang bangun gabungan:</span>",
+         o:["They are made of basic shapes like rectangles and triangles <span class='id-lang'>Terdiri dari bangun dasar seperti persegi panjang dan segitiga</span>","To find area, you might need to add or subtract <span class='id-lang'>Untuk mencari luas, mungkin perlu menambah atau mengurangi</span>","Perimeter is found by adding only the outer edges <span class='id-lang'>Keliling dicari dengan menambah hanya sisi terluar</span>","They cannot exist in real life <span class='id-lang'>Tidak bisa ada di dunia nyata</span>","You must memorize one single formula for all of them <span class='id-lang'>Harus hafal satu rumus untuk semuanya</span>"],
+         a:[0,1,2],
+         h:"Composite shapes use basic shapes, add/subtract for area, outer edges for perimeter, and exist everywhere! <span class='id-lang'>Bangun gabungan pakai bangun dasar, tambah/kurang untuk luas, sisi luar untuk keliling, dan ada di mana-mana!</span>"},
+      ]
+    },
+    // ==================== SECTION 7A ====================
+    {
+      id:"7A", title:"Assessment A <span class='id-lang'>Asesmen A</span>", icon:"fa-clipboard-check", color:"#3b82f6", branch:true,
+      lessons:[
+        {type:"E",etype:"mc",
+         q:"Calculate the area of a rectangle with length 12 cm and width 7 cm. <span class='id-lang'>Hitung luas persegi panjang dengan panjang 12 cm dan lebar 7 cm.</span>",
+         o:["\\(19\\text{ cm}^2\\)","\\(38\\text{ cm}^2\\)","\\(84\\text{ cm}^2\\)","\\(144\\text{ cm}^2\\)"],
+         a:2,
+         h:"Area = p × l = 12 × 7. <span class='id-lang'>Luas = 12 × 7.</span>"},
+        {type:"E",etype:"fb",
+         q:"A triangle has a base of 15 cm and an area of \\(60\\text{ cm}^2\\). What is its height? <span class='id-lang'>Sebuah segitiga memiliki alas 15 cm dan luas 60 cm². Berapakah tingginya?</span>",
+         a:"8",
+         h:"\\(t = \\frac{2L}{a} = \\frac{2 \\times 60}{15}\\). <span class='id-lang'>\\(t = \\frac{2 \\times 60}{15}\\).</span>"},
+        {type:"E",etype:"mc",
+         q:"Calculate the perimeter of a square if its area is \\(81\\text{ cm}^2\\). <span class='id-lang'>Hitung keliling sebuah persegi jika diketahui luasnya adalah 81 cm².</span>",
+         o:["\\(9\\text{ cm}\\)","\\(18\\text{ cm}\\)","\\(36\\text{ cm}\\)","\\(81\\text{ cm}\\)"],
+         a:2,
+         h:"Side = √81 = 9. Perimeter = 4 × 9. <span class='id-lang'>Sisi = √81 = 9. Keliling = 4 × 9.</span>"},
+        {type:"E",etype:"fb",
+         q:"An isosceles triangle garden has a base of 10 m and equal sides of 13 m. Its perimeter is ____ m. <span class='id-lang'>Taman berbentuk segitiga sama kaki memiliki alas 10 m dan sisi miring 13 m. Kelilingnya ____ m.</span>",
+         a:"36",
+         h:"P = 10 + 13 + 13. <span class='id-lang'>K = 10 + 13 + 13.</span>"},
+        {type:"E",etype:"mc",
+         q:"What is the area of a rectangle with length 8 m and width 5 m? <span class='id-lang'>Berapa luas persegi panjang dengan panjang 8 m dan lebar 5 m?</span>",
+         o:["\\(13\\text{ m}^2\\)","\\(26\\text{ m}^2\\)","\\(40\\text{ m}^2\\)","\\(80\\text{ m}^2\\)"],
+         a:2,
+         h:"Area = p × l. <span class='id-lang'>Luas = p × l.</span>"},
+        {type:"E",etype:"tf",
+         q:"Perimeter is the total distance inside a 2D shape. <span class='id-lang'>Keliling adalah total jarak di dalam bangun 2D.</span>",
+         a:false,
+         h:"Perimeter is the distance around the outside. Area is inside. <span class='id-lang'>Keliling adalah jarak di sekeliling luar. Luas di dalam.</span>"},
+        {type:"E",etype:"mc",
+         q:"A triangle has a base of 10 cm and height of 6 cm. What is its area? <span class='id-lang'>Segitiga memiliki alas 10 cm dan tinggi 6 cm. Berapa luasnya?</span>",
+         o:["\\(16\\text{ cm}^2\\)","\\(30\\text{ cm}^2\\)","\\(60\\text{ cm}^2\\)","\\(15\\text{ cm}^2\\)"],
+         a:1,
+         h:"\\(L = \\frac{1}{2} \\times 10 \\times 6\\). <span class='id-lang'>\\(L = \\frac{1}{2} \\times 10 \\times 6\\).</span>"},
+        {type:"E",etype:"fb",
+         q:"A right triangle has sides 6 cm, 8 cm, and 10 cm. Its perimeter is ____ cm. <span class='id-lang'>Segitiga siku-siku memiliki sisi 6 cm, 8 cm, dan 10 cm. Kelilingnya ____ cm.</span>",
+         a:"24",
+         h:"Add all three sides together. <span class='id-lang'>Jumlahkan ketiga sisi.</span>"},
+        {type:"E",etype:"mc",
+         q:"What is the area of a square with a side length of 7 m? <span class='id-lang'>Berapa luas persegi dengan sisi 7 m?</span>",
+         o:["\\(14\\text{ m}^2\\)","\\(28\\text{ m}^2\\)","\\(49\\text{ m}^2\\)","\\(77\\text{ m}^2\\)"],
+         a:2,
+         h:"Area = s × s = 7 × 7. <span class='id-lang'>Luas = s × s = 7 × 7.</span>"},
+        {type:"E",etype:"sa",
+         q:"Select all correct statements: <span class='id-lang'>Pilih semua pernyataan yang benar:</span>",
+         o:["Area is measured in square units <span class='id-lang'>Luas diukur dalam satuan persegi</span>","Perimeter is measured in linear units <span class='id-lang'>Keliling diukur dalam satuan linear</span>","A triangle's area is \\(a \\times t\\) <span class='id-lang'>Luas segitiga adalah \\(a \\times t\\)</span>","Perimeter of a square is \\(4s\\) <span class='id-lang'>Keliling persegi adalah \\(4s\\)</span>"],
+         a:[0,1,3],
+         h:"Triangle area must be halved! <span class='id-lang'>Luas segitiga harus dibagi dua!</span>"},
+      ]
+    },
+    // ==================== SECTION 7B ====================
+    {
+      id:"7B", title:"Assessment B <span class='id-lang'>Asesmen B</span>", icon:"fa-clipboard-check", color:"#ef4444", branch:true,
+      lessons:[
+        {type:"E",etype:"fb",
+         q:"A rectangular land (\\(20\\text{m} \\times 15\\text{m}\\)) has a triangular pool (base \\(6\\text{m}\\), height \\(8\\text{m}\\)) inside it. Calculate the area of the land OUTSIDE the pool. <span class='id-lang'>Lahan persegi panjang (\\(20\\text{m} \\times 15\\text{m}\\)) memiliki kolam segitiga (alas \\(6\\text{m}\\), tinggi \\(8\\text{m}\\)). Hitung luas lahan DI LUAR kolam.</span>",
+         a:"276",
+         h:"Big area = 300. Pool = 1/2 * 6 * 8 = 24. 300 - 24 = ? <span class='id-lang'>Luas besar = 300. Kolam = 24. 300 - 24 = ?</span>"},
+        {type:"E",etype:"mc",
+         q:"A rectangle (\\(10 \\times 6\\)) is cut by two identical right triangles (base 2, height 3) at opposite corners. What is the remaining area? <span class='id-lang'>Persegi panjang (\\(10 \\times 6\\)) dipotong dua segitiga siku-siku identik (alas 2, tinggi 3) di sudut berlawanan. Berapa sisa luasnya?</span>",
+         o:["\\(60\\text{ cm}^2\\)","\\(57\\text{ cm}^2\\)","\\(54\\text{ cm}^2\\)","\\(6\\text{ cm}^2\\)"],
+         a:2,
+         h:"Total area = 60. One triangle = 1/2 * 2 * 3 = 3. Two triangles = 6. 60 - 6 = ? <span class='id-lang'>Total luas = 60. Satu segitiga = 3. Dua segitiga = 6. 60 - 6 = ?</span>"},
+        {type:"E",etype:"mc",
+         q:"A composite shape is made of a square (side 10 cm) with an equilateral triangle (side 10 cm) attached to one side. What is the total perimeter? <span class='id-lang'>Bangun gabungan terdiri dari persegi (sisi 10 cm) dan segitiga sama sisi menempel di salah satu sisinya. Berapa keliling totalnya?</span>",
+         o:["\\(40\\text{ cm}\\)","\\(50\\text{ cm}\\)","\\(60\\text{ cm}\\)","\\(70\\text{ cm}\\)"],
+         a:1,
+         h:"Outer edges = 3 sides of square + 2 sides of triangle. (5 × 10). <span class='id-lang'>Sisi luar = 3 sisi persegi + 2 sisi segitiga. (5 × 10).</span>"},
+        {type:"E",etype:"fb",
+         q:"A square (side 10) has a square hole (side 2) inside it. The remaining area is ____ \\(\\text{units}^2\\). <span class='id-lang'>Persegi (sisi 10) memiliki lubang persegi (sisi 2) di dalamnya. Sisa luasnya ____ unit².</span>",
+         a:"96",
+         h:"Big area = 100. Hole = 4. 100 - 4 = ? <span class='id-lang'>Luas besar = 100. Lubang = 4. 100 - 4 = ?</span>"},
+        {type:"E",etype:"mc",
+         q:"An L-shape is made of two rectangles: \\(6\\text{m} \\times 4\\text{m}\\) and \\(4\\text{m} \\times 4\\text{m}\\). What is the total area? <span class='id-lang'>Bentuk-L terdiri dari dua persegi panjang: \\(6\\text{m} \\times 4\\text{m}\\) dan \\(4\\text{m} \\times 4\\text{m}\\). Berapa total luasnya?</span>",
+         o:["\\(10\\text{ m}^2\\)","\\(24\\text{ m}^2\\)","\\(16\\text{ m}^2\\)","\\(40\\text{ m}^2\\)"],
+         a:3,
+         h:"Area 1 = 24. Area 2 = 16. Total = 24 + 16. <span class='id-lang'>Luas 1 = 24. Luas 2 = 16. Total = 24 + 16.</span>"},
+        {type:"E",etype:"tf",
+         q:"To find the area of a shape with a hole in it, you must add the area of the hole to the total area. <span class='id-lang'>Untuk mencari luas bangun dengan lubang di dalamnya, kamu harus menambahkan luas lubang ke total luas.</span>",
+         a:false,
+         h:"You must SUBTRACT the hole! <span class='id-lang'>Kamu harus MENGURANGI lubangnya!</span>"},
+        {type:"E",etype:"mc",
+         q:"A rectangle (\\(12 \\times 10\\)) has a triangle (base 4, height 5) cut from it. What is the remaining area? <span class='id-lang'>Persegi panjang (\\(12 \\times 10\\)) dipotong segitiga (alas 4, tinggi 5). Berapa sisa luasnya?</span>",
+         o:["\\(120\\text{ cm}^2\\)","\\(110\\text{ cm}^2\\)","\\(10\\text{ cm}^2\\)","\\(130\\text{ cm}^2\\)"],
+         a:1,
+         h:"120 - (1/2 * 4 * 5) = 120 - 10. <span class='id-lang'>120 - (1/2 * 4 * 5) = 120 - 10.</span>"},
+        {type:"E",etype:"fb",
+         q:"An L-shaped garden consists of two rectangles: \\(10\\text{m} \\times 5\\text{m}\\) and \\(5\\text{m} \\times 5\\text{m}\\). Total area is ____ \\(\\text{m}^2\\). <span class='id-lang'>Taman berbentuk-L terdiri dari dua persegi panjang: \\(10\\text{m} \\times 5\\text{m}\\) dan \\(5\\text{m} \\times 5\\text{m}\\). Total luas ____ m².</span>",
+         a:"75",
+         h:"50 + 25 = ? <span class='id-lang'>50 + 25 = ?</span>"},
+        {type:"E",etype:"mc",
+         q:"Two identical squares (side 5) are joined to form a rectangle. What is the area of the new rectangle? <span class='id-lang'>Dua persegi identik (sisi 5) disatukan membentuk persegi panjang. Berapa luas persegi panjang baru tersebut?</span>",
+         o:["\\(10\\text{ units}^2\\)","\\(25\\text{ units}^2\\)","\\(50\\text{ units}^2\\)","\\(100\\text{ units}^2\\)"],
+         a:2,
+         h:"New rectangle is 10 × 5. <span class='id-lang'>Persegi panjang baru 10 × 5.</span>"},
+        {type:"E",etype:"sa",
+         q:"Select all correct steps to find the area of a shape with a cutout: <span class='id-lang'>Pilih langkah yang benar untuk mencari luas bangun dengan potongan:</span>",
+         o:["Calculate area of the big shape <span class='id-lang'>Hitung luas bangun besar</span>","Calculate area of the cutout <span class='id-lang'>Hitung luas potongan</span>","Subtract cutout area from big shape area <span class='id-lang'>Kurangi luas potongan dari luas bangun besar</span>","Add cutout area to big shape area <span class='id-lang'>Tambah luas potongan ke luas bangun besar</span>"],
+         a:[0,1,2],
+         h:"Big - Small = Remaining. <span class='id-lang'>Besar - Kecil = Sisa.</span>"},
+      ]
+    },
+    // ==================== SECTION 7C ====================
+    {
+      id:"7C", title:"Assessment C <span class='id-lang'>Asesmen C</span>", icon:"fa-clipboard-check", color:"#a855f7", branch:true,
+      lessons:[
+        {type:"E",etype:"mc",
+         q:"If the length of a rectangle is increased by 20% and the width remains the same, what is the percentage increase in area? <span class='id-lang'>Jika panjang persegi panjang ditambah 20% dan lebar tetap, berapa persen kenaikan luasnya?</span>",
+         o:["\\(10\\%\\)","\\(20\\%\\)","\\(40\\%\\)","\\(44\\%\\)"],
+         a:1,
+         h:"New Area = 1.2p × l = 1.2 (p × l). So 20% increase. <span class='id-lang'>Luas baru = 1.2p × l = 1.2 (p × l). Jadi naik 20%.</span>"},
+        {type:"E",etype:"mc",
+         q:"A right triangle has sides 6, 8, and 10. If all sides are multiplied by 2, what is the ratio of the new area to the old area? <span class='id-lang'>Segitiga siku-siku memiliki sisi 6, 8, dan 10. Jika semua sisi dikalikan dua, berapakah perbandingan luas segitiga baru dengan luas segitiga lama?</span>",
+         o:["\\(1:2\\)","\\(2:1\\)","\\(4:1\\)","\\(8:1\\)"],
+         a:2,
+         h:"Area scales with the square of the factor. \\(2^2 = 4\\). <span class='id-lang'>Luas skala kuadrat faktor. \\(2^2 = 4\\).</span>"},
+        {type:"E",etype:"fb",
+         q:"If all dimensions of a shape are multiplied by 3, its area is multiplied by ____. <span class='id-lang'>Jika semua dimensi bangun dikalikan 3, luasnya dikalikan ____.</span>",
+         a:"9",
+         h:"\\(3^2 = 9\\). <span class='id-lang'>\\(3^2 = 9\\).</span>"},
+        {type:"E",etype:"tf",
+         q:"If the sides of a triangle are doubled, its area is also doubled. <span class='id-lang'>Jika sisi segitiga dikalikan dua, luasnya juga dikalikan dua.</span>",
+         a:false,
+         h:"Area is multiplied by 4 (squared). <span class='id-lang'>Luas dikalikan 4 (kuadrat).</span>"},
+        {type:"E",etype:"mc",
+         q:"A square has an area of \\(25\\text{ cm}^2\\). If its side length is doubled, what is the new area? <span class='id-lang'>Persegi berluas 25 cm². Jika panjang sisinya dikalikan dua, berapa luas barunya?</span>",
+         o:["\\(50\\text{ cm}^2\\)","\\(100\\text{ cm}^2\\)","\\(125\\text{ cm}^2\\)","\\(250\\text{ cm}^2\\)"],
+         a:1,
+         h:"Side was 5. New side is 10. \\(10^2 = 100\\). <span class='id-lang'>Sisi sebelumnya 5. Sisi baru 10. \\(10^2 = 100\\).</span>"},
+        {type:"E",etype:"fb",
+         q:"A square has a perimeter of 20 m. If the perimeter is doubled, the new area is ____ \\(\\text{m}^2\\). <span class='id-lang'>Persegi memiliki keliling 20 m. Jika keliling dikalikan dua, luas barunya ____ m².</span>",
+         a:"100",
+         h:"Old side = 5. New P = 40, so new side = 10. New area = 100. <span class='id-lang'>Sisi lama = 5. K baru = 40, sisi baru = 10. Luas baru = 100.</span>"},
+        {type:"E",etype:"mc",
+         q:"If both the length and width of a rectangle are increased by 100% (multiplied by 2), the area becomes: <span class='id-lang'>Jika panjang dan lebar persegi panjang ditambah 100% (dikali 2), luasnya menjadi:</span>",
+         o:["2 times larger <span class='id-lang'>2 kali lebih besar</span>","4 times larger <span class='id-lang'>4 kali lebih besar</span>","8 times larger <span class='id-lang'>8 kali lebih besar</span>","Stays the same <span class='id-lang'>Tetap sama</span>"],
+         a:1,
+         h:"\\(2p \\times 2l = 4(p \\times l)\\). <span class='id-lang'>\\(2p \\times 2l = 4(p \\times l)\\).</span>"},
+        {type:"E",etype:"tf",
+         q:"A scale factor of 1:2 on a map means the actual area is 4 times the map area. <span class='id-lang'>Skala 1:2 pada peta berarti luas sebenarnya 4 kali luas peta.</span>",
+         a:true,
+         h:"Area scale factor is \\(2^2 = 4\\). <span class='id-lang'>Skala luas adalah \\(2^2 = 4\\).</span>"},
+        {type:"E",etype:"mc",
+         q:"The length of a rectangle is increased by 50%, and the width is decreased by 50%. What happens to the area? <span class='id-lang'>Panjang persegi panjang ditambah 50%, dan lebar dikurangi 50%. Apa yang terjadi pada luasnya?</span>",
+         o:["Increases by 50% <span class='id-lang'>Naik 50%</span>","Decreases by 25% <span class='id-lang'>Turun 25%</span>","Stays the same <span class='id-lang'>Tetap sama</span>","Decreases by 50% <span class='id-lang'>Turun 50%</span>"],
+         a:1,
+         h:"New Area = \\(1.5p \\times 0.5l = 0.75(p \\times l)\\). So 25% decrease. <span class='id-lang'>Luas baru = \\(1.5p \\times 0.5l = 0.75(p \\times l)\\). Jadi turun 25%.</span>"},
+        {type:"E",etype:"sa",
+         q:"Select all true statements about dimension changes: <span class='id-lang'>Pilih pernyataan benar tentang perubahan dimensi:</span>",
+         o:["If sides are doubled, area is quadrupled <span class='id-lang'>Jika sisi dikali 2, luas dikali 4</span>","If sides are tripled, area is multiplied by 9 <span class='id-lang'>Jika sisi dikali 3, luas dikali 9</span>","Area scales linearly with side length <span class='id-lang'>Luas skala linear dengan panjang sisi</span>","Doubling sides of a square doubles its perimeter <span class='id-lang'>Menggandakan sisi persegi menggandakan kelilingnya</span>"],
+         a:[0,1,3],
+         h:"Area scales quadratically, perimeter scales linearly. <span class='id-lang'>Luas skala kuadratik, keliling skala linear.</span>"},
+      ]
+    },
+    // ==================== SECTION 7D ====================
+    {
+      id:"7D", title:"Assessment D <span class='id-lang'>Asesmen D</span>", icon:"fa-clipboard-check", color:"#06b6d4", branch:true,
+      lessons:[
+        {type:"E",etype:"mc",
+         q:"An architect needs to fence an L-shaped garden. The garden consists of two rectangles: \\(6\\text{m} \\times 4\\text{m}\\) and \\(4\\text{m} \\times 4\\text{m}\\). What is the minimum perimeter if the total area is \\(40\\text{ m}^2\\)? <span class='id-lang'>Arsitek perlu memagar taman berbentuk-L. Taman terdiri dari dua persegi panjang: \\(6\\text{m} \\times 4\\text{m}\\) dan \\(4\\text{m} \\times 4\\text{m}\\). Berapa keliling minimumnya jika total luas 40m²?</span>",
+         o:["\\(24\\text{ m}\\)","\\(26\\text{ m}\\)","\\(28\\text{ m}\\)","\\(40\\text{ m}\\)"],
+         a:2,
+         h:"Draw the L-shape. The outer edges add up to 4+6+2+4+4+8 = 28m. <span class='id-lang'>Gambar bentuk-L. Sisi luar berjumlah 28m.</span>"},
+        {type:"E",etype:"fb",
+         q:"A roof has an area of \\(100\\text{ m}^2\\). Tiles cost Rp 50,000 per \\(\\text{m}^2\\). Total cost for tiles is Rp ____. <span class='id-lang'>Atap luasnya 100m². Genteng Rp 50.000 per m². Total biaya genteng Rp ____.</span>",
+         a:"5000000",
+         h:"100 × 50,000 = 5,000,000. <span class='id-lang'>100 × 50.000 = 5.000.000.</span>"},
+        {type:"E",etype:"mc",
+         q:"If you have 40 meters of fence, which rectangular dimensions will give you the MAXIMUM area? <span class='id-lang'>Jika kamu punya 40 meter pagar, dimensi persegi panjang apa yang memberikan luas MAKSIMUM?</span>",
+         o:["\\(10 \\times 10\\text{ m}\\)","\\(15 \\times 5\\text{ m}\\)","\\(20 \\times 20\\text{ m}\\)","\\(12 \\times 8\\text{ m}\\)"],
+         a:0,
+         h:"A square always gives the maximum area for a fixed perimeter. 4 × 10 = 40. <span class='id-lang'>Persegi selalu memberikan luas maksimum untuk keliling tetap. 4 × 10 = 40.</span>"},
+        {type:"E",etype:"tf",
+         q:"To find the cost of fencing a park, you need to calculate the area. <span class='id-lang'>Untuk mencari biaya memagari taman, kamu perlu menghitung luas.</span>",
+         a:false,
+         h:"Fencing goes around the outside, so you need the perimeter! <span class='id-lang'>Pagar mengelilingi luar, jadi butuh keliling!</span>"},
+        {type:"E",etype:"fb",
+         q:"A rectangular room is \\(5\\text{m} \\times 4\\text{m}\\). If marble costs Rp 200,000 per \\(\\text{m}^2\\), the total cost is Rp ____. <span class='id-lang'>Ruang persegi panjang \\(5\\text{m} \\times 4\\text{m}\\). Jika marmer Rp 200.000 per m², total biaya Rp ____.</span>",
+         a:"4000000",
+         h:"Area = 20. 20 × 200,000 = ? <span class='id-lang'>Luas = 20. 20 × 200.000 = ?</span>"},
+        {type:"E",etype:"mc",
+         q:"An L-shaped land is made of \\(L_1(6\\text{m} \\times 4\\text{m})\\) and \\(L_2(4\\text{m} \\times 4\\text{m})\\). What is the total area? <span class='id-lang'>Lahan berbentuk-L terdiri dari \\(L_1(6\\text{m} \\times 4\\text{m})\\) dan \\(L_2(4\\text{m} \\times 4\\text{m})\\). Berapa total luasnya?</span>",
+         o:["\\(20\\text{ m}^2\\)","\\(24\\text{ m}^2\\)","\\(40\\text{ m}^2\\)","\\(16\\text{ m}^2\\)"],
+         a:2,
+         h:"\\(24 + 16 = 40\\). <span class='id-lang'>\\(24 + 16 = 40\\).</span>"},
+        {type:"E",etype:"tf",
+         q:"An architect must buy 10% extra material to account for cutting waste. <span class='id-lang'>Arsitek harus membeli 10% material ekstra untuk pemborosan potongan.</span>",
+         a:true,
+         h:"Yes, this is standard practice in real-world architecture! <span class='id-lang'>Ya, ini praktik standar di arsitektur dunia nyata!</span>"},
+        {type:"E",etype:"mc",
+         q:"You need to tile a floor and paint a wall. What do you need to calculate for each? <span class='id-lang'>Kamu perlu memasang ubin lantai dan mengecat tembok. Apa yang harus dihitung untuk masing-masing?</span>",
+         o:["Floor: Perimeter, Wall: Area <span class='id-lang'>Lantai: Keliling, Tembok: Luas</span>","Floor: Area, Wall: Area <span class='id-lang'>Lantai: Luas, Tembok: Luas</span>","Floor: Area, Wall: Perimeter <span class='id-lang'>Lantai: Luas, Tembok: Keliling</span>","Floor: Volume, Wall: Perimeter <span class='id-lang'>Lantai: Volume, Tembok: Keliling</span>"],
+         a:1,
+         h:"Both tiling a floor and painting a wall cover a 2D surface! <span class='id-lang'>Keduanya menutupi permukaan 2D!</span>"},
+        {type:"E",etype:"fb",
+         q:"A triangular park (base \\(10\\text{m}\\), height \\(6\\text{m}\\)) needs grass. If grass costs Rp 50,000 per \\(\\text{m}^2\\), total cost is Rp ____. <span class='id-lang'>Taman segitiga (alas \\(10\\text{m}\\), tinggi \\(6\\text{m}\\)) butuh rumput. Jika rumput Rp 50.000 per m², total biaya Rp ____.</span>",
+         a:"1500000",
+         h:"Area = 1/2 × 10 × 6 = 30. 30 × 50,000 = ? <span class='id-lang'>Luas = 30. 30 × 50.000 = ?</span>"},
+        {type:"E",etype:"sa",
+         q:"Select all situations that require calculating PERIMETER: <span class='id-lang'>Pilih semua situasi yang butuh menghitung KELILING:</span>",
+         o:["Building a fence <span class='id-lang'>Membangun pagar</span>","Putting a border on a photo <span class='id-lang'>Memasang bingkai foto</span>","Buying a carpet <span class='id-lang'>Membeli karpet</span>","Painting a ceiling <span class='id-lang'>Mengecat langit-langit</span>","Measuring a running track <span class='id-lang'>Mengukur lintasan lari</span>"],
+         a:[0,1,4],
+         h:"Perimeter is for lengths (1D), Area is for surfaces (2D). <span class='id-lang'>Keliling untuk panjang (1D), Luas untuk permukaan (2D).</span>"},
+      ]
+    },
+    // ==================== SECTION 7E ====================
+    {
+      id:"7E", title:"Assessment E <span class='id-lang'>Asesmen E</span>", icon:"fa-clipboard-check", color:"#f97316", branch:true,
+      lessons:[
+        {type:"E",etype:"mc",
+         q:"A rectangle has a perimeter of 20. Which dimensions give the maximum area? <span class='id-lang'>Persegi panjang memiliki keliling 20. Dimensi apa yang memberikan luas maksimum?</span>",
+         o:["\\(6 \\times 4\\)","\\(5 \\times 5\\)","\\(8 \\times 2\\)","\\(9 \\times 1\\)"],
+         a:1,
+         h:"A square is always the most efficient rectangle for area. <span class='id-lang'>Persegi selalu paling efisien untuk luas.</span>"},
+        {type:"E",etype:"fb",
+         q:"If the side of a square is doubled, its perimeter is multiplied by ____. <span class='id-lang'>Jika sisi persegi dikalikan dua, kelilingnya dikalikan ____.</span>",
+         a:"2",
+         h:"Perimeter scales linearly. <span class='id-lang'>Keliling skala linear.</span>"},
+        {type:"E",etype:"tf",
+         q:"If the side of a square is doubled, its area is doubled. <span class='id-lang'>Jika sisi persegi dikalikan dua, luasnya dikalikan dua.</span>",
+         a:false,
+         h:"Area is multiplied by 4 (squared). <span class='id-lang'>Luas dikalikan 4 (kuadrat).</span>"},
+        {type:"E",etype:"mc",
+         q:"A diagonal of a rectangle divides it into two triangles. If the rectangle area is \\(50\\text{ cm}^2\\), what is the area of one triangle? <span class='id-lang'>Diagonal persegi panjang membaginya menjadi dua segitiga. Jika luas persegi panjang 50 cm², berapa luas satu segitiga?</span>",
+         o:["\\(10\\text{ cm}^2\\)","\\(25\\text{ cm}^2\\)","\\(50\\text{ cm}^2\\)","\\(100\\text{ cm}^2\\)"],
+         a:1,
+         h:"The diagonal cuts the area exactly in half. <span class='id-lang'>Diagonal memotong luas tepat menjadi dua.</span>"},
+        {type:"E",etype:"fb",
+         q:"A trapezoid is decomposed into 1 rectangle (\\(10 \\times 4\\)) and 2 right triangles (base \\(3\\), height \\(4\\)). Total area is ____. <span class='id-lang'>Trapesium diuraikan menjadi 1 persegi panjang (\\(10 \\times 4\\)) dan 2 segitiga siku-siku (alas \\(3\\), tinggi \\(4\\)). Total luas ____.</span>",
+         a:"52",
+         h:"Rect = 40. One Tri = 1/2 * 3 * 4 = 6. Two Tri = 12. 40 + 12 = ? <span class='id-lang'>Rect = 40. Satu Tri = 6. Dua Tri = 12. 40 + 12 = ?</span>"},
+        {type:"E",etype:"mc",
+         q:"If the length of a rectangle is increased by 10% and the width is decreased by 10%, what happens to the area? <span class='id-lang'>Jika panjang persegi panjang ditambah 10% dan lebar dikurangi 10%, apa yang terjadi pada luasnya?</span>",
+         o:["Increases by 1% <span class='id-lang'>Naik 1%</span>","Decreases by 1% <span class='id-lang'>Turun 1%</span>","Stays the same <span class='id-lang'>Tetap sama</span>","Decreases by 10% <span class='id-lang'>Turun 10%</span>"],
+         a:1,
+         h:"\\(1.1p \\times 0.9l = 0.99(p \\times l)\\). It's 99% of the original. <span class='id-lang'>\\(1.1p \\times 0.9l = 0.99(p \\times l)\\). Itu 99% dari aslinya.</span>"},
+        {type:"E",etype:"tf",
+         q:"Two different rectangles can have the same perimeter but different areas. <span class='id-lang'>Dua persegi panjang berbeda bisa memiliki keliling sama tapi luas berbeda.</span>",
+         a:true,
+         h:"Example: 4x4 (Area 16) and 5x3 (Area 15) both have Perimeter 16. <span class='id-lang'>Contoh: 4x4 (Luas 16) dan 5x3 (Luas 15) sama-sama Keliling 16.</span>"},
+        {type:"E",etype:"fb",
+         q:"A rectangle has an area of \\(48\\text{ cm}^2\\). If one side is 8 cm, the perimeter is ____ cm. <span class='id-lang'>Persegi panjang berluas 48 cm². Jika satu sisi 8 cm, kelilingnya ____ cm.</span>",
+         a:"28",
+         h:"Other side = 48 / 8 = 6. P = 2(8 + 6). <span class='id-lang'>Sisi lain = 6. K = 2(8 + 6).</span>"},
+        {type:"E",etype:"mc",
+         q:"A square and a rectangle have the same perimeter of 20 cm. Which statement is true? <span class='id-lang'>Persegi dan persegi panjang memiliki keliling sama 20 cm. Pernyataan mana yang benar?</span>",
+         o:["They must have the same area <span class='id-lang'>Harus punya luas sama</span>","The square has a larger area <span class='id-lang'>Persegi punya luas lebih besar</span>","The rectangle has a larger area <span class='id-lang'>Persegi panjang punya luas lebih besar</span>","Cannot be determined <span class='id-lang'>Tidak bisa ditentukan</span>"],
+         a:1,
+         h:"For a fixed perimeter, a square maximizes area. <span class='id-lang'>Untuk keliling tetap, persegi memaksimalkan luas.</span>"},
+        {type:"E",etype:"sa",
+         q:"Select all correct statements: <span class='id-lang'>Pilih semua pernyataan yang benar:</span>",
+         o:["Area of a triangle is half of a rectangle with same base/height <span class='id-lang'>Luas segitiga setengah dari persegi panjang dengan alas/tinggi sama</span>","Perimeter of a square is \\(4s\\) <span class='id-lang'>Keliling persegi \\(4s\\)</span>","A diagonal cuts a rectangle into two equal triangles <span class='id-lang'>Diagonal memotong persegi panjang menjadi dua segitiga sama</span>","If perimeter increases, area always increases <span class='id-lang'>Jika keliling naik, luas selalu naik</span>"],
+         a:[0,1,2],
+         h:"Perimeter increasing doesn't guarantee area increases (e.g., long thin shapes). <span class='id-lang'>Keliling naik tidak menjamin luas naik.</span>"},
+      ]
+    },
+    // ==================== SECTION 8 ====================
+    {
+      id:8, title:"Consolidation & Reflection <span class='id-lang'>Konsolidasi & Refleksi</span>", icon:"fa-star", color:"#fbbf24", branch:false,
+      lessons:[
+        {type:"T",title:"Summary & Next Steps <span class='id-lang'>Ringkasan & Langkah Berikutnya</span>",
+         body:`<p>Congratulations Benjamin! You just completed calculations usually done by 9th graders! <span class='id-lang'>Selamat Benjamin! Kamu baru saja menyelesaikan perhitungan yang biasanya dilakukan murid kelas 9!</span></p>
+         <div class="mt-4 p-5 rounded-xl bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/20">
+           <div class="text-emerald-400 font-bold mb-3 text-lg"><i class="fa-solid fa-medal mr-2"></i>Key Takeaways <span class='id-lang'>Poin Kunci</span></div>
+           <ul class="space-y-2 text-sm text-slate-300 list-disc list-inside">
+             <li><strong>Perimeter</strong> is the 'fence' (outer edge length). <span class='id-lang'><strong>Keliling</strong> adalah 'pagar' (panjang garis tepi).</span></li>
+             <li><strong>Area</strong> is the 'floor' (space inside). <span class='id-lang'><strong>Luas</strong> adalah 'lantai' (isi di dalam).</span></li>
+             <li><strong>Composite Shapes:</strong> Break them down (decompose) into rectangles and triangles. Add or subtract areas. <span class='id-lang'><strong>Bangun Gabungan:</strong> Pecah menjadi persegi panjang dan segitiga. Tambah atau kurangi luasnya.</span></li>
+             <li><strong>Cost = Area × Price per unit.</strong> Always add a waste margin! <span class='id-lang'><strong>Biaya = Luas × Harga satuan.</strong> Selalu tambahkan margin pemborosan!</span></li>
+           </ul>
+         </div>
+         <p class="mt-4">What was the hardest part today? Take a moment to reflect on it. <span class='id-lang'>Apa bagian tersulit hari ini? Luangkan waktu sejenak untuk merefleksikannya.</span></p>
+         <div class="mt-6 p-5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-center">
+           <div class="text-amber-400 font-bold text-xl mb-2">Architect's Next Mission <span class='id-lang'>Misi Arsitek Berikutnya</span></div>
+           <p class="text-sm text-slate-300 mb-4">Ready for more challenges? Continue your learning journey on the Algonova platform! <span class='id-lang'>Siap untuk tantangan lainnya? Lanjutkan perjalanan belajarmu di platform Algonova!</span></p>
+           <a href="https://learn.algonova.id/login" target="_blank" class="btn-primary inline-flex">
+             <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Algonova <span class="id-lang" style="color:rgba(11,17,33,0.7); display:inline;">Buka Algonova</span>
+           </a>
+         </div>`}
+      ]
+    }
+  ]
+};
+
+// ============================================================
+// STATE APLIKASI
+// ============================================================
+let state = {
+  xp: 0,
+  streak: 0,
+  completed: {},   // { "1-0": true, "1-1": true, ... }  mapIndex-lessonIndex
+  currentView: 'map',
+  currentMap: null,  // index di COURSE.maps
+  currentLesson: null, // index lesson dalam map
+  exerciseState: {},  // state untuk exercise interaktif
+};
+
+// Load dari localStorage
+function loadState() {
+  try {
+    const saved = localStorage.getItem('logicode_state');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      state.xp = parsed.xp || 0;
+      state.streak = parsed.streak || 0;
+      state.completed = parsed.completed || {};
+	  state.mapAnswers = parsed.mapAnswers || {};
+    }
+  } catch(e) {}
+}
+function saveState() {
+  try {
+    localStorage.setItem('logicode_state', JSON.stringify({
+      xp: state.xp, streak: state.streak, completed: state.completed, mapAnswers: state.mapAnswers
+    }));
+  } catch(e) {}
+}
+
+function resetProgress() {
+  if (confirm('Apakah kamu yakin ingin menghapus semua progress? Tindakan ini tidak bisa dibatalkan.')) {
+    // Hapus data dari localStorage
+    localStorage.removeItem('logicode_state');
+    
+    // Reset state di memori
+    state.xp = 0;
+    state.streak = 0;
+    state.completed = {};
+    
+    // Render ulang tampilan peta
+    renderMap();
+    
+    // Tampilkan notifikasi
+    showToast('Progress berhasil direset!', 'info');
+  }
+}
+
+// ============================================================
+// HELPER: Cek apakah peta terbuka
+// ============================================================
+function isMapUnlocked(mapIdx) {
+  return true; // Semua peta selalu terbuka
+}
+
+function isMapCompleted(mapIdx) {
+  const map = COURSE.maps[mapIdx];
+  if (!map) return false;
+  return map.lessons.every((_, li) => state.completed[`${mapIdx}-${li}`]);
+}
+
+function isLessonUnlocked(mapIdx, lessonIdx) {
+  return true; // Semua lesson selalu terbuka
+}
+
+function getMapProgress(mapIdx) {
+  const map = COURSE.maps[mapIdx];
+  if (!map) return 0;
+  const done = map.lessons.filter((_, li) => state.completed[`${mapIdx}-${li}`]).length;
+  return Math.round((done / map.lessons.length) * 100);
+}
+
+function getTotalProgress() {
+  let total = 0, done = 0;
+  COURSE.maps.forEach((m, mi) => {
+    m.lessons.forEach((_, li) => {
+      total++;
+      if (state.completed[`${mi}-${li}`]) done++;
+    });
+  });
+  return total > 0 ? Math.round((done / total) * 100) : 0;
+}
+
+// ============================================================
+// RENDER: PETA MAP (halaman utama)
+// ============================================================
+function renderMap() {
+  const container = document.getElementById('mapContainer');
+  let html = '';
+
+	COURSE.maps.forEach((map, mi) => {
+	const unlocked = isMapUnlocked(mi);
+	const completed = isMapCompleted(mi);
+	const progress = getMapProgress(mi);
+	const isBranch = map.branch;
+	const isLastBranch = isBranch && !COURSE.maps[mi+1]?.branch;
+	const isFirstBranch = isBranch && !COURSE.maps[mi-1]?.branch;
+
+	// Node kelas
+	const nodeClass = completed ? 'completed' : unlocked ? 'unlocked' + (progress === 0 ? ' current' : '') : 'locked';
+
+	// --- BRANCH START: Visual dari Peta 6 ke Peta 7A-7E ---
+	if (isFirstBranch) {
+      const peta6Completed = isMapCompleted(mi - 1);
+      // Garis vertikal turun dari Peta 6
+      html += `<div class="map-line ${peta6Completed ? 'done' : ''}"></div>`;
+      // Garis horizontal branch (diperlebar)
+      html += `<div style="height: 3px; width: 95%; max-width: 850px; margin: 0 auto; background: var(--border);"></div>`;
+      // Buka container flex untuk 7A-7E (ditambah flex-wrap agar rapi di HP)
+      html += `<div class="flex flex-wrap justify-center" style="gap: 20px; max-width: 850px; margin: 0 auto;">`;
+    }
+
+	// --- RENDER NODE ---
+	html += `
+	  <div class="flex flex-col items-center" style="${isBranch ? 'min-width: 150px;' : ''}" onclick="${unlocked ? `openPeta(${mi})` : ''}">
+		${isBranch ? `<div style="width: 3px; height: 25px; background: var(--border);"></div>` : ''}
+		<div class="map-node ${nodeClass}" style="${unlocked ? `border-color:${map.color};${completed ? `background:${map.color}` : ''}` : ''}">
+		  ${completed ? '<i class="fa-solid fa-check"></i>' : unlocked ? `<i class="fa-solid ${map.icon}"></i>` : '<i class="fa-solid fa-lock text-sm"></i>'}
+		</div>
+		<div class="mt-2 text-center">
+		  <div class="text-sm font-semibold node-title ${unlocked ? 'text-slate-200' : 'text-slate-600'}">Peta ${map.id}</div>
+		  <div class="text-xs node-title ${unlocked ? 'text-slate-400' : 'text-slate-600'}">${map.title}</div>
+		  ${unlocked && !completed ? `<div class="mt-1 w-16 mx-auto"><div class="prog-bar"><div class="prog-fill" style="width:${progress}%;background:${map.color}"></div></div></div>` : ''}
+		</div>
+		${isBranch ? `<div style="width: 3px; height: 25px; background: var(--border);"></div>` : ''}
+	  </div>
+	`;
+
+	// --- BRANCH END: Visual dari Peta 7A-7E ke Peta 8 ---
+	if (isLastBranch) {
+      // Tutup container flex 7A-7E
+      html += `</div>`;
+      // Garis horizontal merge (diperlebar)
+      html += `<div style="height: 3px; width: 95%; max-width: 850px; margin: 0 auto; background: var(--border);"></div>`;
+      // Garis vertikal turun ke Peta 8
+      html += `<div class="map-line"></div>`;
+    }
+
+	// --- GARIS VERTIKAL NORMAL (Peta 1-5) ---
+	if (!isBranch && mi < COURSE.maps.length - 1 && !COURSE.maps[mi+1]?.branch) {
+	  html += `<div class="map-line ${completed ? 'done' : ''}"></div>`;
+	}
+	});
+
+  container.innerHTML = html;
+
+  // Update header stats
+  document.getElementById('headerXP').textContent = state.xp;
+  document.getElementById('headerStreak').textContent = state.streak;
+  document.getElementById('totalProgress').textContent = getTotalProgress() + '%';
+  document.getElementById('totalProgFill').style.width = getTotalProgress() + '%';
+}
+
+// ============================================================
+// RENDER: PETA DETAIL (daftar lesson)
+// ============================================================
+function openPeta(mapIdx) {
+  state.currentMap = mapIdx;
+  showView('peta');
+  const map = COURSE.maps[mapIdx];
+  document.getElementById('petaTitle').innerHTML = `Peta ${map.id}: ${map.title}`;
+  const totalLessons = map.lessons.length;
+  const doneLessons = map.lessons.filter((_, li) => state.completed[`${mapIdx}-${li}`]).length;
+  document.getElementById('petaSubtitle').textContent = `${doneLessons}/${totalLessons} selesai`;
+
+  const container = document.getElementById('lessonContainer');
+  let html = '<div class="stagger-in flex flex-col items-center">';
+
+  map.lessons.forEach((lesson, li) => {
+    const unlocked = isLessonUnlocked(mapIdx, li);
+    const completed = state.completed[`${mapIdx}-${li}`] === true;
+    const isTheory = lesson.type === 'T';
+    const isCurrent = unlocked && !completed;
+
+    const nodeClass = completed ? 'completed' : unlocked ? 'unlocked' : 'locked';
+    const shapeClass = isTheory ? 'theory' : 'exercise';
+
+    html += `
+      <div class="flex flex-col items-center">
+        <div class="lesson-node ${shapeClass} ${nodeClass} ${isCurrent ? 'current' : ''}"
+             style="${unlocked ? `border-color:${map.color};${completed ? `background:${map.color}` : ''}` : ''}"
+             onclick="${unlocked ? `openLesson(${mapIdx},${li})` : ''}">
+          ${completed ? '<i class="fa-solid fa-check text-sm"></i>' : isTheory ? '<i class="fa-solid fa-book text-sm"></i>' : '<i class="fa-solid fa-dumbbell text-sm"></i>'}
+        </div>
+        <div class="mt-1 text-center">
+          <div class="text-xs node-title ${unlocked ? 'text-slate-300' : 'text-slate-600'}">${isTheory ? lesson.title : `Exercise ${li+1}`}</div>
+        </div>
+      </div>
+    `;
+
+    // Koneksi ke lesson berikutnya
+    if (li < map.lessons.length - 1) {
+      const connDone = completed;
+      html += `<div class="lesson-connector ${connDone ? 'done' : ''}"></div>`;
+    }
+  });
+
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+// ============================================================
+// RENDER: LESSON (teori atau exercise)
+// ============================================================
+function openLesson(mapIdx, lessonIdx) {
+  state.currentMap = mapIdx;
+  state.currentLesson = lessonIdx;
+  state.exerciseState = {};
+  showView('lesson');
+
+  const map = COURSE.maps[mapIdx];
+  const lesson = map.lessons[lessonIdx];
+  const total = map.lessons.length;
+
+  document.getElementById('lessonCounter').textContent = `${lessonIdx+1}/${total}`;
+  const done = map.lessons.filter((_, li) => state.completed[`${mapIdx}-${li}`] || li < lessonIdx).length;
+  document.getElementById('lessonProgFill').style.width = `${(done/total)*100}%`;
+
+  if (lesson.type === 'T') {
+    renderTheory(lesson);
+  } else {
+    renderExercise(lesson, mapIdx, lessonIdx);
+  }
+}
+
+function renderTheory(lesson) {
+  const content = document.getElementById('lessonContent');
+  content.innerHTML = `
+    <div class="stagger-in">
+      <div class="text-xs font-semibold text-emerald-400 uppercase tracking-wider mb-2">
+        <i class="fa-solid fa-book-open mr-1"></i> Theory <span class="id-lang" style="display:inline; color:#64748b;">Teori</span>
+      </div>
+      <h2 class="text-2xl font-bold mb-6">${lesson.title}</h2>
+      <div class="text-slate-300 leading-relaxed space-y-3">
+        ${lesson.body}
+      </div>
+      <div class="mt-8 flex justify-end">
+        <button id="nextBtn" class="btn-primary" onclick="completeAndNext()">
+          Next <span class="id-lang" style="color:rgba(11,17,33,0.7); display:inline;">Lanjut</span> <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function renderExercise(lesson, mapIdx, lessonIdx) {
+  const content = document.getElementById('lessonContent');
+  const etype = lesson.etype;
+  let exerciseHTML = '';
+
+  switch(etype) {
+    case 'mc': exerciseHTML = renderMC(lesson); break;
+    case 'tf': exerciseHTML = renderTF(lesson); break;
+    case 'fb': exerciseHTML = renderFB(lesson); break;
+    case 'ord': exerciseHTML = renderOrd(lesson); break;
+    case 'match': exerciseHTML = renderMatch(lesson); break;
+    case 'sa': exerciseHTML = renderSA(lesson); break;
+    case 'code': exerciseHTML = renderCode(lesson); break;
+    default: exerciseHTML = '<p>Tipe exercise tidak dikenal</p>';
+  }
+
+  content.innerHTML = `
+    <div class="stagger-in">
+      <div class="text-xs font-semibold text-amber-400 uppercase tracking-wider mb-2">
+        <i class="fa-solid fa-dumbbell mr-1"></i> Exercise <span class="id-lang" style="display:inline; color:#64748b;">Latihan</span>
+      </div>
+      <h2 class="text-xl font-bold mb-6">${lesson.q}</h2>
+      ${lesson.code ? `<div class="code-block mb-6">${escapeHTML(lesson.code)}</div>` : ''}
+      <div id="exerciseArea">${exerciseHTML}</div>
+      <div id="feedbackArea" class="mt-4"></div>
+      <div class="mt-6 flex items-center justify-between">
+        <button class="btn-secondary text-sm" onclick="showHint()" id="hintBtn">
+          <i class="fa-solid fa-lightbulb mr-1"></i> Hint <span class="id-lang" style="display:inline;">Petunjuk</span>
+        </button>
+        <button class="btn-primary" id="checkBtn" onclick="checkAnswer()" disabled>
+          Check <span class="id-lang" style="display:inline;">Periksa</span> <i class="fa-solid fa-check"></i>
+        </button>
+      </div>
+      <div id="hintArea" class="mt-4 hidden">
+        <div class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-sm text-amber-200">
+          <i class="fa-solid fa-lightbulb text-amber-400 mr-2"></i>${lesson.h || 'Tidak ada petunjuk'}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// EXERCISE RENDERERS
+// ============================================================
+
+// Multiple Choice
+function renderMC(lesson) {
+  const labels = ['A','B','C','D','E','F'];
+  return `<div class="space-y-3" id="mcOptions">
+    ${lesson.o.map((opt, i) => `
+      <div class="opt-card" data-idx="${i}" onclick="selectMC(${i})">
+        <span class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-sm font-bold flex-shrink-0">${labels[i]}</span>
+        <span>${opt}</span>
+      </div>
+    `).join('')}
+  </div>`;
+}
+
+function selectMC(idx) {
+  if (state.exerciseState.answered) return;
+  state.exerciseState.selected = idx;
+  document.querySelectorAll('#mcOptions .opt-card').forEach((el, i) => {
+    el.classList.toggle('selected', i === idx);
+  });
+  document.getElementById('checkBtn').disabled = false;
+}
+
+// True/False
+function renderTF(lesson) {
+  return `<div class="flex gap-4" id="tfOptions">
+    <div class="opt-card flex-1 justify-center text-center text-lg" onclick="selectTF(true)" data-val="true">
+      <i class="fa-solid fa-check text-emerald-400 mr-2"></i> True <span class="id-lang">Benar</span>
+    </div>
+    <div class="opt-card flex-1 justify-center text-center text-lg" onclick="selectTF(false)" data-val="false">
+      <i class="fa-solid fa-xmark text-red-400 mr-2"></i> False <span class="id-lang">Salah</span>
+    </div>
+  </div>`;
+}
+
+function selectTF(val) {
+  if (state.exerciseState.answered) return;
+  state.exerciseState.selected = val;
+  document.querySelectorAll('#tfOptions .opt-card').forEach(el => {
+    el.classList.toggle('selected', el.dataset.val === String(val));
+  });
+  document.getElementById('checkBtn').disabled = false;
+}
+
+// Fill Blank
+function renderFB(lesson) {
+  return `<div>
+    <input type="text" class="ex-input" id="fbInput" placeholder="Ketik jawaban..." autocomplete="off" oninput="onFBInput()">
+  </div>`;
+}
+
+function onFBInput() {
+  const val = document.getElementById('fbInput').value.trim();
+  document.getElementById('checkBtn').disabled = val.length === 0;
+}
+
+// Order
+function renderOrd(lesson) {
+  // Tampilkan item dalam urutan acak
+  const shuffled = lesson.o.map((item, i) => ({text: item, origIdx: i}));
+  // Shuffle
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  state.exerciseState.ordOrder = [];
+  state.exerciseState.ordItems = shuffled;
+
+  return `<div>
+	<div class="text-sm text-slate-400 mb-3">Click items in the correct order: <span class="id-lang">Klik item dalam urutan yang benar:</span></div>
+    <div class="space-y-2" id="ordList">
+      ${shuffled.map((item, i) => `
+        <div class="order-item flex items-center gap-3" data-orig="${item.origIdx}" onclick="selectOrd(this,${item.origIdx})">
+          <span class="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center text-xs font-bold ord-num"></span>
+          <span>${item.text}</span>
+        </div>
+      `).join('')}
+    </div>
+    <div class="mt-3 text-xs text-slate-500" id="ordStatus">Urutan terpilih: (belum ada)</div>
+  </div>`;
+}
+
+function selectOrd(el, origIdx) {
+  if (state.exerciseState.answered) return;
+  if (el.classList.contains('ordered')) return;
+
+  const order = state.exerciseState.ordOrder;
+  order.push(origIdx);
+  el.classList.add('ordered');
+  const numEl = el.querySelector('.ord-num');
+  numEl.textContent = order.length;
+
+  document.getElementById('ordStatus').textContent = `Urutan terpilih: ${order.length}/${state.exerciseState.ordItems.length}`;
+  document.getElementById('checkBtn').disabled = order.length < state.exerciseState.ordItems.length;
+}
+
+// Match
+function renderMatch(lesson) {
+  state.exerciseState.matchLeft = null;
+  state.exerciseState.matchPairs = [];
+  state.exerciseState.matchedLeft = new Set();
+  state.exerciseState.matchedRight = new Set();
+
+  // Shuffle right column
+  const rightShuffled = [...lesson.right];
+  for (let i = rightShuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [rightShuffled[i], rightShuffled[j]] = [rightShuffled[j], rightShuffled[i]];
+  }
+  state.exerciseState.rightShuffled = rightShuffled;
+
+  return `<div>
+    <div class="text-sm text-slate-400 mb-3">Klik item kiri, lalu item kanan untuk mencocokkan:</div>
+    <div class="grid grid-cols-2 gap-3" id="matchGrid">
+      <div class="space-y-2" id="matchLeft">
+        ${lesson.left.map((item, i) => `
+          <div class="match-item" data-side="left" data-idx="${i}" onclick="selectMatch('left',${i})">${item}</div>
+        `).join('')}
+      </div>
+      <div class="space-y-2" id="matchRight">
+        ${rightShuffled.map((item, i) => `
+          <div class="match-item" data-side="right" data-idx="${i}" data-val="${item}" onclick="selectMatch('right',${i})">${item}</div>
+        `).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+function selectMatch(side, idx) {
+  if (state.exerciseState.answered) return;
+  const es = state.exerciseState;
+
+  if (side === 'left') {
+    if (es.matchedLeft.has(idx)) return;
+    // Highlight
+    document.querySelectorAll('#matchLeft .match-item').forEach(el => el.classList.remove('active'));
+    const el = document.querySelector(`#matchLeft .match-item[data-idx="${idx}"]`);
+    el.classList.add('active');
+    es.matchLeft = idx;
+  } else {
+    if (es.matchedRight.has(idx)) return;
+    if (es.matchLeft === null) {
+      showToast('Pilih item kiri terlebih dahulu', 'info');
+      return;
+    }
+    // Create pair
+    const lesson = COURSE.maps[state.currentMap].lessons[state.currentLesson];
+    const leftIdx = es.matchLeft;
+    const rightVal = es.rightShuffled[idx];
+    es.matchPairs.push({leftIdx, rightVal, rightShuffledIdx: idx});
+    es.matchedLeft.add(leftIdx);
+    es.matchedRight.add(idx);
+
+    // Visual
+    const leftEl = document.querySelector(`#matchLeft .match-item[data-idx="${leftIdx}"]`);
+    const rightEl = document.querySelector(`#matchRight .match-item[data-idx="${idx}"]`);
+    leftEl.classList.remove('active');
+    leftEl.classList.add('matched');
+    rightEl.classList.add('matched');
+
+    es.matchLeft = null;
+
+    document.getElementById('checkBtn').disabled = es.matchPairs.length < lesson.left.length;
+  }
+}
+
+// Select All
+function renderSA(lesson) {
+  state.exerciseState.selectedSet = new Set();
+  return `<div>
+    <div class="text-sm text-slate-400 mb-3">Pilih semua jawaban yang benar:</div>
+    <div class="space-y-2" id="saOptions">
+      ${lesson.o.map((opt, i) => `
+        <div class="opt-card" data-idx="${i}" onclick="toggleSA(${i})">
+          <span class="w-6 h-6 rounded border-2 border-slate-600 flex items-center justify-center flex-shrink-0 sa-check"></span>
+          <span>${opt}</span>
+        </div>
+      `).join('')}
+    </div>
+  </div>`;
+}
+
+function toggleSA(idx) {
+  if (state.exerciseState.answered) return;
+  const set = state.exerciseState.selectedSet;
+  if (set.has(idx)) set.delete(idx); else set.add(idx);
+  document.querySelectorAll('#saOptions .opt-card').forEach((el, i) => {
+    const check = el.querySelector('.sa-check');
+    if (set.has(i)) {
+      el.classList.add('selected');
+      check.innerHTML = '<i class="fa-solid fa-check text-emerald-400 text-xs"></i>';
+      check.style.borderColor = '#10b981';
+    } else {
+      el.classList.remove('selected');
+      check.innerHTML = '';
+      check.style.borderColor = '';
+    }
+  });
+  document.getElementById('checkBtn').disabled = set.size === 0;
+}
+
+// Code Output
+function renderCode(lesson) {
+  return `<div>
+    <div class="text-sm text-slate-400 mb-3">Tulis output yang akan ditampilkan:</div>
+    <input type="text" class="ex-input font-mono" id="codeInput" placeholder="Ketik output..." autocomplete="off" oninput="onCodeInput()">
+  </div>`;
+}
+
+function onCodeInput() {
+  const val = document.getElementById('codeInput').value.trim();
+  document.getElementById('checkBtn').disabled = val.length === 0;
+}
+
+// ============================================================
+// CHECK ANSWER
+// ============================================================
+function checkAnswer() {
+  if (state.exerciseState.answered) return;
+  state.exerciseState.answered = true;
+
+  const lesson = COURSE.maps[state.currentMap].lessons[state.currentLesson];
+  const etype = lesson.etype;
+  let correct = false;
+  let correctAnswer = '';
+
+  switch(etype) {
+    case 'mc': {
+      const sel = state.exerciseState.selected;
+      correct = sel === lesson.a;
+      document.querySelectorAll('#mcOptions .opt-card').forEach((el, i) => {
+        el.classList.add('disabled');
+        if (i === lesson.a) el.classList.add('correct');
+        if (i === sel && !correct) el.classList.add('wrong');
+      });
+      correctAnswer = lesson.o[lesson.a];
+      break;
+    }
+    case 'tf': {
+      const sel = state.exerciseState.selected;
+      correct = sel === lesson.a;
+      document.querySelectorAll('#tfOptions .opt-card').forEach(el => {
+        el.classList.add('disabled');
+        if (String(lesson.a) === el.dataset.val) el.classList.add('correct');
+        if (String(sel) === el.dataset.val && !correct) el.classList.add('wrong');
+      });
+            correctAnswer = lesson.a ? 'True <span class="id-lang">Benar</span>' : 'False <span class="id-lang">Salah</span>';
+      break;
+    }
+    case 'fb': {
+      const input = document.getElementById('fbInput').value.trim();
+      // Normalisasi: hapus semua spasi dan ubah jadi huruf kecil
+      const normalize = str => str.replace(/\s+/g, '').toLowerCase();
+      // Terima beberapa jawaban yang benar (dipisah /)
+      const answers = lesson.a.split('/');
+      correct = answers.some(a => normalize(input) === normalize(a));
+      document.getElementById('fbInput').classList.add(correct ? 'correct' : 'wrong');
+      document.getElementById('fbInput').disabled = true;
+      correctAnswer = lesson.a;
+      break;
+    }
+    case 'ord': {
+      const order = state.exerciseState.ordOrder;
+      correct = order.length === lesson.a.length && order.every((v, i) => v === lesson.a[i]);
+      correctAnswer = lesson.a.map(i => lesson.o[i]).join(' → ');
+      break;
+    }
+    case 'match': {
+      const pairs = state.exerciseState.matchPairs;
+      const lesson_data = lesson;
+      correct = pairs.length === lesson_data.a.length && pairs.every((p, i) => {
+        // Cek apakah leftIdx-i cocok dengan right yang benar
+        const expectedRightVal = lesson_data.right[lesson_data.a[p.leftIdx]];
+        return p.rightVal === expectedRightVal;
+      });
+      correctAnswer = lesson_data.left.map((l, i) => `${l} ↔ ${lesson_data.right[lesson_data.a[i]]}`).join(', ');
+      break;
+    }
+    case 'sa': {
+      const selected = [...state.exerciseState.selectedSet].sort();
+      const expected = [...lesson.a].sort();
+      correct = selected.length === expected.length && selected.every((v, i) => v === expected[i]);
+      document.querySelectorAll('#saOptions .opt-card').forEach((el, i) => {
+        el.classList.add('disabled');
+        if (lesson.a.includes(i)) el.classList.add('correct');
+        if (selected.includes(i) && !lesson.a.includes(i)) el.classList.add('wrong');
+      });
+      correctAnswer = lesson.a.map(i => lesson.o[i]).join(', ');
+      break;
+    }
+    case 'code': {
+      const input = document.getElementById('codeInput').value.trim();
+      // Normalisasi: hapus semua spasi dan ubah jadi huruf kecil
+      const normalize = str => str.replace(/\s+/g, '').toLowerCase();
+      correct = normalize(input) === normalize(lesson.a);
+      document.getElementById('codeInput').classList.add(correct ? 'correct' : 'wrong');
+      document.getElementById('codeInput').disabled = true;
+      correctAnswer = lesson.a;
+      break;
+    }
+  }
+
+  // Simpan jawaban untuk Print Result
+  const mi = state.currentMap;
+  const li = state.currentLesson;
+  let studentAnswerText = "";
+  let correctAnswerText = "";
+
+  switch(etype) {
+    case 'mc':
+      studentAnswerText = state.exerciseState.selected !== undefined ? lesson.o[state.exerciseState.selected] : "-";
+      correctAnswerText = lesson.o[lesson.a];
+      break;
+    case 'tf':
+      studentAnswerText = state.exerciseState.selected !== null ? (state.exerciseState.selected ? "True" : "False") : "-";
+      correctAnswerText = lesson.a ? "True" : "False";
+      break;
+    case 'fb':
+      studentAnswerText = document.getElementById('fbInput').value.trim() || "-";
+      correctAnswerText = lesson.a;
+      break;
+    case 'code':
+      studentAnswerText = document.getElementById('codeInput').value.trim() || "-";
+      correctAnswerText = lesson.a;
+      break;
+    case 'ord':
+      studentAnswerText = state.exerciseState.ordOrder.map(i => lesson.o[i]).join(' → ') || "-";
+      correctAnswerText = lesson.a.map(i => lesson.o[i]).join(' → ');
+      break;
+    case 'match':
+      studentAnswerText = "Matched pairs";
+      correctAnswerText = lesson.left.map((l, i) => `${l} ↔ ${lesson.right[lesson.a[i]]}`).join('; ');
+      break;
+    case 'sa':
+      studentAnswerText = [...state.exerciseState.selectedSet].sort().map(i => lesson.o[i]).join(', ') || "-";
+      correctAnswerText = lesson.a.map(i => lesson.o[i]).join(', ');
+      break;
+  }
+
+  if (!state.mapAnswers) state.mapAnswers = {};
+  if (!state.mapAnswers[mi]) state.mapAnswers[mi] = {};
+  state.mapAnswers[mi][li] = {
+    q: lesson.q,
+    studentAnswer: studentAnswerText,
+    correctAnswer: correctAnswerText,
+    isCorrect: correct
+  };
+  saveState();
+
+  // Tampilkan feedback
+  const feedback = document.getElementById('feedbackArea');
+  if (correct) {
+    feedback.innerHTML = `
+      <div class="feedback-bar correct-fb">
+        <i class="fa-solid fa-check-circle text-2xl"></i>
+        <div>
+          <div class="text-lg">Correct! Excellent! <span class="id-lang">Benar! Hebat!</span></div>
+          ${correctAnswer ? `<div class="text-sm opacity-80 mt-1">Jawaban: ${correctAnswer}</div>` : ''}
+        </div>
+      </div>
+    `;
+    // Tambah XP
+    state.xp += 10;
+    state.streak += 1;
+    showXPPopup(10);
+    spawnConfetti();
+  } else {
+    feedback.innerHTML = `
+      <div class="feedback-bar wrong-fb">
+        <i class="fa-solid fa-times-circle text-2xl"></i>
+        <div>
+			<div class="text-lg">Incorrect <span class="id-lang">Belum tepat</span></div>
+			<div class="text-sm opacity-80 mt-1">Correct answer: ${correctAnswer} <span class="id-lang">Jawaban yang benar: ${correctAnswer}</span></div>
+        </div>
+      </div>
+    `;
+    state.streak = 0;
+  }
+  
+  renderKatexInElement(feedback);
+  
+  // Update header
+  document.getElementById('headerXP').textContent = state.xp;
+  document.getElementById('headerStreak').textContent = state.streak;
+
+  // Ganti tombol check menjadi lanjut
+  const checkBtn = document.getElementById('checkBtn');
+  checkBtn.textContent = 'Lanjut ';
+  checkBtn.innerHTML = 'Next <span class="id-lang" style="color:rgba(11,17,33,0.7); display:inline;">Lanjut</span> <i class="fa-solid fa-arrow-right"></i>';
+  checkBtn.disabled = false;
+  checkBtn.onclick = () => completeAndNext();
+
+  saveState();
+}
+
+// ============================================================
+// PRINT RESULT UNTUK ASSESSMENT
+// ============================================================
+function showPrintResultForm(mapIdx) {
+  const map = COURSE.maps[mapIdx];
+  const totalLessons = map.lessons.length;
+  let correctCount = 0;
+  
+  if (state.mapAnswers && state.mapAnswers[mapIdx]) {
+    for (let i = 0; i < totalLessons; i++) {
+      if (state.mapAnswers[mapIdx][i] && state.mapAnswers[mapIdx][i].isCorrect) {
+        correctCount++;
+      }
+    }
+  }
+  
+  const score = Math.round((correctCount / totalLessons) * 100);
+
+  const content = document.getElementById('lessonContent');
+  content.innerHTML = `
+    <div class="stagger-in text-center">
+      <div class="text-5xl mb-4">🎉</div>
+      <h2 class="text-2xl font-bold mb-2">Assessment Completed! <span class="id-lang">Asesmen Selesai!</span></h2>
+      <p class="text-slate-400 mb-6">You scored <span class="text-emerald-400 font-bold text-xl">${score}%</span> (${correctCount}/${totalLessons})</p>
+      
+      <div class="max-w-md mx-auto text-left space-y-4 mb-8">
+        <div>
+          <label class="text-sm text-slate-400 block mb-1">Name / <span class="id-lang">Nama</span></label>
+          <input type="text" id="printName" class="ex-input" placeholder="Enter your name / Masukkan nama">
+        </div>
+        <div>
+          <label class="text-sm text-slate-400 block mb-1">Date / <span class="id-lang">Tanggal</span></label>
+          <input type="date" id="printDate" class="ex-input" value="${new Date().toISOString().split('T')[0]}">
+        </div>
+        <div>
+          <label class="text-sm text-slate-400 block mb-1">Assessment / <span class="id-lang">Asesmen</span></label>
+          <input type="text" class="ex-input" value="Assessment ${map.id}" disabled style="opacity:0.6">
+        </div>
+        <div>
+          <label class="text-sm text-slate-400 block mb-1">Score / <span class="id-lang">Skor</span></label>
+          <input type="text" class="ex-input" value="${score}%" disabled style="opacity:0.6">
+        </div>
+      </div>
+
+      <button class="btn-primary text-lg" onclick="generatePrintout(${mapIdx})">
+        <i class="fa-solid fa-print mr-2"></i> Print Result <span class="id-lang" style="color:rgba(11,17,33,0.7); display:inline;">Cetak Hasil</span>
+      </button>
+      
+      <div class="mt-4">
+        <button class="btn-secondary" onclick="openPeta(${mapIdx})">
+          Back to Map <span class="id-lang">Kembali ke Peta</span>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function generatePrintout(mapIdx) {
+  const map = COURSE.maps[mapIdx];
+  const studentName = document.getElementById('printName').value || '-';
+  const printDate = document.getElementById('printDate').value || '-';
+  
+  let correctCount = 0;
+  let tableRows = '';
+  
+  for (let i = 0; i < map.lessons.length; i++) {
+    const ansData = (state.mapAnswers && state.mapAnswers[mapIdx] && state.mapAnswers[mapIdx][i]) ? state.mapAnswers[mapIdx][i] : null;
+    // Hapus tag id-lang dari pertanyaan agar printout lebih bersih (hanya bahasa Inggris)
+    const qText = map.lessons[i].q.replace(/<span class='id-lang'>.*?<\/span>/g, '');
+    const studentAns = ansData ? ansData.studentAnswer : '-';
+    const correctAns = ansData ? ansData.correctAnswer : '-';
+    const isCorrect = ansData ? ansData.isCorrect : false;
+    
+    if (isCorrect) correctCount++;
+    
+    const noteSymbol = isCorrect ? '✓' : '✗';
+    const noteColor = isCorrect ? 'green' : 'red';
+    
+    tableRows += `
+      <tr>
+        <td style="text-align:center; width: 40px;">${i + 1}</td>
+        <td>${qText}</td>
+        <td>${studentAns}</td>
+        <td>${correctAns}</td>
+        <td style="text-align:center; color: ${noteColor}; font-weight:bold; font-size:1.2rem;">${noteSymbol}</td>
+      </tr>
+    `;
+  }
+  
+  const score = Math.round((correctCount / map.lessons.length) * 100);
+
+  const printWindow = window.open('', '_blank');
+  printWindow.document.write(`
+    <!DOCTYPE html>
+    <html lang="id">
+    <head>
+      <meta charset="UTF-8">
+      <title>Assessment Result - ${map.id}</title>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+      <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"><\/script>
+      <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '\\\\(', right: '\\\\)', display: false},{left: '\\\\[', right: '\\\\]', display: true}], throwOnError: false}); setTimeout(function(){window.print();}, 1000);"><\/script>
+      <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 30px; color: #333; line-height: 1.5; }
+        h1 { text-align: center; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #666; font-size: 0.9rem; margin-bottom: 20px; }
+        .header-info { margin-bottom: 20px; border: 1px solid #ddd; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; flex-wrap: wrap; }
+        .header-info p { margin: 5px 0; font-size: 14px; }
+        .header-info strong { margin-right: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 13px; }
+        th, td { border: 1px solid #333; padding: 10px; text-align: left; vertical-align: top; }
+        th { background: #f0f0f0; font-weight: bold; text-align: center; }
+        @media print {
+          body { padding: 0; }
+          .header-info { border: none; padding: 0; }
+        }
+      </style>
+    </head>
+    <body>
+      <h1>Assessment Result</h1>
+      <div class="subtitle">Intro to Systems of Linear Equations</div>
+      
+      <div class="header-info">
+        <div style="flex:1; min-width: 200px;">
+          <p><strong>Name:</strong> ${studentName}</p>
+          <p><strong>Date:</strong> ${printDate}</p>
+        </div>
+        <div style="flex:1; min-width: 200px;">
+          <p><strong>Assessment:</strong> ${map.id}</p>
+          <p><strong>Score:</strong> ${score}% (${correctCount}/${map.lessons.length})</p>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>Question</th>
+            <th>Student Answer</th>
+            <th>Correct Answer</th>
+            <th>Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${tableRows}
+        </tbody>
+      </table>
+    </body>
+    </html>
+  `);
+  printWindow.document.close();
+}
+
+// ============================================================
+// COMPLETE & NEXT
+// ============================================================
+function completeAndNext() {
+  const mi = state.currentMap;
+  const li = state.currentLesson;
+  state.completed[`${mi}-${li}`] = true;
+  saveState();
+
+  const map = COURSE.maps[mi];
+  const isLastLesson = li + 1 >= map.lessons.length;
+  const isAssessment = map.branch; // Peta 7A-7E adalah branch: true
+
+  // Jika ini exercise terakhir di Assessment, tampilkan form Print
+  if (isAssessment && isLastLesson) {
+    showPrintResultForm(mi);
+  } else if (li + 1 < map.lessons.length && isLessonUnlocked(mi, li + 1)) {
+    openLesson(mi, li + 1);
+  } else {
+    openPeta(mi);
+  }
+}
+
+// ============================================================
+// NAVIGASI
+// ============================================================
+function showView(viewName) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(viewName + 'View').classList.add('active');
+  state.currentView = viewName;
+  window.scrollTo(0, 0);
+}
+
+function showMap() {
+  showView('map');
+  renderMap();
+}
+
+function closeLesson() {
+  openPeta(state.currentMap);
+}
+
+// ============================================================
+// UI HELPERS
+// ============================================================
+function showToast(msg, type='info') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function showXPPopup(amount) {
+  document.getElementById('xpAmount').textContent = amount;
+  const popup = document.getElementById('xpPopup');
+  popup.classList.add('show');
+  setTimeout(() => popup.classList.remove('show'), 1500);
+}
+
+function spawnConfetti() {
+  const colors = ['#10b981','#f59e0b','#ec4899','#8b5cf6','#06b6d4','#ef4444'];
+  for (let i = 0; i < 30; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random() * 100 + 'vw';
+    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+    c.style.width = (Math.random() * 8 + 4) + 'px';
+    c.style.height = (Math.random() * 8 + 4) + 'px';
+    c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    c.style.animationDuration = (Math.random() * 1.5 + 1) + 's';
+    c.style.animationDelay = (Math.random() * 0.5) + 's';
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 3000);
+  }
+}
+
+function showHint() {
+  document.getElementById('hintArea').classList.remove('hidden');
+  document.getElementById('hintBtn').disabled = true;
+}
+
+function escapeHTML(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// --- FUNGSI UNTUK MODAL RULES ---
+function openRules() {
+  document.getElementById('rulesModal').classList.add('active');
+}
+
+function closeRules() {
+  document.getElementById('rulesModal').classList.remove('active');
+}
+
+// ============================================================
+// KATEX RENDERING
+// ============================================================
+function renderKatexInElement(el) {
+  if (typeof renderMathInElement === 'function') {
+    renderMathInElement(el, {
+      delimiters: [
+        {left: '\\(', right: '\\)', display: false},  //
+        {left: '\\[', right: '\\]', display: true}    //
+      ],
+      throwOnError: false
+    });
+  }
+}
+
+// Override showView untuk render KaTeX setiap pindah halaman
+const originalShowView = showView;
+showView = function(viewName) {
+  originalShowView(viewName);
+  setTimeout(() => renderKatexInElement(document.body), 100);
+};
+
+// Override openLesson untuk render KaTeX di konten lesson
+const originalOpenLesson = openLesson;
+openLesson = function(mapIdx, lessonIdx) {
+  originalOpenLesson(mapIdx, lessonIdx);
+  setTimeout(() => renderKatexInElement(document.body), 100);
+};
+
+// ============================================================
+// INISIALISASI APLIKASI
+// ============================================================
+loadState();
+renderMap();
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  // Tekan Escape untuk menutup lesson
+  if (e.key === 'Escape' && state.currentView === 'lesson') {
+    closeLesson();
+  }
+  
+  // Tekan Enter untuk memeriksa jawaban / lanjut ke soal berikutnya
+  if (e.key === 'Enter' && state.currentView === 'lesson') {
+    const checkBtn = document.getElementById('checkBtn');
+    // Pastikan tombol ada dan tidak dalam keadaan disabled
+    if (checkBtn && !checkBtn.disabled) {
+      e.preventDefault(); 
+      checkBtn.click();   // Untuk halaman Exercise
+    } else if (nextBtn) {
+      e.preventDefault();
+      nextBtn.click();    // Untuk halaman Teori
+    }
+  }
+});
+</script>
+</body>
+</html>
