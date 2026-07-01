@@ -1,0 +1,2188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math Tutoring — by Deni</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root {
+  --bg: #0b1121; --bg2: #111827; --card: rgba(17,24,39,0.85);
+  --fg: #e2e8f0; --muted: #64748b; --accent: #10b981;
+  --accent2: #f59e0b; --danger: #ef4444; --border: rgba(100,116,139,0.2);
+  --glass: rgba(16,185,129,0.08);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Space Grotesk', sans-serif; background: var(--bg); color: var(--fg); min-height: 100vh; overflow-x: hidden; }
+.font-mono { font-family: 'JetBrains Mono', monospace; }
+
+/* Latar belakang animasi */
+.bg-grid {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    radial-gradient(circle at 20% 50%, rgba(16,185,129,0.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(245,158,11,0.04) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(16,185,129,0.03) 0%, transparent 50%);
+}
+.bg-grid::after {
+  content: ''; position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(16,185,129,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16,185,129,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Transisi halaman */
+.view { display: none; position: relative; z-index: 1; }
+.view.active { display: block; animation: fadeSlideIn 0.4s ease; }
+@keyframes fadeSlideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Peta node */
+.map-node {
+  width: 72px; height: 72px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 1.2rem; cursor: pointer; transition: all 0.3s ease;
+  position: relative; border: 3px solid var(--border);
+  background: var(--bg2);
+}
+.map-node.unlocked { border-color: var(--accent); box-shadow: 0 0 20px rgba(16,185,129,0.2); }
+.map-node.unlocked:hover { transform: scale(1.12); box-shadow: 0 0 30px rgba(16,185,129,0.4); }
+.map-node.completed { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.map-node.completed:hover { transform: scale(1.08); }
+.map-node.locked { opacity: 0.35; cursor: not-allowed; }
+.map-node.current { animation: pulseGlow 2s ease-in-out infinite; }
+@keyframes pulseGlow {
+  0%,100% { box-shadow: 0 0 15px rgba(16,185,129,0.3); }
+  50% { box-shadow: 0 0 35px rgba(16,185,129,0.6); }
+}
+
+/* Koneksi garis peta */
+.map-line { width: 3px; height: 40px; margin: 0 auto; background: var(--border); transition: background 0.5s; }
+.map-line.done { background: var(--accent); }
+.map-branch-line { height: 3px; width: 60px; background: var(--border); transition: background 0.5s; }
+.map-branch-line.done { background: var(--accent); }
+
+/* Lesson node di peta detail */
+.lesson-node {
+  width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem; cursor: pointer; transition: all 0.3s; border: 2px solid var(--border); background: var(--bg2);
+}
+.lesson-node.theory { border-radius: 50%; }
+.lesson-node.exercise { border-radius: 16px; }
+.lesson-node.unlocked { border-color: var(--accent); }
+.lesson-node.unlocked:hover { transform: scale(1.15); box-shadow: 0 0 20px rgba(16,185,129,0.3); }
+.lesson-node.completed { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.lesson-node.locked { opacity: 0.3; cursor: not-allowed; }
+.lesson-connector { width: 2px; height: 24px; margin: 0 auto; background: var(--border); }
+.lesson-connector.done { background: var(--accent); }
+
+/* Tombol */
+.btn-primary {
+  background: var(--accent); color: var(--bg); font-weight: 600; padding: 14px 32px; border-radius: 14px;
+  border: none; cursor: pointer; font-size: 1rem; font-family: inherit; transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-primary:hover { filter: brightness(1.15); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16,185,129,0.3); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; filter: none; }
+.btn-secondary {
+  background: transparent; color: var(--accent); font-weight: 600; padding: 12px 24px; border-radius: 14px;
+  border: 2px solid var(--accent); cursor: pointer; font-size: 0.9rem; font-family: inherit; transition: all 0.2s;
+}
+.btn-secondary:hover { background: rgba(16,185,129,0.1); }
+
+/* Opsi exercise */
+.opt-card {
+  padding: 16px 20px; border: 2px solid var(--border); border-radius: 14px; cursor: pointer;
+  transition: all 0.2s; background: var(--card); min-height: 52px; display: flex; align-items: center; gap: 12px;
+}
+.opt-card:hover { border-color: rgba(16,185,129,0.4); background: var(--glass); }
+.opt-card.selected { border-color: var(--accent); background: rgba(16,185,129,0.12); }
+.opt-card.correct { border-color: #10b981; background: rgba(16,185,129,0.15); }
+.opt-card.wrong { border-color: #ef4444; background: rgba(239,68,68,0.1); }
+.opt-card.disabled { pointer-events: none; opacity: 0.7; }
+
+/* Input exercise */
+.ex-input {
+  background: var(--bg2); border: 2px solid var(--border); border-radius: 12px; padding: 14px 18px;
+  color: var(--fg); font-size: 1rem; font-family: inherit; width: 100%; outline: none; transition: border-color 0.2s;
+}
+.ex-input:focus { border-color: var(--accent); }
+.ex-input.correct { border-color: #10b981; }
+.ex-input.wrong { border-color: #ef4444; }
+
+/* Code block */
+.code-block {
+  background: #0d1117; border: 1px solid rgba(100,116,139,0.2); border-radius: 12px;
+  padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;
+  line-height: 1.7; overflow-x: auto; white-space: pre;
+}
+
+/* Progress bar */
+.prog-bar { height: 6px; border-radius: 3px; background: rgba(100,116,139,0.2); overflow: hidden; }
+.prog-fill { height: 100%; border-radius: 3px; background: var(--accent); transition: width 0.5s ease; }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+  padding: 14px 28px; border-radius: 14px; font-weight: 600; z-index: 999;
+  transition: transform 0.4s ease; pointer-events: none;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.success { background: #10b981; color: #0b1121; }
+.toast.error { background: #ef4444; color: white; }
+.toast.info { background: #f59e0b; color: #0b1121; }
+
+/* XP popup */
+.xp-popup {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0);
+  background: var(--bg2); border: 2px solid var(--accent2); border-radius: 24px;
+  padding: 40px 60px; z-index: 100; text-align: center;
+  transition: transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+.xp-popup.show { transform: translate(-50%,-50%) scale(1); }
+
+/* Celebration particles */
+.confetti { position: fixed; top: -10px; z-index: 99; pointer-events: none; animation: confettiFall 2s ease-out forwards; }
+@keyframes confettiFall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* Match exercise */
+.match-item {
+  padding: 12px 18px; border: 2px solid var(--border); border-radius: 12px; cursor: pointer;
+  transition: all 0.2s; background: var(--card); text-align: center; user-select: none;
+}
+.match-item:hover { border-color: rgba(16,185,129,0.4); }
+.match-item.active { border-color: var(--accent); background: rgba(16,185,129,0.12); box-shadow: 0 0 15px rgba(16,185,129,0.2); }
+.match-item.matched { border-color: #10b981; background: rgba(16,185,129,0.15); opacity: 0.6; pointer-events: none; }
+.match-item.wrong-match { border-color: #ef4444; background: rgba(239,68,68,0.1); }
+
+/* Order exercise */
+.order-item {
+  padding: 14px 20px; border: 2px solid var(--border); border-radius: 12px; cursor: pointer;
+  transition: all 0.2s; background: var(--card); user-select: none;
+}
+.order-item:hover { border-color: rgba(16,185,129,0.4); }
+.order-item.ordered { border-color: var(--accent2); background: rgba(245,158,11,0.1); opacity: 0.5; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(100,116,139,0.3); border-radius: 3px; }
+
+/* Responsif */
+@media (max-width: 640px) {
+  .map-node { width: 56px; height: 56px; font-size: 1rem; }
+  .lesson-node { width: 48px; height: 48px; font-size: 0.75rem; }
+}
+
+/* Animasi masuk */
+.stagger-in > * { opacity: 0; transform: translateY(15px); animation: staggerFade 0.4s ease forwards; }
+.stagger-in > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-in > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger-in > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-in > *:nth-child(4) { animation-delay: 0.2s; }
+.stagger-in > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger-in > *:nth-child(6) { animation-delay: 0.3s; }
+.stagger-in > *:nth-child(7) { animation-delay: 0.35s; }
+.stagger-in > *:nth-child(8) { animation-delay: 0.4s; }
+.stagger-in > *:nth-child(9) { animation-delay: 0.45s; }
+.stagger-in > *:nth-child(10) { animation-delay: 0.5s; }
+@keyframes staggerFade { to { opacity: 1; transform: translateY(0); } }
+
+/* Feedback benar/salah */
+.feedback-bar {
+  padding: 18px 24px; border-radius: 14px; font-weight: 600; display: flex; align-items: center; gap: 12px;
+  animation: fadeSlideIn 0.3s ease;
+}
+.feedback-bar.correct-fb { background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3); color: #10b981; }
+.feedback-bar.wrong-fb { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #ef4444; }
+
+/* Terjemahan bahasa Indonesia di bawah teks utama */
+.id-lang { display: block; font-size: 0.75rem; color: #94a3b8; margin-top: 2px; line-height: 1.4; }
+
+/* Khusus label di node peta/lesson: tidak wrap, indo di bawah inggris */
+.node-title { text-align: center; white-space: nowrap; }
+.node-title .id-lang { display: block; white-space: nowrap; margin-top: 2px; }
+
+/* Modal Rules */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200;
+  display: none; align-items: center; justify-content: center;
+}
+.modal-overlay.active { display: flex; animation: fadeIn 0.3s ease; }
+.modal-box {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 20px;
+  padding: 30px; max-width: 450px; width: 90%; position: relative;
+  animation: scaleIn 0.3s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scaleIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<!-- Rules Modal -->
+<div id="rulesModal" class="modal-overlay">
+  <div class="modal-box">
+    <button onclick="closeRules()" class="absolute top-4 right-4 text-slate-500 hover:text-slate-300 transition">
+      <i class="fa-solid fa-xmark text-lg"></i>
+    </button>
+    <h3 class="text-xl font-bold mb-5 text-amber-400">
+      <i class="fa-solid fa-gavel mr-2"></i>Class Rules <span class="id-lang" style="display:inline; color:#f59e0b;">Aturan Kelas</span>
+    </h3>
+    <ul class="space-y-4 text-slate-300">
+      <li class="flex items-start gap-3">
+        <span class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center flex-shrink-0 mt-0.5"><i class="fa-solid fa-comments text-emerald-400"></i></span>
+        <div>
+          <strong>Take turns speaking</strong>
+          <span class="id-lang">Berbicara secara bergantian</span>
+        </div>
+      </li>
+      <li class="flex items-start gap-3">
+        <span class="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center flex-shrink-0 mt-0.5"><i class="fa-solid fa-video text-amber-400"></i></span>
+        <div>
+          <strong>Turn on camera & microphone when required</strong>
+          <span class="id-lang">Menyalakan kamera & microphone jika diperlukan</span>
+        </div>
+      </li>
+      <li class="flex items-start gap-3">
+        <span class="w-8 h-8 rounded-lg bg-violet-500/10 flex items-center justify-center flex-shrink-0 mt-0.5"><i class="fa-solid fa-hand text-violet-400"></i></span>
+        <div>
+          <strong>Ask for permission to leave the class</strong>
+          <span class="id-lang">Meminta izin jika ingin meninggalkan kelas</span>
+        </div>
+      </li>
+    </ul>
+    <div class="mt-6 text-right">
+      <button onclick="closeRules()" class="btn-primary">Got it! <span class="id-lang" style="color:rgba(11,17,33,0.7); display:inline;">Mengerti!</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast"></div>
+
+<!-- XP Popup -->
+<div id="xpPopup" class="xp-popup">
+  <div class="text-5xl font-bold text-amber-400 mb-2">+<span id="xpAmount">10</span> XP</div>
+  <div class="text-lg text-slate-400">Correct answer! <span class="id-lang">Jawaban benar!</span></div>
+</div>
+
+<!-- ========== MAP VIEW ========== -->
+<div id="mapView" class="view active">
+  <header class="sticky top-0 z-10 backdrop-blur-xl bg-[#0b1121]/80 border-b border-white/5">
+    <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
+          <i class="fa-solid fa-square-root-variable text-emerald-400"></i>
+        </div>
+        <div>
+          <div class="font-bold text-lg leading-tight">Math Tutoring</div>
+          <div class="text-xs text-slate-500">by Deni</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-5">
+        <button onclick="openRules()" class="text-xs text-slate-500 hover:text-amber-400 transition flex items-center gap-1 border border-transparent hover:border-amber-400/30 rounded-lg px-2 py-1" title="Class Rules">
+          <i class="fa-solid fa-gavel"></i> Rules
+        </button>
+        <button onclick="resetProgress()" class="text-xs text-slate-500 hover:text-red-400 transition flex items-center gap-1 border border-transparent hover:border-red-400/30 rounded-lg px-2 py-1" title="Reset Semua Progress">
+          <i class="fa-solid fa-rotate-left"></i> Reset
+        </button>
+        <div class="flex items-center gap-2 text-amber-400 font-semibold">
+          <i class="fa-solid fa-bolt"></i><span id="headerXP">0</span> XP
+        </div>
+        <div class="flex items-center gap-2 text-orange-400 font-semibold">
+          <i class="fa-solid fa-fire"></i><span id="headerStreak">0</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 pt-8 pb-20">
+    <div class="text-center mb-10">
+		<h1 class="text-2xl md:text-3xl font-extrabold mb-3 bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent leading-tight">
+		  KPK & FPB (Logistics & Distribution)
+		  <span class="id-lang" style="display:block; color:#94a3b8; margin-top: 4px; font-size: 1.25rem;">Kelipatan & Faktor Persekutuan (Logistik & Distribusi)</span>
+		</h1>
+            <div class="text-slate-400 mx-auto text-center" style="max-width: 90%;">
+        <div style="white-space: nowrap;">Complete each map to unlock the next. Collect XP and build your learning streak!</div>
+        <div class="id-lang" style="white-space: nowrap;">Selesaikan setiap peta untuk membuka peta berikutnya. Kumpulkan XP dan bangun streak belajarmu!</div>
+      </div>
+    </div>
+
+    <!-- Progress keseluruhan -->
+    <div class="max-w-md mx-auto mb-10">
+      <div class="flex justify-between text-sm mb-2">
+        <span class="text-slate-400">Overall Progress <span class="id-lang" style="display:inline; color:#64748b;">Progress Keseluruhan</span></span>
+        <span class="text-emerald-400 font-semibold" id="totalProgress">0%</span>
+      </div>
+      <div class="prog-bar">
+        <div class="prog-fill" id="totalProgFill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- Peta nodes akan dirender oleh JS -->
+    <div id="mapContainer" class="flex flex-col items-center gap-0"></div>
+  </main>
+</div>
+
+<!-- ========== PETA VIEW (detail lesson) ========== -->
+<div id="petaView" class="view">
+  <header class="sticky top-0 z-10 backdrop-blur-xl bg-[#0b1121]/80 border-b border-white/5">
+    <div class="max-w-2xl mx-auto px-4 py-4 flex items-center gap-4">
+      <button onclick="showMap()" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-white/10 transition">
+        <i class="fa-solid fa-arrow-left text-slate-400"></i>
+      </button>
+      <div>
+        <div class="font-bold text-lg" id="petaTitle"></div>
+        <div class="text-xs text-slate-500" id="petaSubtitle"></div>
+      </div>
+    </div>
+  </header>
+  <main class="max-w-2xl mx-auto px-4 pt-8 pb-20">
+    <div id="lessonContainer" class="flex flex-col items-center"></div>
+  </main>
+</div>
+
+<!-- ========== LESSON VIEW ========== -->
+<div id="lessonView" class="view">
+  <header class="sticky top-0 z-10 backdrop-blur-xl bg-[#0b1121]/80 border-b border-white/5">
+    <div class="max-w-2xl mx-auto px-4 py-4 flex items-center gap-4">
+      <button onclick="closeLesson()" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-white/10 transition">
+        <i class="fa-solid fa-xmark text-slate-400"></i>
+      </button>
+      <div class="flex-1">
+        <div class="prog-bar">
+          <div class="prog-fill" id="lessonProgFill" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="text-sm text-slate-400 font-mono" id="lessonCounter">1/10</div>
+    </div>
+  </header>
+  <main class="max-w-2xl mx-auto px-4 pt-6 pb-20" id="lessonContent"></main>
+</div>
+
+<script>
+// ============================================================
+// DATA KURSUS — Seluruh konten pembelajaran
+// ============================================================
+const COURSE = {
+  title: "KPK & FPB - Logistics & Distribution <span class='id-lang'>Logistik & Distribusi</span>",
+  maps: [
+    // ==================== SECTION 1 ====================
+    {
+      id:1, title:"Spiral Review Warm-up <span class='id-lang'>Pemanasan</span>", icon:"fa-rotate", color:"#10b981", branch:false,
+      lessons:[
+        // T1
+        {type:"T",title:"Lines, Rays, and Angles <span class='id-lang'>Garis, Sinar, dan Sudut</span>",
+         body:`<p>Before we dive into KPK and FPB, let's review some basic geometry concepts. <span class='id-lang'>Sebelum masuk ke KPK dan FPB, mari kita review konsep geometri dasar.</span></p>
+         <div class="mt-4 space-y-3">
+           <div class="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+             <div class="text-emerald-400 font-semibold mb-2"><i class="fa-solid fa-minus mr-2"></i>Lines vs Rays <span class='id-lang'>Garis vs Sinar</span></div>
+             <p class="text-sm text-slate-300">A <strong>Line</strong> extends infinitely in two directions. A <strong>Ray</strong> has one endpoint and extends infinitely in one direction. <span class='id-lang'>Garis memanjang tak hingga dua arah. Sinar memiliki satu titik pangkal dan satu arah tak hingga.</span></p>
+           </div>
+           <div class="p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/20">
+             <div class="text-cyan-400 font-semibold mb-2"><i class="fa-solid fa-xmark mr-2"></i>Vertical Angles <span class='id-lang'>Sudut Bertolak Belakang</span></div>
+             <p class="text-sm text-slate-300">When two lines intersect, they form two pairs of vertical angles. Vertical angles are always equal. <span class='id-lang'>Saat dua garis berpotongan, membentuk 2 pasang sudut bertolak belakang yang besarnya sama.</span></p>
+           </div>
+         </div>`},
+        // E1 mc
+        {type:"E",etype:"mc",
+         q:"Which geometric figure extends infinitely in only ONE direction? <span class='id-lang'>Bangun geometri mana yang memanjang tak hingga hanya ke SATU arah?</span>",
+         o:["Line <span class='id-lang'>Garis</span>","Ray <span class='id-lang'>Sinar</span>","Segment <span class='id-lang'>Ruas Garis</span>","Point <span class='id-lang'>Titik</span>"],
+         a:1,
+         h:"It has one endpoint. <span class='id-lang'>Memiliki satu titik pangkal.</span>"},
+        // E2 fb
+        {type:"E",etype:"fb",
+         q:"If two lines intersect at one point, how many pairs of vertical angles are formed? <span class='id-lang'>Jika dua garis berpotongan di satu titik, berapa pasang sudut bertolak belakang yang terbentuk?</span>",
+         a:"2",
+         h:"They are opposite each other. <span class='id-lang'>Mereka saling berhadapan.</span>"},
+        // E3 tf
+        {type:"E",etype:"tf",
+         q:"Vertical angles formed by intersecting lines are always supplementary (add up to 180°). <span class='id-lang'>Sudut bertolak belakang selalu berpenjumlahan 180 derajat.</span>",
+         a:false,
+         h:"Vertical angles are EQUAL, not supplementary. <span class='id-lang'>Sudut bertolak belakang sama besar, bukan berpenjumlahan 180.</span>"},
+        // T2
+        {type:"T",title:"Parallel Lines & Transversals <span class='id-lang'>Garis Sejajar & Transversal</span>",
+         body:`<p>When a transversal cuts two parallel lines, special angle pairs are formed. <span class='id-lang'>Saat garis transversal memotong dua garis sejajar, terbentuk pasangan sudut khusus.</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-violet-500/10 border border-violet-500/20">
+           <div class="text-violet-400 font-semibold mb-2">Key Relationships <span class='id-lang'>Hubungan Kunci</span></div>
+           <p class="text-sm text-slate-300">1. <strong>Alternate Interior Angles</strong> are equal. <span class='id-lang'>Sudut dalam berseberangan sama besar.</span></p>
+           <p class="text-sm text-slate-300">2. <strong>Co-interior Angles</strong> (same side) add up to 180°. <span class='id-lang'>Sudut dalam sepihak berpenjumlahan 180°.</span></p>
+         </div>`},
+        // E4 mc
+        {type:"E",etype:"mc",
+         q:"Two parallel lines are cut by a transversal. If an alternate interior angle is 75°, what is the measure of its pair? <span class='id-lang'>Dua garis sejajar dipotong transversal. Jika sudut dalam berseberangan 75°, berapa pasangannya?</span>",
+         o:["\\( 75^\\circ \\) <span class='id-lang'>\\( 75^\\circ \\)</span>","\\( 105^\\circ \\) <span class='id-lang'>\\( 105^\\circ \\)</span>","\\( 180^\\circ \\) <span class='id-lang'>\\( 180^\\circ \\)</span>","\\( 90^\\circ \\) <span class='id-lang'>\\( 90^\\circ \\)</span>"],
+         a:0,
+         h:"Alternate interior angles are equal. <span class='id-lang'>Sudut dalam berseberangan sama besar.</span>"},
+        // E5 fb
+        {type:"E",etype:"fb",
+         q:"Two parallel lines are cut by a transversal. If a co-interior angle is 75°, what is the measure of the other co-interior angle? <span class='id-lang'>Jika sudut dalam sepihak 75°, berapa sudut dalam sepihak lainnya?</span>",
+         a:"105",
+         h:"Co-interior angles add to 180. 180 - 75 = ? <span class='id-lang'>180 - 75 = ?</span>"},
+        // E6 match
+        {type:"E",etype:"match",
+         q:"Match the angle pair with its property: <span class='id-lang'>Cocokkan pasangan sudut dengan sifatnya:</span>",
+         left:["Vertical Angles <span class='id-lang'>Bertolak Belakang</span>","Alternate Interior <span class='id-lang'>Dalam Berseberangan</span>","Co-interior <span class='id-lang'>Sepihak Dalam</span>"],
+         right:["Equal <span class='id-lang'>Sama Besar</span>","Sum to 180° <span class='id-lang'>Berjumlah 180°</span>","Equal <span class='id-lang'>Sama Besar</span>"],
+         a:[0,2,1],
+         h:"Vertical and Alternate are equal. Co-interior sum to 180. <span class='id-lang'>Bertolak belakang dan berseberangan sama besar. Sepihak berjumlah 180.</span>"},
+        // T3
+        {type:"T",title:"Supplementary & Complementary <span class='id-lang'>Suplemen & Komplemen</span>",
+         body:`<p>Understanding angle sums is crucial for solving geometry problems. <span class='id-lang'>Memahami jumlah sudut sangat penting untuk geometri.</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20">
+           <div class="text-amber-400 font-semibold mb-2">The Rules <span class='id-lang'>Aturan</span></div>
+           <p class="text-sm text-slate-300"><strong>Supplementary:</strong> Two angles that add up to \\( 180^\\circ \\). <span class='id-lang'>Suplemen: berjumlah 180°.</span></p>
+           <p class="text-sm text-slate-300"><strong>Complementary:</strong> Two angles that add up to \\( 90^\\circ \\). <span class='id-lang'>Komplemen: berjumlah 90°.</span></p>
+         </div>`},
+        // E7 mc
+        {type:"E",etype:"mc",
+         q:"If two angles are supplementary and one is \\( 30^\\circ \\), what is the other? <span class='id-lang'>Jika dua sudut suplemen dan salah satunya 30°, berapa yang lain?</span>",
+         o:["\\( 60^\\circ \\) <span class='id-lang'>\\( 60^\\circ \\)</span>","\\( 90^\\circ \\) <span class='id-lang'>\\( 90^\\circ \\)</span>","\\( 150^\\circ \\) <span class='id-lang'>\\( 150^\\circ \\)</span>","\\( 180^\\circ \\) <span class='id-lang'>\\( 180^\\circ \\)</span>"],
+         a:2,
+         h:"Supplementary means 180. 180 - 30 = 150. <span class='id-lang'>180 - 30 = 150.</span>"},
+        // E8 tf
+        {type:"E",etype:"tf",
+         q:"Two right angles are always supplementary to each other. <span class='id-lang'>Dua sudut siku-siku selalu suplemen satu sama lain.</span>",
+         a:true,
+         h:"90 + 90 = 180. <span class='id-lang'>90 + 90 = 180.</span>"},
+        // E9 fb
+        {type:"E",etype:"fb",
+         q:"What is the sum of two angles if they are complementary? (Type the number) <span class='id-lang'>Berapa jumlah dua sudut jika komplemen? (Ketik angkanya)</span>",
+         a:"90",
+         h:"Complementary means 90 degrees. <span class='id-lang'>Komplemen berarti 90 derajat.</span>"},
+        // E10 ord
+        {type:"E",etype:"ord",
+         q:"Order the steps to find a supplementary angle: <span class='id-lang'>Urutkan langkah mencari sudut suplemen:</span>",
+         o:["Identify the given angle <span class='id-lang'>Identifikasi sudut yang diketahui</span>","Subtract from 180° <span class='id-lang'>Kurangi dari 180°</span>","Know that supplementary equals 180° <span class='id-lang'>Tahu bahwa suplemen sama dengan 180°</span>","Get the final answer <span class='id-lang'>Dapatkan jawaban akhir</span>"],
+         a:[2,0,1,3],
+         h:"Rule -> Given -> Subtract -> Answer. <span class='id-lang'>Aturan -> Diketahui -> Kurangi -> Jawaban.</span>"}
+      ]
+    },
+    // ==================== SECTION 2 ====================
+    {
+      id:2, title:"Real-World Connection <span class='id-lang'>Koneksi Dunia Nyata</span>", icon:"fa-lightbulb", color:"#06b6d4", branch:false,
+      lessons:[
+        // T1
+        {type:"T",title:"Trains and Catering <span class='id-lang'>Kereta Api dan Katering</span>",
+         body:`<p>Have you ever wondered how train schedules are arranged so they don't crash at the same station? Or how catering companies divide hundreds of cakes into boxes with exact amounts? <span class='id-lang'>Pernahkah kamu berpikir bagaimana jadwal kereta diatur agar tidak tabrakan? Atau bagaimana katering membagi ratusan kue ke kotak dengan jumlah sama?</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/20">
+           <div class="text-cyan-400 font-semibold mb-2">The Power of KPK & FPB <span class='id-lang'>Kekuatan KPK & FPB</span></div>
+           <p class="text-sm text-slate-300">Today, you are a Logistics Manager. You will use KPK (Least Common Multiple) for schedules and FPB (Greatest Common Factor) for distribution. <span class='id-lang'>Hari ini kamu Manajer Logistik. KPK untuk jadwal, FPB untuk distribusi.</span></p>
+         </div>`},
+        // E1 mc
+        {type:"E",etype:"mc",
+         q:"If we want to find when two trains will depart at the exact same time again, which math concept do we use? <span class='id-lang'>Jika ingin mencari kapan dua kereta berangkat bersamaan lagi, konsep apa yang dipakai?</span>",
+         o:["FPB (Greatest Common Factor) <span class='id-lang'>FPB</span>","KPK (Least Common Multiple) <span class='id-lang'>KPK</span>","Prime Numbers <span class='id-lang'>Bilangan Prima</span>","Exponents <span class='id-lang'>Eksponen</span>"],
+         a:1,
+         h:"Schedules and cycles use KPK. <span class='id-lang'>Jadwal dan siklus memakai KPK.</span>"},
+        // E2 tf
+        {type:"E",etype:"tf",
+         q:"To divide 30 apples and 42 oranges equally into plastic bags with no leftovers, we use FPB. <span class='id-lang'>Untuk membagi 30 apel dan 42 jeruk sama rata ke kantong tanpa sisa, kita pakai FPB.</span>",
+         a:true,
+         h:"FPB finds the maximum equal groups. <span class='id-lang'>FPB mencari kelompok maksimal yang sama.</span>"},
+        // E3 fb
+        {type:"E",etype:"fb",
+         q:"The Indonesian abbreviation for 'Least Common Multiple' is ____. <span class='id-lang'>Singkatan dari 'Kelipatan Persekutuan Terkecil' adalah ____.</span>",
+         a:"KPK",
+         h:"K for Kelipatan. <span class='id-lang'>K untuk Kelipatan.</span>"},
+        // T2
+        {type:"T",title:"Identifying Keywords <span class='id-lang'>Mengidentifikasi Kata Kunci</span>",
+         body:`<p>In word problems, keywords help us decide whether to use KPK or FPB. <span class='id-lang'>Di soal cerita, kata kunci membantu menentukan KPK atau FPB.</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+           <div class="text-emerald-400 font-semibold mb-2">The Keywords <span class='id-lang'>Kata Kunci</span></div>
+           <p class="text-sm text-slate-300">• <strong>KPK:</strong> 'Bersamaan lagi', 'setiap', 'pertemuan', 'titik temu'. <span class='id-lang'>Bersamaan, setiap, temu.</span></p>
+           <p class="text-sm text-slate-300">• <strong>FPB:</strong> 'Paling banyak', 'maksimal', 'sama rata', 'dibagi ke'. <span class='id-lang'>Paling banyak, maksimal, sama rata, dibagi.</span></p>
+         </div>`},
+        // E4 mc
+        {type:"E",etype:"mc",
+         q:"Which keyword indicates we should use KPK? <span class='id-lang'>Kata kunci mana yang menunjukkan kita harus pakai KPK?</span>",
+         o:["Maximum amount <span class='id-lang'>Jumlah maksimal</span>","Equally distributed <span class='id-lang'>Dibagi sama rata</span>","Meeting again at the same time <span class='id-lang'>Bertemu bersamaan lagi</span>","Divided into groups <span class='id-lang'>Dibagi ke kelompok</span>"],
+         a:2,
+         h:"'Meeting again' is a cycle. <span class='id-lang'>'Bertemu lagi' adalah siklus.</span>"},
+        // E5 fb
+        {type:"E",etype:"fb",
+         q:"If a problem asks for the 'maximum number of bags' to distribute items, we use ____. (Type KPK or FPB) <span class='id-lang'>Jika soal meminta 'jumlah kantong maksimal' untuk membagi barang, kita pakai ____.</span>",
+         a:"FPB",
+         h:"Maximum distribution = FPB. <span class='id-lang'>Distribusi maksimal = FPB.</span>"},
+        // E6 match
+        {type:"E",etype:"match",
+         q:"Match the scenario to the correct concept: <span class='id-lang'>Cocokkan skenario dengan konsep yang benar:</span>",
+         left:["Bus A departs every 15 min, Bus B every 20 min. When together?","36 pencils and 48 erasers divided equally.","Two alarms ringing every 4 and 6 hours.","Packing 40 books into largest equal stacks."],
+         right:["KPK <span class='id-lang'>KPK</span>","FPB <span class='id-lang'>FPB</span>","KPK <span class='id-lang'>KPK</span>","FPB <span class='id-lang'>FPB</span>"],
+         a:[0,1,0,1],
+         h:"Schedules = KPK. Distribution = FPB. <span class='id-lang'>Jadwal = KPK. Pembagian = FPB.</span>"},
+        // T3
+        {type:"T",title:"Logistics Manager Role <span class='id-lang'>Peran Manajer Logistik</span>",
+         body:`<p>As a Logistics Manager, your job is to ensure time cycles match up perfectly (KPK) and items are distributed without leftovers (FPB). <span class='id-lang'>Sebagai Manajer Logistik, tugasmu memastikan siklus waktu pas (KPK) dan barang terbagi tanpa sisa (FPB).</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20">
+           <p class="text-sm text-slate-300">You must analyze the problem, identify the keywords, and choose the right tool. <span class='id-lang'>Kamu harus analisis soal, temukan kata kunci, dan pilih alat yang tepat.</span></p>
+         </div>`},
+        // E7 mc
+        {type:"E",etype:"mc",
+         q:"A factory has 3 machines. Machine A beeps every 2 min, B every 3 min. What are you finding if you want to know when they beep together? <span class='id-lang'>Pabrik punya mesin A (tiap 2 min) dan B (tiap 3 min). Apa yang kamu cari jika ingin tahu kapan berbunyi bersama?</span>",
+         o:["FPB of 2 and 3 <span class='id-lang'>FPB dari 2 dan 3</span>","KPK of 2 and 3 <span class='id-lang'>KPK dari 2 dan 3</span>","Sum of 2 and 3 <span class='id-lang'>Jumlah 2 dan 3</span>","Difference of 2 and 3 <span class='id-lang'>Selisih 2 dan 3</span>"],
+         a:1,
+         h:"Beeping together = cycle = KPK. <span class='id-lang'>Berbunyi bersama = siklus = KPK.</span>"},
+        // E8 tf
+        {type:"E",etype:"tf",
+         q:"If a catering service wants to divide 100 satays into equal portions without leftovers, they need to find the KPK. <span class='id-lang'>Jika katering membagi 100 sate sama rata tanpa sisa, mereka cari KPK.</span>",
+         a:false,
+         h:"Dividing equally = FPB. <span class='id-lang'>Membagi sama rata = FPB.</span>"},
+        // E9 fb
+        {type:"E",etype:"fb",
+         q:"Rina studies every 4 days, Sari every 6 days. They study together today. To find when they meet again, calculate ____. (Type KPK or FPB) <span class='id-lang'>Rina les tiap 4 hari, Sari tiap 6 hari. Untuk cari kapan bertemu lagi, hitung ____.</span>",
+         a:"KPK",
+         h:"Meeting again = cycle = KPK. <span class='id-lang'>Bertemu lagi = siklus = KPK.</span>"},
+        // E10 sa
+        {type:"E",etype:"sa",
+         q:"Select all scenarios that require KPK: <span class='id-lang'>Pilih semua skenario yang membutuhkan KPK:</span>",
+         o:["Finding when two planets align. <span class='id-lang'>Mencari kapan dua planet sejajar.</span>","Dividing 45 chocolates equally. <span class='id-lang'>Membagi 45 cokelat sama rata.</span>","Two traffic lights turning red every 10s and 15s. <span class='id-lang'>Dua lampu merah tiap 10s dan 15s.</span>","Finding the longest piece to cut two ropes. <span class='id-lang'>Mencari potongan terpanjang untuk 2 tali.</span>"],
+         a:[0,2],
+         h:"KPK is for time/cycles. FPB is for cutting/distributing. <span class='id-lang'>KPK untuk waktu. FPB untuk memotong/membagi.</span>"}
+      ]
+    },
+    // ==================== SECTION 3 ====================
+    {
+      id:3, title:"Review Prior Knowledge <span class='id-lang'>Review Pengetahuan</span>", icon:"fa-brain", color:"#8b5cf6", branch:false,
+      lessons:[
+        // T1
+        {type:"T",title:"Prime Factorization <span class='id-lang'>Faktorisasi Prima</span>",
+         body:`<p>To become a logistics expert, our main tool is Prime Factorization using Factor Trees. <span class='id-lang'>Untuk jadi ahli logistik, alat utama kita adalah Faktorisasi Prima pakai Pohon Faktor.</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-violet-500/10 border border-violet-500/20">
+           <div class="text-violet-400 font-semibold mb-2">The Process <span class='id-lang'>Proses</span></div>
+           <p class="text-sm text-slate-300">Break down a number into the multiplication of prime numbers. For 36: \\( 36 = 2 \\times 2 \\times 3 \\times 3 \\). <span class='id-lang'>Pecah angka jadi perkalian bilangan prima. Untuk 36: \\( 36 = 2 \\times 2 \\times 3 \\times 3 \\).</span></p>
+         </div>`},
+        // E1 mc
+        {type:"E",etype:"mc",
+         q:"What is the prime factorization of 36? <span class='id-lang'>Apa faktorisasi prima dari 36?</span>",
+         o:["\\( 2 \\times 3^2 \\) <span class='id-lang'>\\( 2 \\times 3^2 \\)</span>","\\( 2^2 \\times 3^2 \\) <span class='id-lang'>\\( 2^2 \\times 3^2 \\)</span>","\\( 2^2 \\times 3 \\) <span class='id-lang'>\\( 2^2 \\times 3 \\)</span>","\\( 2 \\times 3 \\) <span class='id-lang'>\\( 2 \\times 3 \\)</span>"],
+         a:1,
+         h:"36 / 2 = 18, / 2 = 9, / 3 = 3, / 3 = 1. <span class='id-lang'>36 / 2 = 18, / 2 = 9, / 3 = 3, / 3 = 1.</span>"},
+        // E2 fb
+        {type:"E",etype:"fb",
+         q:"What is the prime factorization of 48? Type using * for multiplication and ^ for exponents (e.g., 2^3*3). <span class='id-lang'>Apa faktorisasi prima dari 48? Ketik pakai * dan ^.</span>",
+         a:"2^4*3",
+         h:"48 = 2x2x2x2x3. <span class='id-lang'>48 = 2x2x2x2x3.</span>"},
+        // E3 tf
+        {type:"E",etype:"tf",
+         q:"The number 1 is a prime number. <span class='id-lang'>Angka 1 adalah bilangan prima.</span>",
+         a:false,
+         h:"1 is neither prime nor composite. <span class='id-lang'>1 bukan prima maupun komposit.</span>"},
+        // T2
+        {type:"T",title:"Exponent Form <span class='id-lang'>Bentuk Eksponen</span>",
+         body:`<p>Once we have the prime factors, we can write them in exponent form to easily compare them for KPK and FPB. <span class='id-lang'>Setelah dapat faktor prima, kita tulis dalam bentuk eksponen untuk membandingkannya.</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-teal-500/10 border border-teal-500/20">
+           <div class="text-teal-400 font-semibold mb-2">Comparing 36 and 48 <span class='id-lang'>Membandingkan 36 dan 48</span></div>
+           <p class="text-sm text-slate-300">\\( 36 = 2^2 \\times 3^2 \\)</p>
+           <p class="text-sm text-slate-300">\\( 48 = 2^4 \\times 3^1 \\)</p>
+         </div>`},
+        // E4 mc
+        {type:"E",etype:"mc",
+         q:"In the expression \\( 2^4 \\), what does the number 4 represent? <span class='id-lang'>Pada \\( 2^4 \\), apa arti angka 4?</span>",
+         o:["Base <span class='id-lang'>Basis</span>","Exponent <span class='id-lang'>Eksponen</span>","Coefficient <span class='id-lang'>Koefisien</span>","Prime <span class='id-lang'>Prima</span>"],
+         a:1,
+         h:"It's the power. <span class='id-lang'>Itu pangkatnya.</span>"},
+        // E5 fb
+        {type:"E",etype:"fb",
+         q:"Looking at 36 and 48, what is the highest power of 2 between them? (Type just the exponent number) <span class='id-lang'>Melihat 36 dan 48, apa pangkat tertinggi dari 2? (Ketik angkanya saja)</span>",
+         a:"4",
+         h:"48 has \\( 2^4 \\), 36 has \\( 2^2 \\). Highest is 4. <span class='id-lang'>48 punya \\( 2^4 \\), 36 punya \\( 2^2 \\). Tertinggi 4.</span>"},
+        // E6 ord
+        {type:"E",etype:"ord",
+         q:"Order the steps to create a factor tree for 48: <span class='id-lang'>Urutkan langkah membuat pohon faktor untuk 48:</span>",
+         o:["Start with 48 <span class='id-lang'>Mulai dengan 48</span>","Divide by 2 to get 24 <span class='id-lang'>Bagi 2 dapat 24</span>","Divide by 2 to get 12 <span class='id-lang'>Bagi 2 dapat 12</span>","Continue until all are prime <span class='id-lang'>Lanjut sampai semua prima</span>"],
+         a:[0,1,2,3],
+         h:"Start -> Divide 2 -> Divide 2 -> Finish. <span class='id-lang'>Mulai -> Bagi 2 -> Bagi 2 -> Selesai.</span>"},
+        // T3
+        {type:"T",title:"Identifying Bases <span class='id-lang'>Identifikasi Basis</span>",
+         body:`<p>To find KPK, we take ALL bases with the HIGHEST exponent. To find FPB, we take SHARED bases with the LOWEST exponent. <span class='id-lang'>Untuk KPK, ambil SEMUA basis dengan pangkat TERTINGGI. Untuk FPB, ambil basis yang SAMA dengan pangkat TERENDAH.</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20">
+           <div class="text-amber-400 font-semibold mb-2">The Golden Rule <span class='id-lang'>Aturan Emas</span></div>
+           <p class="text-sm text-slate-300">KPK = Max of exponents. FPB = Min of exponents. <span class='id-lang'>KPK = Maks pangkat. FPB = Min pangkat.</span></p>
+         </div>`},
+        // E7 mc
+        {type:"E",etype:"mc",
+         q:"To find the FPB of 36 and 48, what bases do we look at? <span class='id-lang'>Untuk mencari FPB 36 dan 48, basis apa yang kita lihat?</span>",
+         o:["Only 2 <span class='id-lang'>Hanya 2</span>","Only 3 <span class='id-lang'>Hanya 3</span>","Shared bases (2 and 3) <span class='id-lang'>Basis yang sama (2 dan 3)</span>","All bases <span class='id-lang'>Semua basis</span>"],
+         a:2,
+         h:"FPB uses only shared bases. <span class='id-lang'>FPB pakai basis yang sama.</span>"},
+        // E8 tf
+        {type:"E",etype:"tf",
+         q:"KPK uses only the shared bases between two numbers. <span class='id-lang'>KPK hanya memakai basis yang sama dari dua angka.</span>",
+         a:false,
+         h:"KPK uses ALL bases. <span class='id-lang'>KPK memakai SEMUA basis.</span>"},
+        // E9 fb
+        {type:"E",etype:"fb",
+         q:"Between 36 and 48, what is the lowest power of 3? (Type just the exponent number) <span class='id-lang'>Antara 36 dan 48, apa pangkat terendah dari 3? (Ketik angkanya)</span>",
+         a:"1",
+         h:"48 has \\( 3^1 \\), 36 has \\( 3^2 \\). Lowest is 1. <span class='id-lang'>48 punya \\( 3^1 \\), 36 punya \\( 3^2 \\). Terendah 1.</span>"},
+        // E10 sa
+        {type:"E",etype:"sa",
+         q:"Select all true statements about KPK and FPB using prime factorization: <span class='id-lang'>Pilih pernyataan benar tentang KPK dan FPB:</span>",
+         o:["KPK takes the highest exponent <span class='id-lang'>KPK ambil pangkat tertinggi</span>","FPB takes the lowest exponent <span class='id-lang'>FPB ambil pangkat terendah</span>","FPB uses all bases <span class='id-lang'>FPB pakai semua basis</span>","KPK uses all bases <span class='id-lang'>KPK pakai semua basis</span>"],
+         a:[0,1,3],
+         h:"FPB only uses shared bases. <span class='id-lang'>FPB hanya pakai basis sama.</span>"}
+      ]
+    },
+    // ==================== SECTION 4 ====================
+    {
+      id:4, title:"Problem Introduction <span class='id-lang'>Pengenalan Masalah</span>", icon:"fa-circle-question", color:"#f59e0b", branch:false,
+      lessons:[
+        // T1
+        {type:"T",title:"Buses and Apples <span class='id-lang'>Bus dan Apel</span>",
+         body:`<p>Let's look at two different scenarios. Scenario A: Bus A departs every 15 mins, Bus B every 20 mins. When do they depart together again? Scenario B: You have 30 apples and 42 oranges, divided equally into bags. What's the max bags? <span class='id-lang'>Skenario A: Bus A tiap 15 min, Bus B tiap 20 min. Kapan berangkat bareng? Skenario B: 30 apel dan 42 jeruk dibagi sama rata. Maksimal berapa kantong?</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20">
+           <div class="text-amber-400 font-semibold mb-2">The Keywords <span class='id-lang'>Kata Kunci</span></div>
+           <p class="text-sm text-slate-300">• 'Together again' (bersamaan lagi) = KPK. <span class='id-lang'>Bersamaan lagi = KPK.</span></p>
+           <p class="text-sm text-slate-300">• 'Maximum equally' (paling banyak/sama rata) = FPB. <span class='id-lang'>Paling banyak/sama rata = FPB.</span></p>
+         </div>`},
+        // E1 mc
+        {type:"E",etype:"mc",
+         q:"Scenario A (Buses departing together) requires which calculation? <span class='id-lang'>Skenario A (Bus berangkat bareng) butuh perhitungan apa?</span>",
+         o:["KPK <span class='id-lang'>KPK</span>","FPB <span class='id-lang'>FPB</span>","Addition <span class='id-lang'>Penjumlahan</span>","Subtraction <span class='id-lang'>Pengurangan</span>"],
+         a:0,
+         h:"Cycles = KPK. <span class='id-lang'>Siklus = KPK.</span>"},
+        // E2 fb
+        {type:"E",etype:"fb",
+         q:"Scenario B (Dividing apples and oranges equally) requires which calculation? (Type KPK or FPB) <span class='id-lang'>Skenario B (Membagi apel dan jeruk sama rata) butuh apa?</span>",
+         a:"FPB",
+         h:"Distribution = FPB. <span class='id-lang'>Distribusi = FPB.</span>"},
+        // E3 tf
+        {type:"E",etype:"tf",
+         q:"To find out when two buses depart together, we need to find their Greatest Common Factor (FPB). <span class='id-lang'>Untuk mencari kapan dua bus berangkat bareng, kita cari FPB.</span>",
+         a:false,
+         h:"Buses = cycle = KPK. <span class='id-lang'>Bus = siklus = KPK.</span>"},
+        // T2
+        {type:"T",title:"Solving the Bus Schedule <span class='id-lang'>Menyelesaikan Jadwal Bus</span>",
+         body:`<p>Let's solve Scenario A: Bus A (15 min) and Bus B (20 min). We need KPK. <span class='id-lang'>Mari selesaikan Skenario A. Kita cari KPK.</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+           <div class="text-emerald-400 font-semibold mb-2">Prime Factorization <span class='id-lang'>Faktorisasi Prima</span></div>
+           <p class="text-sm text-slate-300">\\( 15 = 3 \\times 5 \\)</p>
+           <p class="text-sm text-slate-300">\\( 20 = 2^2 \\times 5 \\)</p>
+           <p class="text-sm text-slate-300 mt-2">KPK takes ALL bases with HIGHEST power: \\( 2^2 \\times 3 \\times 5 = 60 \\). They meet every 60 minutes. <span class='id-lang'>KPK ambil SEMUA basis pangkat TERTINGGI.</span></p>
+         </div>`},
+        // E4 mc
+        {type:"E",etype:"mc",
+         q:"What is the prime factorization of 15? <span class='id-lang'>Apa faktorisasi prima dari 15?</span>",
+         o:["\\( 2 \\times 5 \\) <span class='id-lang'>\\( 2 \\times 5 \\)</span>","\\( 3 \\times 5 \\) <span class='id-lang'>\\( 3 \\times 5 \\)</span>","\\( 3^2 \\times 5 \\) <span class='id-lang'>\\( 3^2 \\times 5 \\)</span>","\\( 15 \\) <span class='id-lang'>\\( 15 \\)</span>"],
+         a:1,
+         h:"15 / 3 = 5. <span class='id-lang'>15 / 3 = 5.</span>"},
+        // E5 fb
+        {type:"E",etype:"fb",
+         q:"Calculate KPK of 15 and 20. <span class='id-lang'>Hitung KPK dari 15 dan 20.</span>",
+         a:"60",
+         h:"\\( 2^2 \\times 3 \\times 5 = 60 \\). <span class='id-lang'>\\( 2^2 \\times 3 \\times 5 = 60 \\).</span>"},
+        // E6 ord
+        {type:"E",etype:"ord",
+         q:"Order the steps to find KPK of 15 and 20: <span class='id-lang'>Urutkan langkah mencari KPK 15 dan 20:</span>",
+         o:["Factorize 15 and 20","Identify all unique bases","Take the highest power of each base","Multiply them to get 60"],
+         a:[0,1,2,3],
+         h:"Factorize -> Bases -> Max Power -> Multiply. <span class='id-lang'>Faktorkan -> Basis -> Pangkat Max -> Kali.</span>"},
+        // T3
+        {type:"T",title:"Solving the Fruit Distribution <span class='id-lang'>Menyelesaikan Distribusi Buah</span>",
+         body:`<p>Let's solve Scenario B: 30 apples and 42 oranges. We need FPB to find max bags. <span class='id-lang'>Mari selesaikan Skenario B. Kita cari FPB.</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-violet-500/10 border border-violet-500/20">
+           <div class="text-violet-400 font-semibold mb-2">Prime Factorization <span class='id-lang'>Faktorisasi Prima</span></div>
+           <p class="text-sm text-slate-300">\\( 30 = 2 \\times 3 \\times 5 \\)</p>
+           <p class="text-sm text-slate-300">\\( 42 = 2 \\times 3 \\times 7 \\)</p>
+           <p class="text-sm text-slate-300 mt-2">FPB takes SHARED bases with LOWEST power: \\( 2 \\times 3 = 6 \\). Max bags = 6. <span class='id-lang'>FPB ambil basis SAMA pangkat TERENDAH. Maks kantong = 6.</span></p>
+         </div>`},
+        // E7 mc
+        {type:"E",etype:"mc",
+         q:"What are the shared prime bases between 30 and 42? <span class='id-lang'>Apa basis prima yang sama antara 30 dan 42?</span>",
+         o:["2 and 5 <span class='id-lang'>2 dan 5</span>","3 and 7 <span class='id-lang'>3 dan 7</span>","2 and 3 <span class='id-lang'>2 dan 3</span>","5 and 7 <span class='id-lang'>5 dan 7</span>"],
+         a:2,
+         h:"30 has 2,3,5. 42 has 2,3,7. Shared is 2,3. <span class='id-lang'>30 punya 2,3,5. 42 punya 2,3,7.</span>"},
+        // E8 fb
+        {type:"E",etype:"fb",
+         q:"Calculate FPB of 30 and 42. <span class='id-lang'>Hitung FPB dari 30 dan 42.</span>",
+         a:"6",
+         h:"\\( 2 \\times 3 = 6 \\). <span class='id-lang'>\\( 2 \\times 3 = 6 \\).</span>"},
+        // E9 tf
+        {type:"E",etype:"tf",
+         q:"The maximum number of equal bags for 30 apples and 42 oranges is 6. <span class='id-lang'>Jumlah kantong maksimal untuk 30 apel dan 42 jeruk adalah 6.</span>",
+         a:true,
+         h:"FPB(30,42) = 6. <span class='id-lang'>FPB(30,42) = 6.</span>"},
+        // E10 sa
+        {type:"E",etype:"sa",
+         q:"Select all true statements regarding Scenarios A and B: <span class='id-lang'>Pilih pernyataan benar tentang Skenario A dan B:</span>",
+         o:["Bus schedule uses KPK <span class='id-lang'>Jadwal bus pakai KPK</span>","Fruit distribution uses FPB <span class='id-lang'>Distribusi buah pakai FPB</span>","Buses meet every 60 mins <span class='id-lang'>Bus bertemu tiap 60 min</span>","Max bags of fruit is 12 <span class='id-lang'>Maks kantong buah 12</span>"],
+         a:[0,1,2],
+         h:"FPB is 6, not 12. <span class='id-lang'>FPB 6, bukan 12.</span>"}
+      ]
+    },
+    // ==================== SECTION 5 ====================
+    {
+      id:5, title:"Guided Practice <span class='id-lang'>Latihan Terbimbing</span>", icon:"fa-chalkboard-user", color:"#ec4899", branch:false,
+      lessons:[
+        // T1
+        {type:"T",title:"The Traffic Light Challenge <span class='id-lang'>Tantangan Lampu Lalu Lintas</span>",
+         body:`<p>Let's try a Hard level problem together. There are 3 lights: Red flashes every 8s, Yellow every 12s, Green every 15s. If they flash together at 08:00, when will they flash together again? <span class='id-lang'>Ada 3 lampu: Merah tiap 8 detik, Kuning 12 detik, Hijau 15 detik. Jika menyala bersama jam 08:00, jam berapa menyala bersama lagi?</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-pink-500/10 border border-pink-500/20">
+           <div class="text-pink-400 font-semibold mb-2">Step 1: Identify <span class='id-lang'>Langkah 1: Identifikasi</span></div>
+           <p class="text-sm text-slate-300">Since we want them to flash 'together again', we need KPK of 8, 12, and 15. <span class='id-lang'>Karena 'bersamaan lagi', kita cari KPK.</span></p>
+         </div>`},
+        // E1 mc
+        {type:"E",etype:"mc",
+         q:"What calculation is needed for the traffic light problem? <span class='id-lang'>Perhitungan apa yang dibutuhkan?</span>",
+         o:["KPK of 8, 12, 15 <span class='id-lang'>KPK dari 8, 12, 15</span>","FPB of 8, 12, 15 <span class='id-lang'>FPB dari 8, 12, 15</span>","Sum of 8, 12, 15 <span class='id-lang'>Jumlah 8, 12, 15</span>","Average of 8, 12, 15 <span class='id-lang'>Rata-rata 8, 12, 15</span>"],
+         a:0,
+         h:"Cycles = KPK. <span class='id-lang'>Siklus = KPK.</span>"},
+        // E2 fb
+        {type:"E",etype:"fb",
+         q:"What is the prime factorization of 12? (Type using ^ e.g., 2^2*3) <span class='id-lang'>Apa faktorisasi prima dari 12?</span>",
+         a:"2^2*3",
+         h:"12 / 2 = 6, / 2 = 3. <span class='id-lang'>12 / 2 = 6, / 2 = 3.</span>"},
+        // E3 tf
+        {type:"E",etype:"tf",
+         q:"To find KPK of three numbers, we only look at bases that are present in ALL THREE numbers. <span class='id-lang'>Untuk KPK 3 angka, kita hanya lihat basis yang ada di KETIGA angka.</span>",
+         a:false,
+         h:"KPK takes ALL bases present in ANY of the numbers. <span class='id-lang'>KPK ambil SEMUA basis di angka mana pun.</span>"},
+        // T2
+        {type:"T",title:"Calculating KPK for 3 Numbers <span class='id-lang'>Menghitung KPK 3 Angka</span>",
+         body:`<p>Let's factorize all three: <span class='id-lang'>Mari faktorkan ketiganya:</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+           <p class="text-sm text-slate-300">\\( 8 = 2^3 \\)</p>
+           <p class="text-sm text-slate-300">\\( 12 = 2^2 \\times 3 \\)</p>
+           <p class="text-sm text-slate-300">\\( 15 = 3 \\times 5 \\)</p>
+           <p class="text-sm text-slate-300 mt-2">Bases: 2, 3, 5. Max powers: \\( 2^3, 3^1, 5^1 \\). <span class='id-lang'>Basis: 2, 3, 5. Pangkat max: \\( 2^3, 3^1, 5^1 \\).</span></p>
+           <p class="text-sm text-emerald-400 mt-1">\\( KPK = 2^3 \\times 3 \\times 5 = 8 \\times 15 = 120 \\) seconds.</p>
+         </div>`},
+        // E4 mc
+        {type:"E",etype:"mc",
+         q:"What is the highest power of 2 among 8, 12, and 15? <span class='id-lang'>Apa pangkat tertinggi dari 2 di antara 8, 12, 15?</span>",
+         o:["\\( 2^1 \\) <span class='id-lang'>\\( 2^1 \\)</span>","\\( 2^2 \\) <span class='id-lang'>\\( 2^2 \\)</span>","\\( 2^3 \\) <span class='id-lang'>\\( 2^3 \\)</span>","\\( 2^4 \\) <span class='id-lang'>\\( 2^4 \\)</span>"],
+         a:2,
+         h:"8 has \\( 2^3 \\). <span class='id-lang'>8 punya \\( 2^3 \\).</span>"},
+        // E5 fb
+        {type:"E",etype:"fb",
+         q:"Calculate KPK of 8, 12, and 15. <span class='id-lang'>Hitung KPK 8, 12, 15.</span>",
+         a:"120",
+         h:"\\( 8 \\times 3 \\times 5 = 120 \\). <span class='id-lang'>\\( 8 \\times 3 \\times 5 = 120 \\).</span>"},
+        // E6 match
+        {type:"E",etype:"match",
+         q:"Match the number to its highest prime base: <span class='id-lang'>Cocokkan angka ke basis prima tertingginya:</span>",
+         left:["8","12","15"],
+         right:["Base 2 (\\( 2^3 \\))","Base 3 (\\( 3^1 \\))","Base 5 (\\( 5^1 \\))"],
+         a:[0,1,2],
+         h:"8 has 2, 12 has 3, 15 has 5. <span class='id-lang'>8 punya 2, 12 punya 3, 15 punya 5.</span>"},
+        // T3
+        {type:"T",title:"Time Conversion <span class='id-lang'>Konversi Waktu</span>",
+         body:`<p>The KPK is 120 seconds. But we need the time in minutes to add to 08:00. <span class='id-lang'>KPK 120 detik. Tapi kita butuh menit untuk ditambah ke jam 08:00.</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20">
+           <div class="text-amber-400 font-semibold mb-2">Converting Time <span class='id-lang'>Konversi Waktu</span></div>
+           <p class="text-sm text-slate-300">120 seconds = \\( 120 \\div 60 \\) = 2 minutes. <span class='id-lang'>120 detik = 2 menit.</span></p>
+           <p class="text-sm text-emerald-400 mt-1">08:00 + 2 mins = 08:02. They flash together again at 08:02. <span class='id-lang'>08:00 + 2 menit = 08:02.</span></p>
+         </div>`},
+        // E7 mc
+        {type:"E",etype:"mc",
+         q:"Convert 120 seconds to minutes. <span class='id-lang'>Ubah 120 detik ke menit.</span>",
+         o:["1 minute <span class='id-lang'>1 menit</span>","2 minutes <span class='id-lang'>2 menit</span>","3 minutes <span class='id-lang'>3 menit</span>","4 minutes <span class='id-lang'>4 menit</span>"],
+         a:1,
+         h:"Divide by 60. <span class='id-lang'>Bagi 60.</span>"},
+        // E8 tf
+        {type:"E",etype:"tf",
+         q:"If the lights flash together at 08:00, they will flash together again at 08:02. <span class='id-lang'>Jika menyala jam 08:00, menyala bersama lagi jam 08:02.</span>",
+         a:true,
+         h:"08:00 + 2 mins = 08:02. <span class='id-lang'>08:00 + 2 menit = 08:02.</span>"},
+        // E9 fb
+        {type:"E",etype:"fb",
+         q:"If KPK was 180 seconds, how many minutes is that? <span class='id-lang'>Jika KPK 180 detik, berapa menit?</span>",
+         a:"3",
+         h:"180 / 60 = 3. <span class='id-lang'>180 / 60 = 3.</span>"},
+        // E10 sa
+        {type:"E",etype:"sa",
+         q:"Select all true statements about the traffic light problem: <span class='id-lang'>Pilih pernyataan benar:</span>",
+         o:["We use KPK for time cycles <span class='id-lang'>KPK untuk siklus waktu</span>","KPK of 8, 12, 15 is 120 <span class='id-lang'>KPK 8, 12, 15 adalah 120</span>","120 seconds equals 2 minutes <span class='id-lang'>120 detik sama dengan 2 menit</span>","The lights meet at 08:12 <span class='id-lang'>Lampu bertemu jam 08:12</span>"],
+         a:[0,1,2],
+         h:"They meet at 08:02, not 08:12. <span class='id-lang'>Mereka bertemu jam 08:02.</span>"}
+      ]
+    },
+    // ==================== SECTION 6 ====================
+    {
+      id:6, title:"Independent Practice <span class='id-lang'>Latihan Mandiri</span>", icon:"fa-user-graduate", color:"#14b8a6", branch:false,
+      lessons:[
+        // T1
+        {type:"T",title:"Logistics Mission 1: Distribution <span class='id-lang'>Misi 1: Distribusi</span>",
+         body:`<p>Now it's your turn, Manager! Task 1: You have 72 books and 96 pencils. You want to divide them into identical packages. What is the maximum number of packages you can make? <span class='id-lang'>Tugas 1: Kamu punya 72 buku dan 96 pensil. Dibagi ke paket identik. Berapa maksimal jumlah paket?</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-teal-500/10 border border-teal-500/20">
+           <div class="text-teal-400 font-bold mb-2">Analyze <span class='id-lang'>Analisis</span></div>
+           <p class="text-sm text-slate-300">Keywords: 'divide equally', 'maximum'. This means FPB. <span class='id-lang'>Kata kunci: bagi sama rata, maksimal. Ini FPB.</span></p>
+         </div>`},
+        // E1 mc
+        {type:"E",etype:"mc",
+         q:"Should you use KPK or FPB for the books and pencils problem? <span class='id-lang'>Pakai KPK atau FPB untuk soal buku dan pensil?</span>",
+         o:["KPK <span class='id-lang'>KPK</span>","FPB <span class='id-lang'>FPB</span>"],
+         a:1,
+         h:"Max packages = FPB. <span class='id-lang'>Paket maksimal = FPB.</span>"},
+        // E2 fb
+        {type:"E",etype:"fb",
+         q:"What is the prime factorization of 72? (Use ^ and *) <span class='id-lang'>Apa faktorisasi prima 72?</span>",
+         a:"2^3*3^2",
+         h:"72 = 8 x 9 = 2^3 x 3^2. <span class='id-lang'>72 = 8 x 9.</span>"},
+        // E3 tf
+        {type:"E",etype:"tf",
+         q:"The prime factorization of 96 is \\( 2^5 \\times 3 \\). <span class='id-lang'>Faktorisasi prima 96 adalah \\( 2^5 \\times 3 \\).</span>",
+         a:true,
+         h:"96 / 2 = 48, / 2 = 24, / 2 = 12, / 2 = 6, / 2 = 3. So 2^5 * 3. <span class='id-lang'>96 dibagi 2 lima kali sisanya 3.</span>"},
+        // T2
+        {type:"T",title:"Solving the Books and Pencils <span class='id-lang'>Menyelesaikan Buku & Pensil</span>",
+         body:`<p>Let's calculate the FPB of 72 and 96. <span class='id-lang'>Mari hitung FPB 72 dan 96.</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20">
+           <p class="text-sm text-slate-300">\\( 72 = 2^3 \\times 3^2 \\)</p>
+           <p class="text-sm text-slate-300">\\( 96 = 2^5 \\times 3^1 \\)</p>
+           <p class="text-sm text-slate-300 mt-2">Shared bases: 2 and 3. Lowest powers: \\( 2^3 \\) and \\( 3^1 \\). <span class='id-lang'>Basis sama: 2, 3. Pangkat terendah: \\( 2^3, 3^1 \\).</span></p>
+           <p class="text-sm text-emerald-400 mt-1">\\( FPB = 2^3 \\times 3 = 8 \\times 3 = 24 \\). Max packages = 24. <span class='id-lang'>FPB = 24. Maksimal paket = 24.</span></p>
+         </div>`},
+        // E4 mc
+        {type:"E",etype:"mc",
+         q:"What are the lowest powers for the shared bases of 72 and 96? <span class='id-lang'>Berapa pangkat terendah untuk basis yang sama?</span>",
+         o:["\\( 2^2 \\) and \\( 3^1 \\) <span class='id-lang'>\\( 2^2 \\) dan \\( 3^1 \\)</span>","\\( 2^3 \\) and \\( 3^1 \\) <span class='id-lang'>\\( 2^3 \\) dan \\( 3^1 \\)</span>","\\( 2^5 \\) and \\( 3^2 \\) <span class='id-lang'>\\( 2^5 \\) dan \\( 3^2 \\)</span>","\\( 2^1 \\) and \\( 3^1 \\) <span class='id-lang'>\\( 2^1 \\) dan \\( 3^1 \\)</span>"],
+         a:1,
+         h:"72 has 2^3, 96 has 2^5. Min is 2^3. Both have 3^1. <span class='id-lang'>72 punya 2^3, 96 punya 2^5. Min 2^3.</span>"},
+        // E5 fb
+        {type:"E",etype:"fb",
+         q:"Calculate FPB of 72 and 96. <span class='id-lang'>Hitung FPB 72 dan 96.</span>",
+         a:"24",
+         h:"\\( 8 \\times 3 = 24 \\). <span class='id-lang'>\\( 8 \\times 3 = 24 \\).</span>"},
+        // E6 ord
+        {type:"E",etype:"ord",
+         q:"Order the steps to solve the distribution problem: <span class='id-lang'>Urutkan langkah menyelesaikan soal distribusi:</span>",
+         o:["Identify it as FPB","Factorize 72 and 96","Find shared bases with lowest powers","Multiply to get max packages"],
+         a:[0,1,2,3],
+         h:"Identify -> Factorize -> Min Powers -> Multiply. <span class='id-lang'>Identifikasi -> Faktorkan -> Min -> Kali.</span>"},
+        // T3
+        {type:"T",title:"Logistics Mission 2: Machine Cycles <span class='id-lang'>Misi 2: Siklus Mesin</span>",
+         body:`<p>Task 2: Three machine alarms ring every 18, 24, and 36 minutes. If they ring together now, how long until they ring together again? <span class='id-lang'>Tugas 2: Tiga alarm berbunyi tiap 18, 24, 36 menit. Jika berbunyi bersama sekarang, berapa lama lagi berbunyi bersama?</span></p>
+         <div class="mt-4 p-4 rounded-xl bg-violet-500/10 border border-violet-500/20">
+           <div class="text-violet-400 font-semibold mb-2">Analyze <span class='id-lang'>Analisis</span></div>
+           <p class="text-sm text-slate-300">Keywords: 'ring together again'. This means KPK. <span class='id-lang'>Kata kunci: bersama lagi. Ini KPK.</span></p>
+         </div>`},
+        // E7 mc
+        {type:"E",etype:"mc",
+         q:"Should you use KPK or FPB for the machine alarms? <span class='id-lang'>Pakai KPK atau FPB untuk alarm mesin?</span>",
+         o:["KPK <span class='id-lang'>KPK</span>","FPB <span class='id-lang'>FPB</span>"],
+         a:0,
+         h:"Cycles = KPK. <span class='id-lang'>Siklus = KPK.</span>"},
+        // E8 fb
+        {type:"E",etype:"fb",
+         q:"What is the prime factorization of 18? (Use ^ and *) <span class='id-lang'>Apa faktorisasi prima 18?</span>",
+         a:"2*3^2",
+         h:"18 = 2 x 9 = 2 x 3^2. <span class='id-lang'>18 = 2 x 9.</span>"},
+        // E9 tf
+        {type:"E",etype:"tf",
+         q:"The prime factorization of 36 is \\( 2^2 \\times 3^2 \\). <span class='id-lang'>Faktorisasi prima 36 adalah \\( 2^2 \\times 3^2 \\).</span>",
+         a:true,
+         h:"36 = 4 x 9 = 2^2 x 3^2. <span class='id-lang'>36 = 4 x 9.</span>"},
+        // E10 sa
+        {type:"E",etype:"sa",
+         q:"Select all true statements about solving Mission 2: <span class='id-lang'>Pilih pernyataan benar untuk Misi 2:</span>",
+         o:["We need to find KPK of 18, 24, 36 <span class='id-lang'>Cari KPK 18, 24, 36</span>","\\( 24 = 2^3 \\times 3 \\) <span class='id-lang'>\\( 24 = 2^3 \\times 3 \\)</span>","Highest power of 2 is \\( 2^3 \\) <span class='id-lang'>Pangkat tertinggi 2 adalah \\( 2^3 \\)</span>","Highest power of 3 is \\( 3^1 \\) <span class='id-lang'>Pangkat tertinggi 3 adalah \\( 3^1 \\)</span>"],
+         a:[0,1,2],
+         h:"36 has 3^2, so highest power of 3 is 3^2. <span class='id-lang'>36 punya 3^2, jadi tertinggi 3^2.</span>"}
+      ]
+    },
+    // ==================== SECTION 7A ====================
+    {
+      id:"7A", title:"Assessment A <span class='id-lang'>Asesmen A</span>", icon:"fa-clipboard-check", color:"#3b82f6", branch:true,
+      lessons:[
+        {type:"E",etype:"mc",
+         q:"What is the KPK of 4 and 6? <span class='id-lang'>Berapa KPK dari 4 dan 6?</span>",
+         o:["10 <span class='id-lang'>10</span>","12 <span class='id-lang'>12</span>","24 <span class='id-lang'>24</span>","2 <span class='id-lang'>2</span>"],
+         a:1,
+         h:"Lowest common multiple. <span class='id-lang'>Kelipatan persekutuan terkecil.</span>"},
+        {type:"E",etype:"fb",
+         q:"What is the FPB of 15 and 20? <span class='id-lang'>Berapa FPB dari 15 dan 20?</span>",
+         a:"5",
+         h:"Greatest common factor. <span class='id-lang'>Faktor persekutuan terbesar.</span>"},
+        {type:"E",etype:"tf",
+         q:"KPK is found by taking the lowest power of all shared bases. <span class='id-lang'>KPK dicari dengan mengambil pangkat terendah dari basis yang sama.</span>",
+         a:false,
+         h:"That is FPB. KPK takes highest power of ALL bases. <span class='id-lang'>Itu FPB. KPK ambil pangkat tertinggi SEMUA basis.</span>"},
+        {type:"E",etype:"mc",
+         q:"Which keyword indicates we should use FPB? <span class='id-lang'>Kata kunci mana yang menunjukkan pakai FPB?</span>",
+         o:["Together again <span class='id-lang'>Bersamaan lagi</span>","Every <span class='id-lang'>Setiap</span>","Maximum equally <span class='id-lang'>Maksimal sama rata</span>","Cycle <span class='id-lang'>Siklus</span>"],
+         a:2,
+         h:"Distribution uses FPB. <span class='id-lang'>Distribusi pakai FPB.</span>"},
+        {type:"E",etype:"fb",
+         q:"What is the prime factorization of 24? (Use ^ and *) <span class='id-lang'>Apa faktorisasi prima 24?</span>",
+         a:"2^3*3",
+         h:"24 = 8 x 3. <span class='id-lang'>24 = 8 x 3.</span>"},
+        {type:"E",etype:"match",
+         q:"Match the problem to the concept: <span class='id-lang'>Cocokkan soal ke konsep:</span>",
+         left:["Bus A (10m), Bus B (15m). Meet when?","45 candies, 75 chocolates. Max bags?","Alarm every 4h, 6h. Meet again?"],
+         right:["KPK","FPB","KPK"],
+         a:[0,1,2],
+         h:"Time = KPK. Distribution = FPB. <span class='id-lang'>Waktu = KPK. Bagi = FPB.</span>"},
+        {type:"E",etype:"sa",
+         q:"Select all true statements: <span class='id-lang'>Pilih pernyataan benar:</span>",
+         o:["FPB uses shared bases <span class='id-lang'>FPB pakai basis yang sama</span>","KPK uses all bases <span class='id-lang'>KPK pakai semua basis</span>","FPB takes highest power <span class='id-lang'>FPB ambil pangkat tertinggi</span>","KPK takes highest power <span class='id-lang'>KPK ambil pangkat tertinggi</span>"],
+         a:[0,1,3],
+         h:"FPB takes lowest power. <span class='id-lang'>FPB ambil pangkat terendah.</span>"},
+        {type:"E",etype:"fb",
+         q:"Bus A departs every 10 mins, Bus B every 15 mins. When do they meet again? <span class='id-lang'>Bus A tiap 10 min, B tiap 15 min. Kapan bertemu lagi?</span>",
+         a:"30",
+         h:"KPK(10, 15). <span class='id-lang'>KPK(10, 15).</span>"},
+        {type:"E",etype:"tf",
+         q:"240 seconds is equal to 4 minutes. <span class='id-lang'>240 detik sama dengan 4 menit.</span>",
+         a:true,
+         h:"240 / 60 = 4. <span class='id-lang'>240 / 60 = 4.</span>"},
+        {type:"E",etype:"mc",
+         q:"What is the FPB of 30 and 42? <span class='id-lang'>Berapa FPB 30 dan 42?</span>",
+         o:["6 <span class='id-lang'>6</span>","12 <span class='id-lang'>12</span>","2 <span class='id-lang'>2</span>","210 <span class='id-lang'>210</span>"],
+         a:0,
+         h:"2 x 3 = 6. <span class='id-lang'>2 x 3 = 6.</span>"}
+      ]
+    },
+    // ==================== SECTION 7B ====================
+    {
+      id:"7B", title:"Assessment B <span class='id-lang'>Asesmen B</span>", icon:"fa-clipboard-check", color:"#ef4444", branch:true,
+      lessons:[
+        {type:"E",etype:"fb",
+         q:"Calculate KPK of 18, 24, and 36. <span class='id-lang'>Hitung KPK 18, 24, 36.</span>",
+         a:"72",
+         h:"\\( 2^3 \\times 3^2 = 72 \\). <span class='id-lang'>\\( 2^3 \\times 3^2 = 72 \\).</span>"},
+        {type:"E",etype:"fb",
+         q:"Calculate FPB of 72 and 96. <span class='id-lang'>Hitung FPB 72 dan 96.</span>",
+         a:"24",
+         h:"\\( 2^3 \\times 3 = 24 \\). <span class='id-lang'>\\( 2^3 \\times 3 = 24 \\).</span>"},
+        {type:"E",etype:"mc",
+         q:"For 72 and 96, what is the lowest power of 2? <span class='id-lang'>Untuk 72 dan 96, apa pangkat terendah dari 2?</span>",
+         o:["\\( 2^1 \\) <span class='id-lang'>\\( 2^1 \\)</span>","\\( 2^3 \\) <span class='id-lang'>\\( 2^3 \\)</span>","\\( 2^5 \\) <span class='id-lang'>\\( 2^5 \\)</span>","\\( 2^4 \\) <span class='id-lang'>\\( 2^4 \\)</span>"],
+         a:1,
+         h:"72 has \\( 2^3 \\), 96 has \\( 2^5 \\). Min is 3. <span class='id-lang'>72 punya 2^3, 96 punya 2^5. Min 3.</span>"},
+        {type:"E",etype:"sa",
+         q:"Select all steps to find FPB: <span class='id-lang'>Pilih langkah mencari FPB:</span>",
+         o:["Factorize numbers <span class='id-lang'>Faktorkan angka</span>","Find shared bases <span class='id-lang'>Cari basis sama</span>","Take highest powers <span class='id-lang'>Ambil pangkat tertinggi</span>","Multiply lowest powers <span class='id-lang'>Kali pangkat terendah</span>"],
+         a:[0,1,3],
+         h:"FPB = shared bases, lowest powers. <span class='id-lang'>FPB = basis sama, pangkat terendah.</span>"},
+        {type:"E",etype:"tf",
+         q:"120 seconds equals 2 minutes. <span class='id-lang'>120 detik sama dengan 2 menit.</span>",
+         a:true,
+         h:"120 / 60 = 2. <span class='id-lang'>120 / 60 = 2.</span>"},
+        {type:"E",etype:"mc",
+         q:"Two buses depart every 15 and 20 mins. What is the KPK? <span class='id-lang'>Dua bus tiap 15 dan 20 min. Berapa KPK-nya?</span>",
+         o:["5 <span class='id-lang'>5</span>","35 <span class='id-lang'>35</span>","60 <span class='id-lang'>60</span>","300 <span class='id-lang'>300</span>"],
+         a:2,
+         h:"\\( 2^2 \\times 3 \\times 5 = 60 \\). <span class='id-lang'>\\( 2^2 \\times 3 \\times 5 = 60 \\).</span>"},
+        {type:"E",etype:"match",
+         q:"Match the number to its factorization: <span class='id-lang'>Cocokkan angka ke faktornya:</span>",
+         left:["24","36","15"],
+         right:["\\( 2^3 \\times 3 \\)","\\( 2^2 \\times 3^2 \\)","\\( 3 \\times 5 \\)"],
+         a:[0,1,2],
+         h:"Break them down to primes. <span class='id-lang'>Pecah jadi prima.</span>"},
+        {type:"E",etype:"fb",
+         q:"Calculate KPK of 8, 12, and 15. <span class='id-lang'>Hitung KPK 8, 12, 15.</span>",
+         a:"120",
+         h:"\\( 2^3 \\times 3 \\times 5 = 120 \\). <span class='id-lang'>\\( 2^3 \\times 3 \\times 5 = 120 \\).</span>"},
+        {type:"E",etype:"ord",
+         q:"Order the steps to solve a KPK word problem: <span class='id-lang'>Urutkan langkah soal KPK:</span>",
+         o:["Identify keywords for KPK","Factorize the numbers","Take highest power of all bases","Convert time if necessary"],
+         a:[0,1,2,3],
+         h:"Identify -> Factorize -> Max -> Convert. <span class='id-lang'>Identifikasi -> Faktorkan -> Max -> Konversi.</span>"},
+        {type:"E",etype:"mc",
+         q:"What is the max number of equal bags for 45 and 75 items? <span class='id-lang'>Maks kantong untuk 45 dan 75 barang?</span>",
+         o:["5 <span class='id-lang'>5</span>","15 <span class='id-lang'>15</span>","25 <span class='id-lang'>25</span>","225 <span class='id-lang'>225</span>"],
+         a:1,
+         h:"FPB(45, 75). <span class='id-lang'>FPB(45, 75).</span>"}
+      ]
+    },
+    // ==================== SECTION 7C ====================
+    {
+      id:"7C", title:"Assessment C <span class='id-lang'>Asesmen C</span>", icon:"fa-clipboard-check", color:"#a855f7", branch:true,
+      lessons:[
+        {type:"E",etype:"fb",
+         q:"3 alarms ring every 15, 20, 45 mins. They ring at 07:15. What time do they ring together for the 3rd time? (Format HH:MM) <span class='id-lang'>3 alarm tiap 15, 20, 45 min. Berbunyi jam 07:15. Jam berapa bunyi bersama untuk ke-3 kalinya?</span>",
+         a:"13:15",
+         h:"KPK=180 min (3h). 1st: 07:15, 2nd: 10:15, 3rd: 13:15. <span class='id-lang'>KPK=180 menit. Ke-3: 13:15.</span>"},
+        {type:"E",etype:"fb",
+         q:"120kg rice, 144kg sugar, 180kg flour. Max packages? <span class='id-lang'>Max paket untuk 120, 144, 180?</span>",
+         a:"12",
+         h:"FPB(120, 144, 180) = 12. <span class='id-lang'>FPB = 12.</span>"},
+        {type:"E",etype:"mc",
+         q:"If max packages is 12, how much rice per package? <span class='id-lang'>Jika paket maks 12, berapa beras per paket?</span>",
+         o:["10 kg <span class='id-lang'>10 kg</span>","12 kg <span class='id-lang'>12 kg</span>","15 kg <span class='id-lang'>15 kg</span>","20 kg <span class='id-lang'>20 kg</span>"],
+         a:0,
+         h:"120 / 12 = 10. <span class='id-lang'>120 / 12 = 10.</span>"},
+        {type:"E",etype:"sa",
+         q:"Select true statements for 120, 144, 180: <span class='id-lang'>Pilih pernyataan benar:</span>",
+         o:["FPB is 12 <span class='id-lang'>FPB 12</span>","Sugar per package is 12kg <span class='id-lang'>Gula per paket 12kg</span>","Rice per package is 15kg <span class='id-lang'>Beras per paket 15kg</span>","Flour per package is 15kg <span class='id-lang'>Tepung per paket 15kg</span>"],
+         a:[0,1,3],
+         h:"144/12=12, 180/12=15, 120/12=10. <span class='id-lang'>144/12=12, 180/12=15, 120/12=10.</span>"},
+        {type:"E",etype:"fb",
+         q:"Smallest number divisible by 12, 15, 20? <span class='id-lang'>Angka terkecil habis dibagi 12, 15, 20?</span>",
+         a:"60",
+         h:"KPK(12, 15, 20). <span class='id-lang'>KPK(12, 15, 20).</span>"},
+        {type:"E",etype:"mc",
+         q:"What is KPK of 12, 15, 20? <span class='id-lang'>KPK 12, 15, 20?</span>",
+         o:["60 <span class='id-lang'>60</span>","120 <span class='id-lang'>120</span>","30 <span class='id-lang'>30</span>","5 <span class='id-lang'>5</span>"],
+         a:0,
+         h:"\\( 2^2 \\times 3 \\times 5 = 60 \\). <span class='id-lang'>\\( 2^2 \\times 3 \\times 5 = 60 \\).</span>"},
+        {type:"E",etype:"tf",
+         q:"If FPB is 12 and KPK is 72, and one number is 24, the other is 48. <span class='id-lang'>Jika FPB 12, KPK 72, salah satu 24, yang lain 48.</span>",
+         a:false,
+         h:"Other is 36. (12x72)/24 = 36. <span class='id-lang'>Lainnya 36. (12x72)/24 = 36.</span>"},
+        {type:"E",etype:"fb",
+         q:"If FPB=12, KPK=72, one number is 24, what is the other? <span class='id-lang'>Jika FPB=12, KPK=72, satu angka 24, angka lain?</span>",
+         a:"36",
+         h:"(FPB * KPK) / Num1 = Num2. <span class='id-lang'>(12 * 72) / 24 = 36.</span>"},
+        {type:"E",etype:"ord",
+         q:"Order steps to find 3rd meeting time: <span class='id-lang'>Urutkan langkah cari temu ke-3:</span>",
+         o:["Find KPK of intervals","Convert KPK to hours","Add to initial time for 2nd meeting","Add again for 3rd meeting"],
+         a:[0,1,2,3],
+         h:"KPK -> Hours -> 2nd -> 3rd. <span class='id-lang'>KPK -> Jam -> Ke-2 -> Ke-3.</span>"},
+        {type:"E",etype:"match",
+         q:"Match concept to scenario: <span class='id-lang'>Cocokkan konsep ke skenario:</span>",
+         left:["Smallest divisible number","Maximum equal packages","Meeting again cycles"],
+         right:["KPK","FPB","KPK"],
+         a:[0,1,2],
+         h:"Smallest divisible = KPK. <span class='id-lang'>Habis dibagi terkecil = KPK.</span>"}
+      ]
+    },
+    // ==================== SECTION 7D ====================
+    {
+      id:"7D", title:"Assessment D <span class='id-lang'>Asesmen D</span>", icon:"fa-clipboard-check", color:"#06b6d4", branch:true,
+      lessons:[
+        {type:"E",etype:"fb",
+         q:"Ribbons 150cm and 225cm. Cut into equal longest pieces. Length of one piece? <span class='id-lang'>Pita 150cm dan 225cm. Potong terpanjang sama. Panjang satu potong?</span>",
+         a:"75",
+         h:"FPB(150, 225). <span class='id-lang'>FPB(150, 225).</span>"},
+        {type:"E",etype:"fb",
+         q:"Ribbons 150cm and 225cm cut into 75cm pieces. Total pieces? <span class='id-lang'>Total potongan pita?</span>",
+         a:"5",
+         h:"(150/75) + (225/75) = 2 + 3 = 5. <span class='id-lang'>2 + 3 = 5.</span>"},
+        {type:"E",etype:"tf",
+         q:"FPB is always smaller than or equal to the smallest number. <span class='id-lang'>FPB selalu lebih kecil atau sama dengan angka terkecil.</span>",
+         a:true,
+         h:"True, it's a common factor. <span class='id-lang'>Benar, itu faktor persekutuan.</span>"},
+        {type:"E",etype:"mc",
+         q:"KPK is always larger than or equal to the largest number. <span class='id-lang'>KPK selalu lebih besar atau sama dengan angka terbesar.</span>",
+         o:["True <span class='id-lang'>Benar</span>","False <span class='id-lang'>Salah</span>"],
+         a:0,
+         h:"True, it's a common multiple. <span class='id-lang'>Benar, itu kelipatan persekutuan.</span>"},
+        {type:"E",etype:"sa",
+         q:"Select true statements for ribbons (150, 225): <span class='id-lang'>Pilih pernyataan benar untuk pita:</span>",
+         o:["FPB is 75 <span class='id-lang'>FPB 75</span>","Longest piece is 75cm <span class='id-lang'>Potongan terpanjang 75cm</span>","Total pieces is 5 <span class='id-lang'>Total 5 potong</span>","Total pieces is 3 <span class='id-lang'>Total 3 potong</span>"],
+         a:[0,1,2],
+         h:"150/75=2, 225/75=3. Total 5. <span class='id-lang'>Total 5.</span>"},
+        {type:"E",etype:"fb",
+         q:"Rina (4 days), Sari (6 days). When do they meet again? <span class='id-lang'>Rina 4 hari, Sari 6 hari. Kapan bertemu lagi?</span>",
+         a:"12",
+         h:"KPK(4, 6). <span class='id-lang'>KPK(4, 6).</span>"},
+        {type:"E",etype:"mc",
+         q:"Rina and Sari meeting every 12 days is an example of: <span class='id-lang'>Rina dan Sari bertemu tiap 12 hari adalah contoh:</span>",
+         o:["FPB","KPK","Average","Sum"],
+         a:1,
+         h:"Cycles = KPK. <span class='id-lang'>Siklus = KPK.</span>"},
+        {type:"E",etype:"match",
+         q:"Match number to factorization: <span class='id-lang'>Cocokkan angka ke faktor:</span>",
+         left:["150","225"],
+         right:["\\( 2 \\times 3 \\times 5^2 \\)","\\( 3^2 \\times 5^2 \\)"],
+         a:[0,1],
+         h:"150 has a 2. 225 does not. <span class='id-lang'>150 punya 2. 225 tidak.</span>"},
+        {type:"E",etype:"ord",
+         q:"Order steps to cut ribbons equally: <span class='id-lang'>Urutkan langkah memotong pita:</span>",
+         o:["Identify it as FPB","Factorize lengths","Find lowest power of shared bases","Cut into that length"],
+         a:[0,1,2,3],
+         h:"Identify -> Factorize -> Lowest -> Cut. <span class='id-lang'>Identifikasi -> Faktorkan -> Terendah -> Potong.</span>"},
+        {type:"E",etype:"fb",
+         q:"Find smallest 'x' so KPK(x, 15) = 60. <span class='id-lang'>Cari 'x' terkecil agar KPK(x, 15) = 60.</span>",
+         a:"4",
+         h:"60 = 2^2 x 3 x 5. 15 = 3 x 5. x must have 2^2. Smallest is 4. <span class='id-lang'>x harus punya 2^2. Terkecil 4.</span>"}
+      ]
+    },
+    // ==================== SECTION 7E ====================
+    {
+      id:"7E", title:"Assessment E <span class='id-lang'>Asesmen E</span>", icon:"fa-clipboard-check", color:"#f97316", branch:true,
+      lessons:[
+        {type:"E",etype:"fb",
+         q:"Find smallest 'x' so KPK(x, 15) = 60. <span class='id-lang'>Cari 'x' terkecil agar KPK(x, 15) = 60.</span>",
+         a:"4",
+         h:"x must provide the missing 2^2. <span class='id-lang'>x harus sediakan 2^2 yang hilang.</span>"},
+        {type:"E",etype:"mc",
+         q:"Smallest number divisible by 12, 15, 20 requires: <span class='id-lang'>Angka terkecil habis dibagi 12, 15, 20 butuh:</span>",
+         o:["FPB","KPK","Subtraction","Division"],
+         a:1,
+         h:"Smallest divisible = KPK. <span class='id-lang'>Habis dibagi terkecil = KPK.</span>"},
+        {type:"E",etype:"tf",
+         q:"Finding the longest equal cut uses KPK. <span class='id-lang'>Mencari potongan sama terpanjang memakai KPK.</span>",
+         a:false,
+         h:"It uses FPB. <span class='id-lang'>Itu pakai FPB.</span>"},
+        {type:"E",etype:"sa",
+         q:"Select all keywords for FPB: <span class='id-lang'>Pilih kata kunci untuk FPB:</span>",
+         o:["Maximum <span class='id-lang'>Maksimal</span>","Equally <span class='id-lang'>Sama rata</span>","Together again <span class='id-lang'>Bersamaan lagi</span>","Distributed <span class='id-lang'>Dibagi</span>"],
+         a:[0,1,3],
+         h:"Together again is KPK. <span class='id-lang'>Bersamaan lagi itu KPK.</span>"},
+        {type:"E",etype:"fb",
+         q:"45 chocolates, 75 candies. Max bags? <span class='id-lang'>Maks kantong?</span>",
+         a:"15",
+         h:"FPB(45, 75). <span class='id-lang'>FPB(45, 75).</span>"},
+        {type:"E",etype:"mc",
+         q:"If 15 bags, how many chocolates per bag? <span class='id-lang'>Jika 15 kantong, berapa cokelat per kantong?</span>",
+         o:["3 <span class='id-lang'>3</span>","5 <span class='id-lang'>5</span>","15 <span class='id-lang'>15</span>","45 <span class='id-lang'>45</span>"],
+         a:0,
+         h:"45 / 15 = 3. <span class='id-lang'>45 / 15 = 3.</span>"},
+        {type:"E",etype:"match",
+         q:"Match rule to concept: <span class='id-lang'>Cocokkan aturan ke konsep:</span>",
+         left:["All bases, highest power","Shared bases, lowest power","Cycles and schedules","Max distribution"],
+         right:["KPK","FPB","KPK","FPB"],
+         a:[0,1,2,3],
+         h:"Memorize the golden rules. <span class='id-lang'>Hafalkan aturan emas.</span>"},
+        {type:"E",etype:"fb",
+         q:"Calculate KPK of 24, 36, 60. <span class='id-lang'>Hitung KPK 24, 36, 60.</span>",
+         a:"360",
+         h:"\\( 2^3 \\times 3^2 \\times 5 = 360 \\). <span class='id-lang'>\\( 2^3 \\times 3^2 \\times 5 = 360 \\).</span>"},
+        {type:"E",etype:"fb",
+         q:"Calculate FPB of 24, 36, 60. <span class='id-lang'>Hitung FPB 24, 36, 60.</span>",
+         a:"12",
+         h:"\\( 2^2 \\times 3 = 12 \\). <span class='id-lang'>\\( 2^2 \\times 3 = 12 \\).</span>"},
+        {type:"E",etype:"ord",
+         q:"Order steps to find smallest divisible number: <span class='id-lang'>Urutkan langkah cari habis dibagi terkecil:</span>",
+         o:["Identify numbers","Factorize all numbers","Take highest power of all bases","Multiply to get result"],
+         a:[0,1,2,3],
+         h:"Identify -> Factorize -> Max -> Multiply. <span class='id-lang'>Identifikasi -> Faktorkan -> Max -> Kali.</span>"}
+      ]
+    },
+    // ==================== SECTION 8 ====================
+    {
+      id:8, title:"Consolidation & Reflection <span class='id-lang'>Konsolidasi & Refleksi</span>", icon:"fa-star", color:"#fbbf24", branch:false,
+      lessons:[
+        {type:"T",title:"Summary & Next Steps <span class='id-lang'>Ringkasan & Langkah Berikutnya</span>",
+         body:`<p>Brilliant work today! You've successfully mastered the logistics of time cycles and item distribution! <span class='id-lang'>Kerja luar biasa hari ini! Kamu berhasil menguasai logistik siklus waktu dan distribusi barang!</span></p>
+         <div class="mt-4 p-5 rounded-xl bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/20">
+           <div class="text-emerald-400 font-bold mb-3 text-lg"><i class="fa-solid fa-medal mr-2"></i>Key Takeaways <span class='id-lang'>Poin Kunci</span></div>
+           <ul class="space-y-2 text-sm text-slate-300 list-disc list-inside">
+             <li><strong>KPK (Least Common Multiple):</strong> Used for cycles, schedules, and 'meeting again'. Takes ALL bases with HIGHEST power. <span class='id-lang'><strong>KPK:</strong> Untuk siklus, jadwal, temu lagi. Ambil SEMUA basis pangkat TERTINGGI.</span></li>
+             <li><strong>FPB (Greatest Common Factor):</strong> Used for maximum equal distribution and cutting. Takes SHARED bases with LOWEST power. <span class='id-lang'><strong>FPB:</strong> Untuk distribusi maksimal sama rata dan memotong. Ambil basis SAMA pangkat TERENDAH.</span></li>
+           </ul>
+         </div>
+         <p class="mt-4">Remember to complete your customized homework set on the portal! <span class='id-lang'>Ingat untuk menyelesaikan PR kustomismu di portal!</span></p>
+         <div class="mt-6 p-5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-center">
+           <div class="text-amber-400 font-bold text-xl mb-2">Your Next Mission <span class='id-lang'>Misi Berikutnya</span></div>
+           <p class="text-sm text-slate-300 mb-4">Ready for more challenges? Continue your learning journey on the Algonova platform! <span class='id-lang'>Siap untuk tantangan lainnya? Lanjutkan perjalanan belajarmu di platform Algonova!</span></p>
+           <a href="https://learn.algonova.id/login" target="_blank" class="btn-primary inline-flex">
+             <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Algonova <span class="id-lang" style="color:rgba(11,17,33,0.7); display:inline;">Buka Algonova</span>
+           </a>
+         </div>`}
+      ]
+    }
+  ]
+};
+
+// ============================================================
+// STATE APLIKASI
+// ============================================================
+let state = {
+  xp: 0,
+  streak: 0,
+  completed: {},   // { "1-0": true, "1-1": true, ... }  mapIndex-lessonIndex
+  currentView: 'map',
+  currentMap: null,  // index di COURSE.maps
+  currentLesson: null, // index lesson dalam map
+  exerciseState: {},  // state untuk exercise interaktif
+};
+
+// Load dari localStorage
+function loadState() {
+  try {
+    const saved = localStorage.getItem('logicode_state');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      state.xp = parsed.xp || 0;
+      state.streak = parsed.streak || 0;
+      state.completed = parsed.completed || {};
+	  state.mapAnswers = parsed.mapAnswers || {};
+    }
+  } catch(e) {}
+}
+function saveState() {
+  try {
+    localStorage.setItem('logicode_state', JSON.stringify({
+      xp: state.xp, streak: state.streak, completed: state.completed, mapAnswers: state.mapAnswers
+    }));
+  } catch(e) {}
+}
+
+function resetProgress() {
+  if (confirm('Apakah kamu yakin ingin menghapus semua progress? Tindakan ini tidak bisa dibatalkan.')) {
+    // Hapus data dari localStorage
+    localStorage.removeItem('logicode_state');
+    
+    // Reset state di memori
+    state.xp = 0;
+    state.streak = 0;
+    state.completed = {};
+    
+    // Render ulang tampilan peta
+    renderMap();
+    
+    // Tampilkan notifikasi
+    showToast('Progress berhasil direset!', 'info');
+  }
+}
+
+// ============================================================
+// HELPER: Cek apakah peta terbuka
+// ============================================================
+function isMapUnlocked(mapIdx) {
+  return true; // Semua peta selalu terbuka
+}
+
+function isMapCompleted(mapIdx) {
+  const map = COURSE.maps[mapIdx];
+  if (!map) return false;
+  return map.lessons.every((_, li) => state.completed[`${mapIdx}-${li}`]);
+}
+
+function isLessonUnlocked(mapIdx, lessonIdx) {
+  return true; // Semua lesson selalu terbuka
+}
+
+function getMapProgress(mapIdx) {
+  const map = COURSE.maps[mapIdx];
+  if (!map) return 0;
+  const done = map.lessons.filter((_, li) => state.completed[`${mapIdx}-${li}`]).length;
+  return Math.round((done / map.lessons.length) * 100);
+}
+
+function getTotalProgress() {
+  let total = 0, done = 0;
+  COURSE.maps.forEach((m, mi) => {
+    m.lessons.forEach((_, li) => {
+      total++;
+      if (state.completed[`${mi}-${li}`]) done++;
+    });
+  });
+  return total > 0 ? Math.round((done / total) * 100) : 0;
+}
+
+// ============================================================
+// RENDER: PETA MAP (halaman utama)
+// ============================================================
+function renderMap() {
+  const container = document.getElementById('mapContainer');
+  let html = '';
+
+	COURSE.maps.forEach((map, mi) => {
+	const unlocked = isMapUnlocked(mi);
+	const completed = isMapCompleted(mi);
+	const progress = getMapProgress(mi);
+	const isBranch = map.branch;
+	const isLastBranch = isBranch && !COURSE.maps[mi+1]?.branch;
+	const isFirstBranch = isBranch && !COURSE.maps[mi-1]?.branch;
+
+	// Node kelas
+	const nodeClass = completed ? 'completed' : unlocked ? 'unlocked' + (progress === 0 ? ' current' : '') : 'locked';
+
+	// --- BRANCH START: Visual dari Peta 6 ke Peta 7A-7E ---
+	if (isFirstBranch) {
+      const peta6Completed = isMapCompleted(mi - 1);
+      // Garis vertikal turun dari Peta 6
+      html += `<div class="map-line ${peta6Completed ? 'done' : ''}"></div>`;
+      // Garis horizontal branch (diperlebar)
+      html += `<div style="height: 3px; width: 95%; max-width: 850px; margin: 0 auto; background: var(--border);"></div>`;
+      // Buka container flex untuk 7A-7E (ditambah flex-wrap agar rapi di HP)
+      html += `<div class="flex flex-wrap justify-center" style="gap: 20px; max-width: 850px; margin: 0 auto;">`;
+    }
+
+	// --- RENDER NODE ---
+	html += `
+	  <div class="flex flex-col items-center" style="${isBranch ? 'min-width: 150px;' : ''}" onclick="${unlocked ? `openPeta(${mi})` : ''}">
+		${isBranch ? `<div style="width: 3px; height: 25px; background: var(--border);"></div>` : ''}
+		<div class="map-node ${nodeClass}" style="${unlocked ? `border-color:${map.color};${completed ? `background:${map.color}` : ''}` : ''}">
+		  ${completed ? '<i class="fa-solid fa-check"></i>' : unlocked ? `<i class="fa-solid ${map.icon}"></i>` : '<i class="fa-solid fa-lock text-sm"></i>'}
+		</div>
+		<div class="mt-2 text-center">
+		  <div class="text-sm font-semibold node-title ${unlocked ? 'text-slate-200' : 'text-slate-600'}">Peta ${map.id}</div>
+		  <div class="text-xs node-title ${unlocked ? 'text-slate-400' : 'text-slate-600'}">${map.title}</div>
+		  ${unlocked && !completed ? `<div class="mt-1 w-16 mx-auto"><div class="prog-bar"><div class="prog-fill" style="width:${progress}%;background:${map.color}"></div></div></div>` : ''}
+		</div>
+		${isBranch ? `<div style="width: 3px; height: 25px; background: var(--border);"></div>` : ''}
+	  </div>
+	`;
+
+	// --- BRANCH END: Visual dari Peta 7A-7E ke Peta 8 ---
+	if (isLastBranch) {
+      // Tutup container flex 7A-7E
+      html += `</div>`;
+      // Garis horizontal merge (diperlebar)
+      html += `<div style="height: 3px; width: 95%; max-width: 850px; margin: 0 auto; background: var(--border);"></div>`;
+      // Garis vertikal turun ke Peta 8
+      html += `<div class="map-line"></div>`;
+    }
+
+	// --- GARIS VERTIKAL NORMAL (Peta 1-5) ---
+	if (!isBranch && mi < COURSE.maps.length - 1 && !COURSE.maps[mi+1]?.branch) {
+	  html += `<div class="map-line ${completed ? 'done' : ''}"></div>`;
+	}
+	});
+
+  container.innerHTML = html;
+
+  // Update header stats
+  document.getElementById('headerXP').textContent = state.xp;
+  document.getElementById('headerStreak').textContent = state.streak;
+  document.getElementById('totalProgress').textContent = getTotalProgress() + '%';
+  document.getElementById('totalProgFill').style.width = getTotalProgress() + '%';
+}
+
+// ============================================================
+// RENDER: PETA DETAIL (daftar lesson)
+// ============================================================
+function openPeta(mapIdx) {
+  state.currentMap = mapIdx;
+  showView('peta');
+  const map = COURSE.maps[mapIdx];
+  document.getElementById('petaTitle').innerHTML = `Peta ${map.id}: ${map.title}`;
+  const totalLessons = map.lessons.length;
+  const doneLessons = map.lessons.filter((_, li) => state.completed[`${mapIdx}-${li}`]).length;
+  document.getElementById('petaSubtitle').textContent = `${doneLessons}/${totalLessons} selesai`;
+
+  const container = document.getElementById('lessonContainer');
+  let html = '<div class="stagger-in flex flex-col items-center">';
+
+  map.lessons.forEach((lesson, li) => {
+    const unlocked = isLessonUnlocked(mapIdx, li);
+    const completed = state.completed[`${mapIdx}-${li}`] === true;
+    const isTheory = lesson.type === 'T';
+    const isCurrent = unlocked && !completed;
+
+    const nodeClass = completed ? 'completed' : unlocked ? 'unlocked' : 'locked';
+    const shapeClass = isTheory ? 'theory' : 'exercise';
+
+    html += `
+      <div class="flex flex-col items-center">
+        <div class="lesson-node ${shapeClass} ${nodeClass} ${isCurrent ? 'current' : ''}"
+             style="${unlocked ? `border-color:${map.color};${completed ? `background:${map.color}` : ''}` : ''}"
+             onclick="${unlocked ? `openLesson(${mapIdx},${li})` : ''}">
+          ${completed ? '<i class="fa-solid fa-check text-sm"></i>' : isTheory ? '<i class="fa-solid fa-book text-sm"></i>' : '<i class="fa-solid fa-dumbbell text-sm"></i>'}
+        </div>
+        <div class="mt-1 text-center">
+          <div class="text-xs node-title ${unlocked ? 'text-slate-300' : 'text-slate-600'}">${isTheory ? lesson.title : `Exercise ${li+1}`}</div>
+        </div>
+      </div>
+    `;
+
+    // Koneksi ke lesson berikutnya
+    if (li < map.lessons.length - 1) {
+      const connDone = completed;
+      html += `<div class="lesson-connector ${connDone ? 'done' : ''}"></div>`;
+    }
+  });
+
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+// ============================================================
+// RENDER: LESSON (teori atau exercise)
+// ============================================================
+function openLesson(mapIdx, lessonIdx) {
+  state.currentMap = mapIdx;
+  state.currentLesson = lessonIdx;
+  state.exerciseState = {};
+  showView('lesson');
+
+  const map = COURSE.maps[mapIdx];
+  const lesson = map.lessons[lessonIdx];
+  const total = map.lessons.length;
+
+  document.getElementById('lessonCounter').textContent = `${lessonIdx+1}/${total}`;
+  const done = map.lessons.filter((_, li) => state.completed[`${mapIdx}-${li}`] || li < lessonIdx).length;
+  document.getElementById('lessonProgFill').style.width = `${(done/total)*100}%`;
+
+  if (lesson.type === 'T') {
+    renderTheory(lesson);
+  } else {
+    renderExercise(lesson, mapIdx, lessonIdx);
+  }
+}
+
+function renderTheory(lesson) {
+  const content = document.getElementById('lessonContent');
+  content.innerHTML = `
+    <div class="stagger-in">
+      <div class="text-xs font-semibold text-emerald-400 uppercase tracking-wider mb-2">
+        <i class="fa-solid fa-book-open mr-1"></i> Theory <span class="id-lang" style="display:inline; color:#64748b;">Teori</span>
+      </div>
+      <h2 class="text-2xl font-bold mb-6">${lesson.title}</h2>
+      <div class="text-slate-300 leading-relaxed space-y-3">
+        ${lesson.body}
+      </div>
+      <div class="mt-8 flex justify-end">
+        <button id="nextBtn" class="btn-primary" onclick="completeAndNext()">
+          Next <span class="id-lang" style="color:rgba(11,17,33,0.7); display:inline;">Lanjut</span> <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function renderExercise(lesson, mapIdx, lessonIdx) {
+  const content = document.getElementById('lessonContent');
+  const etype = lesson.etype;
+  let exerciseHTML = '';
+
+  switch(etype) {
+    case 'mc': exerciseHTML = renderMC(lesson); break;
+    case 'tf': exerciseHTML = renderTF(lesson); break;
+    case 'fb': exerciseHTML = renderFB(lesson); break;
+    case 'ord': exerciseHTML = renderOrd(lesson); break;
+    case 'match': exerciseHTML = renderMatch(lesson); break;
+    case 'sa': exerciseHTML = renderSA(lesson); break;
+    case 'code': exerciseHTML = renderCode(lesson); break;
+    default: exerciseHTML = '<p>Tipe exercise tidak dikenal</p>';
+  }
+
+  content.innerHTML = `
+    <div class="stagger-in">
+      <div class="text-xs font-semibold text-amber-400 uppercase tracking-wider mb-2">
+        <i class="fa-solid fa-dumbbell mr-1"></i> Exercise <span class="id-lang" style="display:inline; color:#64748b;">Latihan</span>
+      </div>
+      <h2 class="text-xl font-bold mb-6">${lesson.q}</h2>
+      ${lesson.code ? `<div class="code-block mb-6">${escapeHTML(lesson.code)}</div>` : ''}
+      <div id="exerciseArea">${exerciseHTML}</div>
+      <div id="feedbackArea" class="mt-4"></div>
+      <div class="mt-6 flex items-center justify-between flex-wrap gap-3">
+        <div class="flex gap-2">
+          <button class="btn-secondary text-sm" onclick="showHint()" id="hintBtn">
+            <i class="fa-solid fa-lightbulb mr-1"></i> Hint <span class="id-lang" style="display:inline;">Petunjuk</span>
+          </button>
+          <button class="btn-secondary text-sm" onclick="resetExercise()" id="resetBtn">
+            <i class="fa-solid fa-rotate-left mr-1"></i> Reset <span class="id-lang" style="display:inline;">Atur Ulang</span>
+          </button>
+        </div>
+        <button class="btn-primary" id="checkBtn" onclick="checkAnswer()" disabled>
+          Check <span class="id-lang" style="display:inline;">Periksa</span> <i class="fa-solid fa-check"></i>
+        </button>
+      </div>
+      <div id="hintArea" class="mt-4 hidden">
+        <div class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-sm text-amber-200">
+          <i class="fa-solid fa-lightbulb text-amber-400 mr-2"></i>${lesson.h || 'Tidak ada petunjuk'}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// Fungsi baru untuk mereset exercise
+function resetExercise() {
+  if (state.exerciseState.answered) return; // Tidak bisa reset jika sudah di-check
+  const lesson = COURSE.maps[state.currentMap].lessons[state.currentLesson];
+  renderExercise(lesson, state.currentMap, state.currentLesson);
+}
+
+// ============================================================
+// EXERCISE RENDERERS
+// ============================================================
+
+// Multiple Choice
+function renderMC(lesson) {
+  const labels = ['A','B','C','D','E','F'];
+  return `<div class="space-y-3" id="mcOptions">
+    ${lesson.o.map((opt, i) => `
+      <div class="opt-card" data-idx="${i}" onclick="selectMC(${i})">
+        <span class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-sm font-bold flex-shrink-0">${labels[i]}</span>
+        <span>${opt}</span>
+      </div>
+    `).join('')}
+  </div>`;
+}
+
+function selectMC(idx) {
+  if (state.exerciseState.answered) return;
+  state.exerciseState.selected = idx;
+  document.querySelectorAll('#mcOptions .opt-card').forEach((el, i) => {
+    el.classList.toggle('selected', i === idx);
+  });
+  document.getElementById('checkBtn').disabled = false;
+}
+
+// True/False
+function renderTF(lesson) {
+  return `<div class="flex gap-4" id="tfOptions">
+    <div class="opt-card flex-1 justify-center text-center text-lg" onclick="selectTF(true)" data-val="true">
+      <i class="fa-solid fa-check text-emerald-400 mr-2"></i> True <span class="id-lang">Benar</span>
+    </div>
+    <div class="opt-card flex-1 justify-center text-center text-lg" onclick="selectTF(false)" data-val="false">
+      <i class="fa-solid fa-xmark text-red-400 mr-2"></i> False <span class="id-lang">Salah</span>
+    </div>
+  </div>`;
+}
+
+function selectTF(val) {
+  if (state.exerciseState.answered) return;
+  state.exerciseState.selected = val;
+  document.querySelectorAll('#tfOptions .opt-card').forEach(el => {
+    el.classList.toggle('selected', el.dataset.val === String(val));
+  });
+  document.getElementById('checkBtn').disabled = false;
+}
+
+// Fill Blank
+function renderFB(lesson) {
+  return `<div>
+    <input type="text" class="ex-input" id="fbInput" placeholder="Ketik jawaban..." autocomplete="off" oninput="onFBInput()">
+  </div>`;
+}
+
+function onFBInput() {
+  const val = document.getElementById('fbInput').value.trim();
+  document.getElementById('checkBtn').disabled = val.length === 0;
+}
+
+// Order
+function renderOrd(lesson) {
+  // Tampilkan item dalam urutan acak
+  const shuffled = lesson.o.map((item, i) => ({text: item, origIdx: i}));
+  // Shuffle
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  state.exerciseState.ordOrder = [];
+  state.exerciseState.ordItems = shuffled;
+
+  return `<div>
+	<div class="text-sm text-slate-400 mb-3">Click items in the correct order: <span class="id-lang">Klik item dalam urutan yang benar:</span></div>
+    <div class="space-y-2" id="ordList">
+      ${shuffled.map((item, i) => `
+        <div class="order-item flex items-center gap-3" data-orig="${item.origIdx}" onclick="selectOrd(this,${item.origIdx})">
+          <span class="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center text-xs font-bold ord-num"></span>
+          <span>${item.text}</span>
+        </div>
+      `).join('')}
+    </div>
+    <div class="mt-3 text-xs text-slate-500" id="ordStatus">Urutan terpilih: (belum ada)</div>
+  </div>`;
+}
+
+function selectOrd(el, origIdx) {
+  if (state.exerciseState.answered) return;
+  if (el.classList.contains('ordered')) return;
+
+  const order = state.exerciseState.ordOrder;
+  order.push(origIdx);
+  el.classList.add('ordered');
+  const numEl = el.querySelector('.ord-num');
+  numEl.textContent = order.length;
+
+  document.getElementById('ordStatus').textContent = `Urutan terpilih: ${order.length}/${state.exerciseState.ordItems.length}`;
+  document.getElementById('checkBtn').disabled = order.length < state.exerciseState.ordItems.length;
+}
+
+// Match
+function renderMatch(lesson) {
+  state.exerciseState.matchLeft = null;
+  state.exerciseState.matchPairs = [];
+  state.exerciseState.matchedLeft = new Set();
+  state.exerciseState.matchedRight = new Set();
+
+  // Shuffle right column
+  const rightShuffled = [...lesson.right];
+  for (let i = rightShuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [rightShuffled[i], rightShuffled[j]] = [rightShuffled[j], rightShuffled[i]];
+  }
+  state.exerciseState.rightShuffled = rightShuffled;
+
+  return `<div>
+    <div class="text-sm text-slate-400 mb-3">Klik item kiri, lalu item kanan untuk mencocokkan:</div>
+    <div class="grid grid-cols-2 gap-3" id="matchGrid">
+      <div class="space-y-2" id="matchLeft">
+        ${lesson.left.map((item, i) => `
+          <div class="match-item" data-side="left" data-idx="${i}" onclick="selectMatch('left',${i})">${item}</div>
+        `).join('')}
+      </div>
+      <div class="space-y-2" id="matchRight">
+        ${rightShuffled.map((item, i) => `
+          <div class="match-item" data-side="right" data-idx="${i}" data-val="${item}" onclick="selectMatch('right',${i})">${item}</div>
+        `).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+function selectMatch(side, idx) {
+  if (state.exerciseState.answered) return;
+  const es = state.exerciseState;
+
+  if (side === 'left') {
+    if (es.matchedLeft.has(idx)) return;
+    // Highlight
+    document.querySelectorAll('#matchLeft .match-item').forEach(el => el.classList.remove('active'));
+    const el = document.querySelector(`#matchLeft .match-item[data-idx="${idx}"]`);
+    el.classList.add('active');
+    es.matchLeft = idx;
+  } else {
+    if (es.matchedRight.has(idx)) return;
+    if (es.matchLeft === null) {
+      showToast('Pilih item kiri terlebih dahulu', 'info');
+      return;
+    }
+    // Create pair
+    const lesson = COURSE.maps[state.currentMap].lessons[state.currentLesson];
+    const leftIdx = es.matchLeft;
+    const rightVal = es.rightShuffled[idx];
+    es.matchPairs.push({leftIdx, rightVal, rightShuffledIdx: idx});
+    es.matchedLeft.add(leftIdx);
+    es.matchedRight.add(idx);
+
+    // Visual
+    const leftEl = document.querySelector(`#matchLeft .match-item[data-idx="${leftIdx}"]`);
+    const rightEl = document.querySelector(`#matchRight .match-item[data-idx="${idx}"]`);
+    leftEl.classList.remove('active');
+    leftEl.classList.add('matched');
+    rightEl.classList.add('matched');
+
+    es.matchLeft = null;
+
+    document.getElementById('checkBtn').disabled = es.matchPairs.length < lesson.left.length;
+  }
+}
+
+// Select All
+function renderSA(lesson) {
+  state.exerciseState.selectedSet = new Set();
+  return `<div>
+    <div class="text-sm text-slate-400 mb-3">Pilih semua jawaban yang benar:</div>
+    <div class="space-y-2" id="saOptions">
+      ${lesson.o.map((opt, i) => `
+        <div class="opt-card" data-idx="${i}" onclick="toggleSA(${i})">
+          <span class="w-6 h-6 rounded border-2 border-slate-600 flex items-center justify-center flex-shrink-0 sa-check"></span>
+          <span>${opt}</span>
+        </div>
+      `).join('')}
+    </div>
+  </div>`;
+}
+
+function toggleSA(idx) {
+  if (state.exerciseState.answered) return;
+  const set = state.exerciseState.selectedSet;
+  if (set.has(idx)) set.delete(idx); else set.add(idx);
+  document.querySelectorAll('#saOptions .opt-card').forEach((el, i) => {
+    const check = el.querySelector('.sa-check');
+    if (set.has(i)) {
+      el.classList.add('selected');
+      check.innerHTML = '<i class="fa-solid fa-check text-emerald-400 text-xs"></i>';
+      check.style.borderColor = '#10b981';
+    } else {
+      el.classList.remove('selected');
+      check.innerHTML = '';
+      check.style.borderColor = '';
+    }
+  });
+  document.getElementById('checkBtn').disabled = set.size === 0;
+}
+
+// Code Output
+function renderCode(lesson) {
+  return `<div>
+    <div class="text-sm text-slate-400 mb-3">Tulis output yang akan ditampilkan:</div>
+    <input type="text" class="ex-input font-mono" id="codeInput" placeholder="Ketik output..." autocomplete="off" oninput="onCodeInput()">
+  </div>`;
+}
+
+function onCodeInput() {
+  const val = document.getElementById('codeInput').value.trim();
+  document.getElementById('checkBtn').disabled = val.length === 0;
+}
+
+// ============================================================
+// CHECK ANSWER
+// ============================================================
+function checkAnswer() {
+  if (state.exerciseState.answered) return;
+  state.exerciseState.answered = true;
+
+  // Sembunyikan tombol Hint dan Reset
+  const resetBtn = document.getElementById('resetBtn');
+  if (resetBtn) resetBtn.style.display = 'none';
+
+  const lesson = COURSE.maps[state.currentMap].lessons[state.currentLesson];
+  const etype = lesson.etype;
+  let correct = false;
+  let correctAnswer = '';
+
+  switch(etype) {
+    case 'mc': {
+      const sel = state.exerciseState.selected;
+      correct = sel === lesson.a;
+      document.querySelectorAll('#mcOptions .opt-card').forEach((el, i) => {
+        el.classList.add('disabled');
+        if (i === lesson.a) el.classList.add('correct');
+        if (i === sel && !correct) el.classList.add('wrong');
+      });
+      correctAnswer = lesson.o[lesson.a];
+      break;
+    }
+    case 'tf': {
+      const sel = state.exerciseState.selected;
+      correct = sel === lesson.a;
+      document.querySelectorAll('#tfOptions .opt-card').forEach(el => {
+        el.classList.add('disabled');
+        if (String(lesson.a) === el.dataset.val) el.classList.add('correct');
+        if (String(sel) === el.dataset.val && !correct) el.classList.add('wrong');
+      });
+            correctAnswer = lesson.a ? 'True <span class="id-lang">Benar</span>' : 'False <span class="id-lang">Salah</span>';
+      break;
+    }
+    case 'fb': {
+      const input = document.getElementById('fbInput').value.trim();
+      // Normalisasi: hapus semua spasi dan ubah jadi huruf kecil
+      const normalize = str => str.replace(/\s+/g, '').toLowerCase();
+      // Terima beberapa jawaban yang benar (dipisah /)
+      const answers = lesson.a.split('/');
+      correct = answers.some(a => normalize(input) === normalize(a));
+      document.getElementById('fbInput').classList.add(correct ? 'correct' : 'wrong');
+      document.getElementById('fbInput').disabled = true;
+      correctAnswer = lesson.a;
+      break;
+    }
+    case 'ord': {
+      const order = state.exerciseState.ordOrder;
+      correct = order.length === lesson.a.length && order.every((v, i) => v === lesson.a[i]);
+      correctAnswer = lesson.a.map(i => lesson.o[i]).join(' → ');
+      break;
+    }
+    case 'match': {
+      const pairs = state.exerciseState.matchPairs;
+      const lesson_data = lesson;
+      correct = pairs.length === lesson_data.a.length && pairs.every((p, i) => {
+        // Cek apakah leftIdx-i cocok dengan right yang benar
+        const expectedRightVal = lesson_data.right[lesson_data.a[p.leftIdx]];
+        return p.rightVal === expectedRightVal;
+      });
+      correctAnswer = lesson_data.left.map((l, i) => `${l} ↔ ${lesson_data.right[lesson_data.a[i]]}`).join(', ');
+      break;
+    }
+    case 'sa': {
+      const selected = [...state.exerciseState.selectedSet].sort();
+      const expected = [...lesson.a].sort();
+      correct = selected.length === expected.length && selected.every((v, i) => v === expected[i]);
+      document.querySelectorAll('#saOptions .opt-card').forEach((el, i) => {
+        el.classList.add('disabled');
+        if (lesson.a.includes(i)) el.classList.add('correct');
+        if (selected.includes(i) && !lesson.a.includes(i)) el.classList.add('wrong');
+      });
+      correctAnswer = lesson.a.map(i => lesson.o[i]).join(', ');
+      break;
+    }
+    case 'code': {
+      const input = document.getElementById('codeInput').value.trim();
+      // Normalisasi: hapus semua spasi dan ubah jadi huruf kecil
+      const normalize = str => str.replace(/\s+/g, '').toLowerCase();
+      correct = normalize(input) === normalize(lesson.a);
+      document.getElementById('codeInput').classList.add(correct ? 'correct' : 'wrong');
+      document.getElementById('codeInput').disabled = true;
+      correctAnswer = lesson.a;
+      break;
+    }
+  }
+
+  // Simpan jawaban untuk Print Result
+  const mi = state.currentMap;
+  const li = state.currentLesson;
+  let studentAnswerText = "";
+  let correctAnswerText = "";
+
+  switch(etype) {
+    case 'mc':
+      studentAnswerText = state.exerciseState.selected !== undefined ? lesson.o[state.exerciseState.selected] : "-";
+      correctAnswerText = lesson.o[lesson.a];
+      break;
+    case 'tf':
+      studentAnswerText = state.exerciseState.selected !== null ? (state.exerciseState.selected ? "True" : "False") : "-";
+      correctAnswerText = lesson.a ? "True" : "False";
+      break;
+    case 'fb':
+      studentAnswerText = document.getElementById('fbInput').value.trim() || "-";
+      correctAnswerText = lesson.a;
+      break;
+    case 'code':
+      studentAnswerText = document.getElementById('codeInput').value.trim() || "-";
+      correctAnswerText = lesson.a;
+      break;
+    case 'ord':
+      studentAnswerText = state.exerciseState.ordOrder.map(i => lesson.o[i]).join(' → ') || "-";
+      correctAnswerText = lesson.a.map(i => lesson.o[i]).join(' → ');
+      break;
+    case 'match':
+      studentAnswerText = "Matched pairs";
+      correctAnswerText = lesson.left.map((l, i) => `${l} ↔ ${lesson.right[lesson.a[i]]}`).join('; ');
+      break;
+    case 'sa':
+      studentAnswerText = [...state.exerciseState.selectedSet].sort().map(i => lesson.o[i]).join(', ') || "-";
+      correctAnswerText = lesson.a.map(i => lesson.o[i]).join(', ');
+      break;
+  }
+
+  if (!state.mapAnswers) state.mapAnswers = {};
+  if (!state.mapAnswers[mi]) state.mapAnswers[mi] = {};
+  state.mapAnswers[mi][li] = {
+    q: lesson.q,
+    studentAnswer: studentAnswerText,
+    correctAnswer: correctAnswerText,
+    isCorrect: correct
+  };
+  saveState();
+
+  // Tampilkan feedback
+  const feedback = document.getElementById('feedbackArea');
+  if (correct) {
+    feedback.innerHTML = `
+      <div class="feedback-bar correct-fb">
+        <i class="fa-solid fa-check-circle text-2xl"></i>
+        <div>
+          <div class="text-lg">Correct! Excellent! <span class="id-lang">Benar! Hebat!</span></div>
+          ${correctAnswer ? `<div class="text-sm opacity-80 mt-1">Answer: ${correctAnswer}</div>` : ''}
+        </div>
+      </div>
+    `;
+    // Tambah XP
+    state.xp += 10;
+    state.streak += 1;
+    showXPPopup(10);
+    spawnConfetti();
+  } else {
+    feedback.innerHTML = `
+      <div class="feedback-bar wrong-fb">
+        <i class="fa-solid fa-times-circle text-2xl"></i>
+        <div>
+            <div class="text-lg">Incorrect <span class="id-lang">Belum tepat</span></div>
+            <div class="text-sm opacity-80 mt-1">Answer: ${correctAnswer}</div>
+        </div>
+      </div>
+    `;
+    state.streak = 0;
+  }
+  
+  renderKatexInElement(feedback);
+  
+  // Update header
+  document.getElementById('headerXP').textContent = state.xp;
+  document.getElementById('headerStreak').textContent = state.streak;
+
+  // Ganti tombol check menjadi lanjut
+  const checkBtn = document.getElementById('checkBtn');
+  checkBtn.textContent = 'Lanjut ';
+  checkBtn.innerHTML = 'Next <span class="id-lang" style="color:rgba(11,17,33,0.7); display:inline;">Lanjut</span> <i class="fa-solid fa-arrow-right"></i>';
+  checkBtn.disabled = false;
+  checkBtn.onclick = () => completeAndNext();
+
+  saveState();
+}
+
+// ============================================================
+// PRINT RESULT UNTUK ASSESSMENT
+// ============================================================
+function showPrintResultForm(mapIdx) {
+  const map = COURSE.maps[mapIdx];
+  const totalLessons = map.lessons.length;
+  let correctCount = 0;
+  
+  if (state.mapAnswers && state.mapAnswers[mapIdx]) {
+    for (let i = 0; i < totalLessons; i++) {
+      if (state.mapAnswers[mapIdx][i] && state.mapAnswers[mapIdx][i].isCorrect) {
+        correctCount++;
+      }
+    }
+  }
+  
+  const score = Math.round((correctCount / totalLessons) * 100);
+
+  const content = document.getElementById('lessonContent');
+  content.innerHTML = `
+    <div class="stagger-in text-center">
+      <div class="text-5xl mb-4">🎉</div>
+      <h2 class="text-2xl font-bold mb-2">Assessment Completed! <span class="id-lang">Asesmen Selesai!</span></h2>
+      <p class="text-slate-400 mb-6">You scored <span class="text-emerald-400 font-bold text-xl">${score}%</span> (${correctCount}/${totalLessons})</p>
+      
+      <div class="max-w-md mx-auto text-left space-y-4 mb-8">
+        <div>
+          <label class="text-sm text-slate-400 block mb-1">Name / <span class="id-lang">Nama</span></label>
+          <input type="text" id="printName" class="ex-input" placeholder="Enter your name / Masukkan nama">
+        </div>
+        <div>
+          <label class="text-sm text-slate-400 block mb-1">Date / <span class="id-lang">Tanggal</span></label>
+          <input type="date" id="printDate" class="ex-input" value="${new Date().toISOString().split('T')[0]}">
+        </div>
+        <div>
+          <label class="text-sm text-slate-400 block mb-1">Assessment / <span class="id-lang">Asesmen</span></label>
+          <input type="text" class="ex-input" value="Assessment ${map.id}" disabled style="opacity:0.6">
+        </div>
+        <div>
+          <label class="text-sm text-slate-400 block mb-1">Score / <span class="id-lang">Skor</span></label>
+          <input type="text" class="ex-input" value="${score}%" disabled style="opacity:0.6">
+        </div>
+      </div>
+
+      <button class="btn-primary text-lg" onclick="generatePrintout(${mapIdx})">
+        <i class="fa-solid fa-print mr-2"></i> Print Result <span class="id-lang" style="color:rgba(11,17,33,0.7); display:inline;">Cetak Hasil</span>
+      </button>
+      
+      <div class="mt-4">
+        <button class="btn-secondary" onclick="openPeta(${mapIdx})">
+          Back to Map <span class="id-lang">Kembali ke Peta</span>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function generatePrintout(mapIdx) {
+  const map = COURSE.maps[mapIdx];
+  const studentName = document.getElementById('printName').value || '-';
+  const printDate = document.getElementById('printDate').value || '-';
+  
+  let correctCount = 0;
+  let tableRows = '';
+  
+  for (let i = 0; i < map.lessons.length; i++) {
+    const ansData = (state.mapAnswers && state.mapAnswers[mapIdx] && state.mapAnswers[mapIdx][i]) ? state.mapAnswers[mapIdx][i] : null;
+    // Hapus tag id-lang dari pertanyaan agar printout lebih bersih (hanya bahasa Inggris)
+    const qText = map.lessons[i].q.replace(/<span class='id-lang'>.*?<\/span>/g, '');
+    const studentAns = ansData ? ansData.studentAnswer : '-';
+    const correctAns = ansData ? ansData.correctAnswer : '-';
+    const isCorrect = ansData ? ansData.isCorrect : false;
+    
+    if (isCorrect) correctCount++;
+    
+    const noteSymbol = isCorrect ? '✓' : '✗';
+    const noteColor = isCorrect ? 'green' : 'red';
+    
+    tableRows += `
+      <tr>
+        <td style="text-align:center; width: 40px;">${i + 1}</td>
+        <td>${qText}</td>
+        <td>${studentAns}</td>
+        <td>${correctAns}</td>
+        <td style="text-align:center; color: ${noteColor}; font-weight:bold; font-size:1.2rem;">${noteSymbol}</td>
+      </tr>
+    `;
+  }
+  
+  const score = Math.round((correctCount / map.lessons.length) * 100);
+
+  const printWindow = window.open('', '_blank');
+  printWindow.document.write(`
+    <!DOCTYPE html>
+    <html lang="id">
+    <head>
+      <meta charset="UTF-8">
+      <title>Assessment Result - ${map.id}</title>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+      <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"><\/script>
+      <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '\\\\(', right: '\\\\)', display: false},{left: '\\\\[', right: '\\\\]', display: true}], throwOnError: false}); setTimeout(function(){window.print();}, 1000);"><\/script>
+      <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 30px; color: #333; line-height: 1.5; }
+        h1 { text-align: center; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #666; font-size: 0.9rem; margin-bottom: 20px; }
+        .header-info { margin-bottom: 20px; border: 1px solid #ddd; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; flex-wrap: wrap; }
+        .header-info p { margin: 5px 0; font-size: 14px; }
+        .header-info strong { margin-right: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 13px; }
+        th, td { border: 1px solid #333; padding: 10px; text-align: left; vertical-align: top; }
+        th { background: #f0f0f0; font-weight: bold; text-align: center; }
+        @media print {
+          body { padding: 0; }
+          .header-info { border: none; padding: 0; }
+        }
+      </style>
+    </head>
+    <body>
+      <h1>Assessment Result</h1>
+      <div class="subtitle">KPK & FPB - Faktor dan Kelipatan</div>
+      
+      <div class="header-info">
+        <div style="flex:1; min-width: 200px;">
+          <p><strong>Name:</strong> ${studentName}</p>
+          <p><strong>Date:</strong> ${printDate}</p>
+        </div>
+        <div style="flex:1; min-width: 200px;">
+          <p><strong>Assessment:</strong> ${map.id}</p>
+          <p><strong>Score:</strong> ${score}% (${correctCount}/${map.lessons.length})</p>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>Question</th>
+            <th>Student Answer</th>
+            <th>Correct Answer</th>
+            <th>Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${tableRows}
+        </tbody>
+      </table>
+    </body>
+    </html>
+  `);
+  printWindow.document.close();
+}
+
+// ============================================================
+// COMPLETE & NEXT
+// ============================================================
+function completeAndNext() {
+  const mi = state.currentMap;
+  const li = state.currentLesson;
+  state.completed[`${mi}-${li}`] = true;
+  saveState();
+
+  const map = COURSE.maps[mi];
+  const isLastLesson = li + 1 >= map.lessons.length;
+  const isAssessment = map.branch; // Peta 7A-7E adalah branch: true
+
+  // Jika ini exercise terakhir di Assessment, tampilkan form Print
+  if (isAssessment && isLastLesson) {
+    showPrintResultForm(mi);
+  } else if (li + 1 < map.lessons.length && isLessonUnlocked(mi, li + 1)) {
+    openLesson(mi, li + 1);
+  } else {
+    openPeta(mi);
+  }
+}
+
+// ============================================================
+// NAVIGASI
+// ============================================================
+function showView(viewName) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(viewName + 'View').classList.add('active');
+  state.currentView = viewName;
+  window.scrollTo(0, 0);
+}
+
+function showMap() {
+  showView('map');
+  renderMap();
+}
+
+function closeLesson() {
+  openPeta(state.currentMap);
+}
+
+// ============================================================
+// UI HELPERS
+// ============================================================
+function showToast(msg, type='info') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function showXPPopup(amount) {
+  document.getElementById('xpAmount').textContent = amount;
+  const popup = document.getElementById('xpPopup');
+  popup.classList.add('show');
+  setTimeout(() => popup.classList.remove('show'), 1500);
+}
+
+function spawnConfetti() {
+  const colors = ['#10b981','#f59e0b','#ec4899','#8b5cf6','#06b6d4','#ef4444'];
+  for (let i = 0; i < 30; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random() * 100 + 'vw';
+    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+    c.style.width = (Math.random() * 8 + 4) + 'px';
+    c.style.height = (Math.random() * 8 + 4) + 'px';
+    c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    c.style.animationDuration = (Math.random() * 1.5 + 1) + 's';
+    c.style.animationDelay = (Math.random() * 0.5) + 's';
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 3000);
+  }
+}
+
+function showHint() {
+  document.getElementById('hintArea').classList.remove('hidden');
+  document.getElementById('hintBtn').disabled = true;
+}
+
+function escapeHTML(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// --- FUNGSI UNTUK MODAL RULES ---
+function openRules() {
+  document.getElementById('rulesModal').classList.add('active');
+}
+
+function closeRules() {
+  document.getElementById('rulesModal').classList.remove('active');
+}
+
+// ============================================================
+// KATEX RENDERING
+// ============================================================
+function renderKatexInElement(el) {
+  if (typeof renderMathInElement === 'function') {
+    renderMathInElement(el, {
+      delimiters: [
+        {left: '\\(', right: '\\)', display: false},  //
+        {left: '\\[', right: '\\]', display: true}    //
+      ],
+      throwOnError: false
+    });
+  }
+}
+
+// Override showView untuk render KaTeX setiap pindah halaman
+const originalShowView = showView;
+showView = function(viewName) {
+  originalShowView(viewName);
+  setTimeout(() => renderKatexInElement(document.body), 100);
+};
+
+// Override openLesson untuk render KaTeX di konten lesson
+const originalOpenLesson = openLesson;
+openLesson = function(mapIdx, lessonIdx) {
+  originalOpenLesson(mapIdx, lessonIdx);
+  setTimeout(() => renderKatexInElement(document.body), 100);
+};
+
+// ============================================================
+// INISIALISASI APLIKASI
+// ============================================================
+loadState();
+renderMap();
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  // Tekan Escape untuk menutup lesson
+  if (e.key === 'Escape' && state.currentView === 'lesson') {
+    closeLesson();
+  }
+  
+  // Tekan Enter untuk memeriksa jawaban / lanjut ke soal berikutnya
+  if (e.key === 'Enter' && state.currentView === 'lesson') {
+    const checkBtn = document.getElementById('checkBtn');
+    // Pastikan tombol ada dan tidak dalam keadaan disabled
+    if (checkBtn && !checkBtn.disabled) {
+      e.preventDefault(); 
+      checkBtn.click();   // Untuk halaman Exercise
+    } else if (nextBtn) {
+      e.preventDefault();
+      nextBtn.click();    // Untuk halaman Teori
+    }
+  }
+});
+</script>
+</body>
+</html>
